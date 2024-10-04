@@ -1,0 +1,15 @@
+.card {
+    max-width: 500px;
+}
+
+img {
+    max-width: 150px;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    cursor: pointer;
+}

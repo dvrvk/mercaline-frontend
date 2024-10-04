@@ -1,0 +1,36 @@
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="row align-items-center">
+        <div class="col-md-6 text-center">
+            <img src="assets\images\logo_sin_fondo.png" class="rounded mx-auto d-block">
+            <h1>Bienvenido a Mercaline</h1>
+            <p>
+                Mercaline es tu plataforma ideal para la compraventa de artículos usados entre particulares. Nuestro objetivo es doble: ayudarte a ganar dinero vendiendo lo que ya no usas y permitirte ahorrar en la compra de artículos que necesitas. Además, al reutilizar y reciclar productos, juntos contribuimos a reducir las emisiones de CO2, promoviendo un consumo más sostenible y responsable.
+            </p>
+            <p>
+                <a class="link-opacity-75-hover" routerLink="/registro">Únete a nuestra comunidad</a> y descubre cómo puedes hacer una diferencia positiva para el planeta mientras mejoras tu economía personal. ¡Empieza a vender y comprar en Mercaline hoy mismo!
+            </p>
+        </div>
+        
+        <div class="col-md-6">
+            <h2 class="text-center p-3">Inicia Sesión</h2>
+            <div class="card p-5 m-auto">
+                <form (ngSubmit)="iniciarSesion()" #loginForm="ngForm">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Nombre de usuario</label>
+                        <input type="text" class="form-control" id="username" name="username"
+                            [(ngModel)]="user.username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="pass" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="pass" name="pass" [(ngModel)]="user.password"
+                            required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" [disabled]="!loginForm.form.valid">
+                        Iniciar Sesión
+                    </button>
+                    <a class="p-3 text-center" routerLink="/registro">Quiero unirme a mercaline</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

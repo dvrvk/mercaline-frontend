@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { UserServiceService } from '../user-service.service';
-import { Router } from '@angular/router';
+import { UserServiceService } from '../../services/user-service.service';
+import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
 declare var Swal: any;
@@ -8,7 +8,7 @@ declare var Swal: any;
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, RouterLink],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -24,9 +24,8 @@ export class LoginComponent {
   ) {}
 
   iniciarSesion() {
-    this.userService.logearUsuario(this.user).subscribe({
+    this.userService.logIn(this.user).subscribe({
       next: (response) => {
-        
 
         Swal.fire({
           position: "center",
@@ -35,7 +34,7 @@ export class LoginComponent {
           showConfirmButton: false,
           timer: 1500
         })
-        this.router.navigate(["/"]);
+        this.router.navigate(["/perfil"]);
       },
       error: (error) => {
         Swal.fire({

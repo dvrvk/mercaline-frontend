@@ -1,0 +1,27 @@
+<div class="container">
+  <h2 class="text-center my-4">Formulario de Registro</h2>
+  <div class="card p-5 m-auto">
+    <form class="container" (ngSubmit)="onSubmit()" #registerForm="ngForm">
+      <div class="mb-3">
+        <label for="username" class="form-label">Nombre:</label>
+        <input type="text" class="form-control" id="username" name="username" [(ngModel)]="user.username" required>
+      </div>
+      <div class="mb-3">
+        <label for="email" class="form-label">Email:</label>
+        <input type="email" class="form-control" id="email" name="email" [(ngModel)]="user.email" required>
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Contraseña:</label>
+        <input type="password" class="form-control" id="password" name="password" [(ngModel)]="user.password" required>
+      </div>
+      <div class="mb-3">
+        <label for="tel" class="form-label">Teléfono:</label>
+        <input type="text" class="form-control" id="tel" name="tel" [(ngModel)]="user.tel">
+      </div>
+      <div class="">
+        <button type="submit" class="btn btn-primary me-2" [disabled]="!registerForm.form.valid">Registrarse</button>
+        <a class="btn btn-outline-primary" routerLink="/login">Volver</a>
+      </div>
+    </form>
+  </div>
+</div>

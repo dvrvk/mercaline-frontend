@@ -1,13 +1,16 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './home/home.component';
-import { RegistroComponent } from './registro/registro.component';
-import { LoginComponent } from './login/login.component';
+import { HomeComponent } from './components/home/home.component';
+import { RegistroComponent } from './components/registro/registro.component';
+import { LoginComponent } from './components/login/login.component';
+import { PerfilComponent } from './components/perfil/perfil.component';
+import { authGuard } from './guards/auth.guard';
+import { redirectGuardGuard } from './guards/redirect-guard.guard';
 
 export const routes: Routes = [
     {
-        path: '', 
-        title: 'Inicio',
-        component: HomeComponent
+        path: '',
+        redirectTo: '/login',
+        pathMatch: 'full'
     },
     {
         path: 'registro', 
@@ -17,6 +20,13 @@ export const routes: Routes = [
     {
         path: 'login', 
         title: 'Iniciar Sesión',
-        component: LoginComponent
+        component: LoginComponent,
+        canActivate: [redirectGuardGuard]
+    },
+    {
+        path: 'perfil',
+        title: 'Perfil',
+        component: PerfilComponent,
+        canActivate: [authGuard]
     }
 ];

@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
-import { UserServiceService } from '../user-service.service';
+import { UserServiceService } from '../../services/user-service.service';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 declare var Swal: any;
 
 @Component({
   selector: 'app-registro',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, RouterLink],
   templateUrl: './registro.component.html',
   styleUrl: './registro.component.css'
 })
@@ -29,14 +29,17 @@ export class RegistroComponent {
   onSubmit() {
     this.userService.registrarUsuario(this.user).subscribe({
       next: (response) => {
-        //console.log('Usuario registrado:', response);
+        
         Swal.fire({
           position: "center",
           icon: "success",
-          title: `${response.name} se ha registrado`,
+          title: `${response.username} se ha registrado`,
           showConfirmButton: false,
           timer: 1500
         });
+
+        this.login();
+        
       },
       error: (error) => {
         console.error('Error al registrar el usuario:', error);
@@ -45,11 +48,18 @@ export class RegistroComponent {
           title: "Oops...",
           text: "No se ha podido registrar al usuario",
         });
-      },
-      complete: () => {
-        this.router.navigate(["/"]);
-        // Aquí puedes manejar cualquier acción adicional después de completar la solicitud
       }
     });
+  }
+
+  login() {
+    this.userService.logIn(this.user).subscribe(
+      response => {
+        this.router.navigate(["/perfil"]);
+      },
+      error => {
+        console.log(error)
+      }
+    )
   }
 }
