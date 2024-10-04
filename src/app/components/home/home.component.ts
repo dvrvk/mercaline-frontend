@@ -1,17 +1,45 @@
-import { Component } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { UserServiceService } from '../../services/user-service.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+
+declare var Swal: any;
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink],
+  imports: [CommonModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent {
-  constructor(private router: Router) {}
+export class HomeComponent implements OnInit{
+  userdata : any = "";
 
-  registrarUsuario() {
-    this.router.navigate(['/registro']);
+  constructor(private router: Router, private userService: UserServiceService) {};
+
+  ngOnInit(): void {
+    this.userData();
   }
+
+  userData() {
+    const userString = localStorage.getItem('userdata');
+    if(userString) {
+      console.log(JSON.parse(userString));
+      this.userdata = JSON.parse(userString);
+    } else {
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Error al cargar el perfil",
+        text: "No se han podido cargar los datos del perfil, vuelve a iniciar sesión",
+        showConfirmButton: true
+      });
+
+      this.userService.logOut();
+      this.router.navigate(["/login"]);
+      
+    }
+  }
+
 }

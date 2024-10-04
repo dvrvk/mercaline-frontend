@@ -55,7 +55,7 @@ export class RegistroComponent {
   login() {
     this.userService.logIn(this.user).subscribe(
       response => {
-        this.router.navigate(["/perfil"]);
+        this.router.navigate(["/home"]);
       },
       error => {
         console.log(error)

@@ -24,9 +24,9 @@ export const routes: Routes = [
         canActivate: [redirectGuardGuard]
     },
     {
-        path: 'perfil',
-        title: 'Perfil',
-        component: PerfilComponent,
+        path: 'home',
+        title: 'Home',
+        component: HomeComponent,
         canActivate: [authGuard]
     }
 ];

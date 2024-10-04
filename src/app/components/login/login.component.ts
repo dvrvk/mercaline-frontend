@@ -34,7 +34,7 @@ export class LoginComponent {
           showConfirmButton: false,
           timer: 1500
         })
-        this.router.navigate(["/perfil"]);
+        this.router.navigate(["/home"]);
       },
       error: (error) => {
         Swal.fire({

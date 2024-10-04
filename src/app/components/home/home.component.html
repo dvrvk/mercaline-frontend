@@ -1,3 +1,8 @@
-<h1>Bienvenido a Mercaline</h1>
-<a class="btn btn-primary mx-3" routerLink="/registro">Registrarse</a>
-<a class="btn btn-primary mx-3" routerLink="/login">Iniciar Sesión</a>
+<div *ngIf="userdata">
+    <h1>Bienvenido, {{ userdata.username }}</h1>
+    
+  </div>
+  <div *ngIf="!userdata">
+    <p>No se encontraron datos del cliente.</p>
+  </div>
+  

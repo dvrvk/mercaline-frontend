@@ -8,7 +8,7 @@ export const redirectGuardGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
 
   if(userService.isAuth()) {
-    router.navigate(['/perfil'])
+    router.navigate(['/home'])
     return false;
   } else {
     return true;
