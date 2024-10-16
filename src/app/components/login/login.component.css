@@ -1,5 +1,10 @@
 .card {
     max-width: 500px;
+    background-color:  var(--lighter-main-color);
+}
+
+input, .card {
+    border-color: var(--darker-main-color);
 }
 
 img {
@@ -8,8 +13,22 @@ img {
 
 a {
     text-decoration: none;
+    color: var(--darker-main-color);
+    font-weight: 600;
+    font-size: large;
 }
 
 a:hover {
+    cursor: pointer;
+}
+
+.btn-login {
+    background: var(--darker-main-color);
+    border: var(--darker-main-color);
+    color: white;
+    font-weight: 600;
+}
+
+.btn-login:hover {
     cursor: pointer;
 }
