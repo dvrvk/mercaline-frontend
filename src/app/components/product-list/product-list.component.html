@@ -1,0 +1,35 @@
+<section class="container py-5 px-4" *ngIf="products.length > 0; else noProducts">
+  <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+    <div class="col mb-5" *ngFor="let product of products">
+      <div class="card h-100">
+        <!-- Product image-->
+        <img class="card-img-top img-limited-height" [src]="product.imagenUrl" alt="{{ product.nombre }}" *ngIf="product.imagenUrl"/>
+        <!-- Product details-->
+        <div class="card-body p-4">
+          <div class="text-center">
+            <!-- Product name-->
+            <h5 class="fw-bolder">{{ product.nombre }}</h5>
+            <!-- Product price-->
+            <p>{{ product.precio | customCurrencyFormat }}</p>
+            <span class="badge badge-cat mx-2">{{product.categoria}}</span>
+            <span class="badge text-bg-light mx-2">{{product.estado}}</span>
+          </div>
+        </div>
+        <!-- Product actions-->
+        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+          <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Ver producto</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pagination d-flex justify-content-center align-items-center">
+    <a class="btn custom-link" (click)="onPageChange(currentPage - 1)" *ngIf="currentPage !== 0">Anterior</a>
+      <span class="mx-2 text-center align-middle">Página {{ currentPage + 1 }} de {{ totalPages }}</span>
+      <a class="btn custom-link" (click)="onPageChange(currentPage + 1)" *ngIf="currentPage + 2 <= totalPages">Siguiente</a>
+  </div>
+</section>
+<ng-template #noProducts>
+  <p>No hay productos disponibles.</p>
+</ng-template>
+  

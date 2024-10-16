@@ -1,6 +1,6 @@
 <div *ngIf="userdata">
-    <h1>Bienvenido, {{ userdata.username }}</h1>
-    
+    <app-navbar [usuario]=userdata.username></app-navbar>
+    <app-product-list></app-product-list>
   </div>
   <div *ngIf="!userdata">
     <p>No se encontraron datos del cliente.</p>

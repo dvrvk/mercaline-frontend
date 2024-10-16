@@ -1,1 +1,18 @@
+:root {
+    --main-color: #4dce83;
+    --darker-main-color: #48be79;
+}
 
+.custom-link {
+    text-decoration: none;
+    border-bottom: 2px solid var(--main-color); /* Color del subrayado */
+    padding-bottom: 2px;
+    transition: border-color 0.3s;
+    font-weight: 500;
+  }
+  
+  .custom-link:hover {
+    border-bottom-color: 2px solid var(--darker-main-color); /* Color del subrayado al pasar el ratón */
+    font-weight: bold;
+}
+  

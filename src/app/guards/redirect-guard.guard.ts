@@ -1,5 +1,5 @@
 import { CanActivateFn, Router } from '@angular/router';
-import { UserServiceService } from '../services/user-service.service';
+import { UserServiceService } from '../services/user-service/user-service.service';
 import { inject } from '@angular/core';
 
 export const redirectGuardGuard: CanActivateFn = (route, state) => {
