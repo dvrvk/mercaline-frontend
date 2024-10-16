@@ -1,0 +1,9 @@
+.img-limited-height {
+    max-height: 200px; 
+    object-fit: cover;
+}
+
+.badge-cat {
+    background-color: var(--darker-main-color);
+    color: white;
+}

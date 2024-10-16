@@ -1,8 +1,11 @@
 <div *ngIf="userdata">
-    <h1>Bienvenido, {{ userdata.username }}</h1>
-    
-  </div>
-  <div *ngIf="!userdata">
-    <p>No se encontraron datos del cliente.</p>
-  </div>
-  
+  <!-- Al llegar a HOME carga primero el NAVBAR
+   pasando el nombre de usuario por @input -->
+  <app-navbar [usuario]=userdata.username></app-navbar>
+  <app-sidebar></app-sidebar>
+  <app-product-list></app-product-list>
+  <app-footer></app-footer>
+</div>
+<div *ngIf="!userdata">
+  <p>No se encontraron datos del cliente.</p>
+</div>
