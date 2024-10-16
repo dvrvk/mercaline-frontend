@@ -1,0 +1,36 @@
+<nav class="navbar navbar-expand-lg navbar-custom">
+    <div class="container px-5">
+      <a class="navbar-brand" href="#">Logo MERCALINE</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
+        aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Ver productos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Favoritos</a>
+          </li>
+        </ul> 
+        <!-- Botón Usuario -->
+        <div class="dropdown d-flex justify-content-center" id="botonUsuario">
+          <span class="navbar-text mx-3"id="hola">Hola</span>
+          <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton1"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            {{ usuario }}
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li><a class="dropdown-item" href="#">Subir producto</a></li>
+            <li><a class="dropdown-item" href="#">Mi perfil</a></li>
+            <li><a class="dropdown-item text-danger" routerLink="login">Salir</a></li>
+            <!-- TO-DO: Al pulsar Salir, borrar token -->
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>

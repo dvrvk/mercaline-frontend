@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { UserServiceService } from '../../services/user-service.service';
+import { UserServiceService } from '../../services/user-service/user-service.service';
 import { FormsModule, Validators, FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
