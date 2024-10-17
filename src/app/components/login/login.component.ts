@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { UserServiceService } from '../../services/user-service/user-service.service';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { UserServiceService } from '../../services/user-service/user-service.service';
 
 declare var Swal: any;
 
