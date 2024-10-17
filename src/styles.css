@@ -16,4 +16,8 @@
     border-bottom-color: 2px solid var(--darker-main-color); /* Color del subrayado al pasar el ratón */
     font-weight: bold;
 }
+
+.text-justify {
+  text-align: justify;
+}
   

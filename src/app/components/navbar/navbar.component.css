@@ -1,9 +1,15 @@
 .navbar-custom {
-    background-color: aquamarine;
+    background: var(--darker-main-color)
 }
-#hola{
-    margin-right: 15px;
+
+.logo-nav {
+    max-width: 50px;
 }
-#botonUsuario{
-    margin-right: 10%;
+
+a {
+    transition: transform 0.1s;
+}
+
+a:hover {
+    transform: scale(1.1);
 }
