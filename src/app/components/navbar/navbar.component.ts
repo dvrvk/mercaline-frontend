@@ -12,7 +12,7 @@ import { UserServiceService } from '../../services/user-service/user-service.ser
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
-[x: string]: any;
+  [x: string]: any;
 
   @Input()
   usuario: string | undefined;

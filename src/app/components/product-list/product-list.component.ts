@@ -20,7 +20,7 @@ export class ProductListComponent {
   totalElements: number = 0;
   totalPages: number = 0;
   currentPage: number = 0;
-  pageSize: number = 10;
+  pageSize: number = 12;
 
   constructor(
     private productService: ProductService, 

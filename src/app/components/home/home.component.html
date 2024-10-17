@@ -2,8 +2,17 @@
   <!-- Al llegar a HOME carga primero el NAVBAR
    pasando el nombre de usuario por @input -->
   <app-navbar [usuario]=userdata.username></app-navbar>
-  <app-sidebar></app-sidebar>
-  <app-product-list></app-product-list>
+  <main class="container-md">
+    <div class="row">
+      <div class="col-md-3">
+        <app-sidebar></app-sidebar>
+      </div>
+      <div class="col-md-9">
+        <app-product-list></app-product-list>
+      </div>
+    </div>
+  </main>
+  
   <app-footer></app-footer>
 </div>
 <div *ngIf="!userdata">
