@@ -56,7 +56,7 @@ export class RegistroComponent {
     if(this.userRegister.valid) {
       // Formateo los datos
       this.userService.formatUserDataRegister(this.userRegister.value);
-      // Petición POST al servidor
+      // Petición POST
       this.userService.registrarUsuario(this.userRegister.value).subscribe({
         next : (response) => {
           // Notificación usuario registrado
