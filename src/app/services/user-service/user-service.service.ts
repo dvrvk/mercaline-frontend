@@ -49,6 +49,11 @@ export class UserServiceService {
     return data;
   }
 
+  formatUserDataLogin(data:any): any {
+    data.username = data.username.trim().toLowerCase();
+    return data;
+  }
+
   private formatName(name: string): string {
     return name
       .trim()
