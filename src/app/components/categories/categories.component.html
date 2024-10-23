@@ -4,7 +4,7 @@
   <div>
     <div class="d-flex" #buttonContainer>
       <ng-container *ngFor="let category of categories">
-        <button class="btn btn-categories me-2">
+        <button class="btn btn-categories me-2" (click)="selectCategory([category.id, category.name])">
           {{ category.name | capitalizeFirst }}
         </button>
       </ng-container>
