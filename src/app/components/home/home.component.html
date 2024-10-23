@@ -2,12 +2,11 @@
   <!-- Al llegar a HOME carga primero el NAVBAR
    pasando el nombre de usuario por @input -->
   <app-navbar [usuario]=userdata.username></app-navbar>
+  
   <main class="container-md">
+    <app-categories></app-categories>
     <div class="row">
-      <div class="col-md-3">
-        <app-sidebar></app-sidebar>
-      </div>
-      <div class="col-md-9">
+      <div class="col-md-12">
         <app-product-list></app-product-list>
       </div>
     </div>

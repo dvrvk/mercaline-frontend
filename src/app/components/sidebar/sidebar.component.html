@@ -1,24 +1,21 @@
 <div id="sidebar" class="flex-shrink-0 p-3">
-  <a href="/" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
-    <svg class="bi me-2" width="30" height="24">
-      <use xlink:href="#bootstrap"></use>
-    </svg>
-  </a>
-  <ul class="list-unstyled ps-0">
-    <li class="mb-1">
-      <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
-        data-bs-target="#home-collapse" aria-expanded="true">
-        <i class="bi bi-arrow-down-circle"></i>
-        <span class="px-lg-2"> Categorías</span>
-      </button>
-      <div class="collapse show" id="home-collapse">
-        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small px-lg-5 px-md-3">
-          <li><a href="#" class="link-dark rounded categoria">Categoría 1</a></li>
-          <li><a href="#" class="link-dark rounded categoria">Categoría 2</a></li>
-          <li><a href="#" class="link-dark rounded categoria">Categoría 3</a></li>
-        </ul>
-      </div>
-    </li>
-    <li class="border-top my-3"></li>
-  </ul>
+  <h4>Filtros</h4>
+    <ul class="list-unstyled ps-0 border-top">
+      <li class="mb-1">
+        <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
+          data-bs-target="#home-collapse" aria-expanded="true">
+          <i class="bi bi-arrow-down-circle"></i>
+          <span class="px-lg-2"> Categoría</span>
+        </button>
+        <div class="collapse" id="home-collapse" >
+          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small px-lg-5 px-md-3" *ngFor="let category of categories">
+            <li>
+                <a class="category-link" id="category-{{category.id}}">{{ category.name | capitalizeFirst }}</a>  
+            </li>
+          </ul>
+        </div>
+      </li>
+      <li class="border-top my-3"></li>
+    </ul>
+  
 </div>

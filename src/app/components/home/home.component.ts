@@ -7,20 +7,27 @@ import { SidebarComponent } from "../sidebar/sidebar.component";
 import { FooterComponent } from '../footer/footer.component';
 import { UserServiceService } from '../../services/user-service/user-service.service';
 import { ProductListComponent } from "../product-list/product-list.component";
+import { CategoriesComponent } from '../categories/categories.component';
 
 declare var Swal: any;
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, NavbarComponent, SidebarComponent, FooterComponent, ProductListComponent],
+  imports: [CommonModule, NavbarComponent, CategoriesComponent, SidebarComponent, FooterComponent, ProductListComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
 export class HomeComponent implements OnInit{
   userdata : any = "";
+  selectedCategoryId: number | null = null;
 
   constructor(private router: Router, private userService: UserServiceService) {};
+
+  // Método que se ejecuta cuando se selecciona una categoría
+  onCategorySelected(categoryId: any): void {
+    console.log(categoryId);
+  }
 
   ngOnInit(): void {
     this.userData();
