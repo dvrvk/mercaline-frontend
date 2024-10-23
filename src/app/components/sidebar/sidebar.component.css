@@ -3,4 +3,12 @@
     float: left;
 }
 
+.category-link {
+    text-decoration: none;
+    color: inherit;
+}
 
+.category-link:hover {
+    color: var(--darker-main-color);
+    cursor: pointer;
+}
