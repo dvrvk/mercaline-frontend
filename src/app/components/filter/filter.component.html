@@ -1,0 +1,36 @@
+<div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="filterModalLabel">Filtros</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label class="form-label">Estado del producto</label>
+              <!--prueba-->
+              <div class="dropdown">
+                <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                  Selecciona estados
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <li *ngFor="let status of statusList">
+                    <div class="form-check mx-3">
+                      <input class="form-check-input custom-check" type="checkbox" value="{{status.id}}" id="status-{{status.id}}" (change)="onCheckboxChange($event)">
+                      <label class="form-check-label" for="status-{{status.id}}">
+                        {{status.name}}
+                      </label>
+                    </div>
+                  </li>
+                  <li><a class="btn btn-danger mt-2 mx-3" (click)="clearSelections()">Limpiar Seleccion</a></li>
+                </ul>
+              </div>
+            </div>
+            <a class="btn custom-btn" (click)="applyFilters()" data-bs-dismiss="modal" aria-label="Close">Aplicar filtros</a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+

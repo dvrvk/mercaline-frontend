@@ -2,6 +2,8 @@ import { Component, EventEmitter, HostListener, Output } from '@angular/core';
 import { Categories, Page, ProductService } from '../../services/product-service/product.service';
 import { CommonModule } from '@angular/common';
 import { CapitalizeFirstPipe } from '../../utils/capitalizeFirst/capitalize-first.pipe';
+import { CategoryService } from '../../services/category/category.service';
+import { ArrayType } from '@angular/compiler';
 
 @Component({
   selector: 'app-categories',
@@ -12,18 +14,23 @@ import { CapitalizeFirstPipe } from '../../utils/capitalizeFirst/capitalize-firs
 })
 export class CategoriesComponent {
   categories : Categories[] = [];
-  @Output() selectedCategoryId = new EventEmitter<number>();
   totalElements: number = 0;
   totalPages: number = 0;
   currentPage: number = 0;
   pageSize: number = 8;
+  selectedCategory : Object = {};
 
-  constructor(private productService : ProductService) {
-
-  }
+  constructor(private productService : ProductService,
+              private categoryService : CategoryService
+  ) {}
 
   ngOnInit() {
     this.updateItemsPerPage();
+  }
+
+  selectCategory(category: any[]) {
+    this.selectedCategory = category;
+    this.categoryService.selectCategory(this.selectedCategory);
   }
 
   @HostListener('window:resize', ['$event'])
@@ -64,9 +71,4 @@ export class CategoriesComponent {
     this.loadCategories(page, this.pageSize);
   }
 
-  // Método para emitir el ID de la categoría seleccionada
-  selectCategory(categoryId: number): void {
-    this.selectedCategoryId.emit(categoryId);
-    console.log(this.selectedCategoryId);
-  }
 }

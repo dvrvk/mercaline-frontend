@@ -1,4 +1,18 @@
-<section class="container py-5 px-2" *ngIf="products.length > 0; else noProducts">
+<section class="container py-4 px-2" *ngIf="products.length > 0; else noProducts">
+  <div *ngIf="selectedCategory">
+      <h2 class="text-center py-3">{{ selectedCategory | capitalizeFirst}} 
+        <span class="mx-4">
+          <button type="button" class="btn btn-dark position-relative" data-bs-toggle="modal" data-bs-target="#filterModal">
+            <i class="bi bi-funnel"></i> Filtros
+            <span *ngIf="arefiltersApplied" class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+              <span class="visually-hidden">New alerts</span>
+            </span>
+          </button>
+        </span>
+      </h2>
+      <!-- Lista de productos basados en la categoría seleccionada -->
+      <app-filter (filtersApplied)="onFiltersApplied($event)" (filterStatusChanged)="onFilterChange($event)"></app-filter>
+  </div>
   <div class="row gx-4 gx-lg-3 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
     <div class="col mb-5" *ngFor="let product of products">
       <div class="card h-100">
@@ -32,8 +46,10 @@
   </div>
 </section>
 <ng-template #noProducts>
-  <div class="container d-flex justify-content-center align-items-center">
-    <p>No hay productos disponibles.</p>
+  <div class="container d-flex flex-column justify-content-center align-items-center">
+    <app-sgv-not-found></app-sgv-not-found>
+    <h3 class="text-center my-3">
+      Ups, parece que no hay productos en esta categoría... ¡pero podrías ser el primero en subir uno y marcar la diferencia!</h3>
   </div>
 </ng-template>
   
