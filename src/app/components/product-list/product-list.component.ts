@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ProductService, ProductResponseSummaryDTO, Page } from '../../services/product-service/product.service';
+import { ProductService, ProductResponseSummaryDTO, Page, FilterClass } from '../../services/product-service/product.service';
 import { CommonModule } from '@angular/common';
 import { CustomCurrencyFormatPipe } from '../../utils/custom-currency/custom-currency-format.pipe';
 import { UserServiceService } from '../../services/user-service/user-service.service';
@@ -18,24 +18,33 @@ declare var Swal: any;
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.css'
 })
+
 export class ProductListComponent {
+  // Productos y paginacion
   products: ProductResponseSummaryDTO[] = [];
   totalElements: number = 0;
   totalPages: number = 0;
   currentPage: number = 0;
   pageSize: number = 12;
 
+  // Categoria seleccionada
   selectedCategory: string = '';
   selectedCategoryId: number = 0;
 
+  // Indiciador de filtros aplicados
   arefiltersApplied: boolean = false;
+
+  //Errores
+  isError : boolean = false;
+  errorMessage : string = "Ups, lo sentimos no hemos podido conectarnos al servidor. Por favor, intentalo más tarde."
 
   constructor(
     private productService: ProductService, 
     private UserService: UserServiceService,
     private router: Router,
     private categoryService: CategoryService) {}
-
+  
+  // Al inicio - cargar productos y suscribir los cambios de categoria
   ngOnInit() : void {
     this.loadProducts(this.currentPage, this.pageSize);
     this.categoryService.selectedCategory$.subscribe((category : any) => {
@@ -44,17 +53,17 @@ export class ProductListComponent {
         this.selectedCategoryId = category[0];
         this.loadProductsByCategory(this.currentPage, this.pageSize, category[0]);
       }
-     
-      // Aquí puedes cargar los productos basados en la categoría seleccionada
     });
   }
 
+  // Si cambian los productos
   ngOnChanges(): void {
     this.loadProducts(this.currentPage, this.pageSize);
   }
 
-  onFiltersApplied(selectedStatus: number[]) {
-    this.productService.getProductsFilter(0, this.pageSize, this.selectedCategoryId, selectedStatus)
+  // Al aplicar filtros volver a cargar productos
+  onFiltersApplied(filters: FilterClass) {
+    this.productService.getProductsFilter(0, this.pageSize, this.selectedCategoryId, filters)
     .subscribe((data)=> {
       this.products = data.content;
       this.totalElements = data.page.totalElements;
@@ -64,13 +73,14 @@ export class ProductListComponent {
     (error)=> {
       console.log(error)
     })
-    // Aquí puedes ejecutar la función que necesites con los filtros aplicados
   }
 
+  // Indiciar que se han incorporado filtros
   onFilterChange(areFilter: boolean) {
     this.arefiltersApplied = areFilter;
   }
 
+  // Cargar los productos filtrando por categoria
   loadProductsByCategory(page: number, size: number, categoryId:number ) : void {
 
     this.productService.getProductsByCategory(page, size, categoryId).subscribe(
@@ -80,9 +90,10 @@ export class ProductListComponent {
         this.totalElements = data.page.totalElements;
         this.totalPages = data.page.totalPages;
         this.currentPage = data.page.number;
+        this.isError = false;
       }, 
       (error) => {
-        console.error('Error al cargar los productos', error.error)
+        //console.error('Error al cargar los productos', error.error)
 
         const message = error.error && error.error.message ? error.error.message : "Ha ocurrido un error al cargar los productos. Por favor, inténtalo de nuevo"
 
@@ -94,10 +105,13 @@ export class ProductListComponent {
           showConfirmButton: true
         });
 
+        this.isError = true;
+
         // Si el token no es valido se hace logout()
         if(Number(error.error.status) === 401) {
           this.UserService.logOut();
           this.router.navigate(["/login"]);
+          this.isError = false;
           
         }
       }
@@ -105,7 +119,7 @@ export class ProductListComponent {
  
   }
   
-
+  // Cargar productos paginados
   loadProducts(page: number, size: number) : void {
 
       this.productService.getProduct(page, size).subscribe(
@@ -115,12 +129,13 @@ export class ProductListComponent {
           this.totalElements = data.page.totalElements;
           this.totalPages = data.page.totalPages;
           this.currentPage = data.page.number;
+          this.isError = false;
         }, 
         (error) => {
           console.error('Error al cargar los productos', error.error)
   
           const message = error.error && error.error.message ? error.error.message : "Ha ocurrido un error al cargar los productos. Por favor, inténtalo de nuevo"
-  
+          this.isError = true;
           Swal.fire({
             position: "center",
             icon: "error",
@@ -128,11 +143,13 @@ export class ProductListComponent {
             text: message,
             showConfirmButton: true
           });
+          
   
           // Si el token no es valido se hace logout()
           if(Number(error.error.status) === 401) {
             this.UserService.logOut();
             this.router.navigate(["/login"]);
+            this.isError = false;
             
           }
         }
@@ -140,6 +157,7 @@ export class ProductListComponent {
    
     }
 
+    // Cargar productos al cambiar de página
     onPageChange(page: number): void {
       this.loadProducts(page, this.pageSize);
     }

@@ -1,18 +1,21 @@
-<div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+<div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true" (blur)="closeModal($event)" (focus)="openModal($event)">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="filterModalLabel">Filtros</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button id="close-modal-btn" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <form>
             <div class="mb-3">
               <label class="form-label">Estado del producto</label>
-              <!--prueba-->
+  
               <div class="dropdown">
-                <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                <button class="btn btn-outline-dark dropdown-toggle position-relative" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                   Selecciona estados
+                  <span *ngIf="areSelectedStatusF()" class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+                    <span class="visually-hidden">New alerts</span>
+                  </span>
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                   <li *ngFor="let status of statusList">
@@ -27,7 +30,25 @@
                 </ul>
               </div>
             </div>
-            <a class="btn custom-btn" (click)="applyFilters()" data-bs-dismiss="modal" aria-label="Close">Aplicar filtros</a>
+            <div class="mb-3">
+              <div class="row g-3 align-items-center">
+                <!-- Input de Precio Mínimo -->
+                <div class="col-6">
+                  <label for="precioMin" class="form-label">Precio Mínimo</label>
+                  <input type="number" id="precioMin" class="form-control" [(ngModel)]="minTempPrice" (input)="validarRango()"  (input)="changePrice($event)" [ngClass]="{ 'is-invalid': errorRange }" name="precioMin">
+                </div>
+                <!-- Input de Precio Máximo -->
+                <div class="col-6">
+                  <label for="precioMax" class="form-label">Precio Máximo</label>
+                  <input type="number" id="precioMax" class="form-control" [(ngModel)]="maxTempPrice" (input)="validarRango()" (input)="changePrice($event)" [ngClass]="{ 'is-invalid': errorRange }" name="precioMax">
+                </div>
+              </div>
+              <div *ngIf="errorRange" class="text-danger mt-2">
+                El precio mínimo no puede ser mayor que el precio máximo.
+              </div>
+            </div>
+            <button [disabled]="errorRange" class="btn custom-btn" (click)="applyFilters()" data-bs-dismiss="modal" aria-label="Close"> Aplicar filtros</button>
+            <a class="btn btn-danger mx-3" (click)="clearFilter()" data-bs-dismiss="modal" aria-label="Close">Limpiar filtros</a>
           </form>
         </div>
       </div>

@@ -11,7 +11,7 @@
         </span>
       </h2>
       <!-- Lista de productos basados en la categoría seleccionada -->
-      <app-filter (filtersApplied)="onFiltersApplied($event)" (filterStatusChanged)="onFilterChange($event)"></app-filter>
+      <app-filter (filterApplied)="onFiltersApplied($event)" (filterStatusChanged)="onFilterChange($event)"></app-filter>
   </div>
   <div class="row gx-4 gx-lg-3 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
     <div class="col mb-5" *ngFor="let product of products">
@@ -48,8 +48,13 @@
 <ng-template #noProducts>
   <div class="container d-flex flex-column justify-content-center align-items-center">
     <app-sgv-not-found></app-sgv-not-found>
-    <h3 class="text-center my-3">
-      Ups, parece que no hay productos en esta categoría... ¡pero podrías ser el primero en subir uno y marcar la diferencia!</h3>
+    <h3 class="text-center my-3" *ngIf="isError">
+      {{errorMessage}}
+    </h3>
+    <h3 class="text-center my-3" *ngIf="!isError">
+      Ups, parece que no hay productos en esta categoría... ¡pero podrías ser el primero en subir uno y marcar la diferencia!
+    </h3>
+      
   </div>
 </ng-template>
   
