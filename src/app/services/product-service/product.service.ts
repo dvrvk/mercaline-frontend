@@ -12,7 +12,7 @@ export class ProductService {
   private apiUrlStatus = 'http://localhost:8080/products/status';
   private apiUrlUser = 'http://localhost:8080/user/products'
   private apiUrlfindByCategory = `http://localhost:8080/products/category/`;
-  private apiUrlFilter = 'http://localhost:8080/products/filter';
+  private apiUrlFilter = 'http://localhost:8080/products/filter2';
 
   constructor(private http: HttpClient) { }
 
@@ -49,20 +49,33 @@ export class ProductService {
     return this.http.get<Page<ProductResponseSummaryDTO>>(this.apiUrlfindByCategory + categoryId, {headers, params});
   }
   
-  getProductsFilter(page: number, size: number, categoryId : number, statusList : number[]): Observable<Page<ProductResponseSummaryDTO>> {
-    
+  getProductsFilter(page: number, size: number, categoryId : number, filter : FilterClass): Observable<Page<ProductResponseSummaryDTO>> {
+    console.log(filter)
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     let params = new HttpParams()
                           .set('page', page.toString())
                           .set('size', size.toString())
                           .set('categoryId', categoryId)
-                          .set('status', statusList.toString())
+                          .set('status', filter.statusFilter.toString())
+    if(filter.minPrice !== null) {
+      params = params.set('minPrice', filter.minPrice)
+    }
 
+    if(filter.maxPrice !== null) {
+      params = params.set('maxPrice', filter.maxPrice.toString())
+    }
+    
     return this.http.get<Page<ProductResponseSummaryDTO>>(this.apiUrlFilter, {headers, params});
     
   }
 
+}
+
+export interface FilterClass {
+  statusFilter : number[],
+  maxPrice : number | null,
+  minPrice : number | null
 }
 
 export interface Categories {
