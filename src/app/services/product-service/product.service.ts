@@ -49,7 +49,7 @@ export class ProductService {
     return this.http.get<Page<ProductResponseSummaryDTO>>(this.apiUrlfindByCategory + categoryId, {headers, params});
   }
   
-  getProductsFilter(page: number, size: number, categoryId : number, filter : FilterClass): Observable<Page<ProductResponseSummaryDTO>> {
+  getProductsFilter(page: number, size: number, categoryId : number, filter : FilterClass | null, order : string | null): Observable<Page<ProductResponseSummaryDTO>> {
     console.log(filter)
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
@@ -57,13 +57,20 @@ export class ProductService {
                           .set('page', page.toString())
                           .set('size', size.toString())
                           .set('categoryId', categoryId)
-                          .set('status', filter.statusFilter.toString())
-    if(filter.minPrice !== null) {
-      params = params.set('minPrice', filter.minPrice)
+    if(filter !== null) {
+      params = params.set('status', filter.statusFilter.toString())
+
+      if(filter.minPrice !== null) {
+        params = params.set('minPrice', filter.minPrice)
+      }
+  
+      if(filter.maxPrice !== null) {
+        params = params.set('maxPrice', filter.maxPrice.toString())
+      }
     }
 
-    if(filter.maxPrice !== null) {
-      params = params.set('maxPrice', filter.maxPrice.toString())
+    if(order !== null) {
+      params = params.set('sort', order);
     }
     
     return this.http.get<Page<ProductResponseSummaryDTO>>(this.apiUrlFilter, {headers, params});
