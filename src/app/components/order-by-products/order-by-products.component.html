@@ -1,0 +1,16 @@
+<div class="dropdown">
+    <button class="btn" id="sortButton" data-bs-toggle="dropdown"
+        aria-expanded="false">
+        <p class="m-0">
+            Ordenado por 
+            <span id="sort-by-text" class="highlighted-text me-2">{{ sortBy }}</span>
+            <i class="bi bi-caret-down"></i>
+        </p>
+    </button>
+
+    <ul class="dropdown-menu" aria-labelledby="sortButton">
+        <li><a class="dropdown-item" (click)="changeSort('default')">Por defecto</a></li>
+        <li><a class="dropdown-item" (click)="changeSort('highPrice')">Precio: más caros primero</a></li>
+        <li><a class="dropdown-item" (click)="changeSort('lowPrice')">Precio: más batratos primeros</a></li>
+    </ul>
+</div>

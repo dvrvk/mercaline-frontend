@@ -8,13 +8,19 @@ import { CapitalizeFirstPipe } from '../../utils/capitalizeFirst/capitalize-firs
 import { CategoryService } from '../../services/category/category.service';
 import { SgvNotFoundComponent } from "../svg-icons/sgv-not-found/sgv-not-found.component";
 import { FilterComponent } from "../filter/filter.component";
+import { OrderByProductsComponent } from '../order-by-products/order-by-products.component';
 
 declare var Swal: any;
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [CommonModule, CustomCurrencyFormatPipe, CapitalizeFirstPipe, SgvNotFoundComponent, FilterComponent],
+  imports: [CommonModule, 
+            CustomCurrencyFormatPipe, 
+            CapitalizeFirstPipe, 
+            SgvNotFoundComponent, 
+            FilterComponent,
+            OrderByProductsComponent],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.css'
 })
@@ -33,6 +39,8 @@ export class ProductListComponent {
 
   // Indiciador de filtros aplicados
   arefiltersApplied: boolean = false;
+  filterApplied : FilterClass | null = null;
+  orderApplied : string | null = null;
 
   //Errores
   isError : boolean = false;
@@ -51,7 +59,7 @@ export class ProductListComponent {
       if(Object.keys(category).length != 0) {
         this.selectedCategory = category[1];
         this.selectedCategoryId = category[0];
-        this.loadProductsByCategory(this.currentPage, this.pageSize, category[0]);
+        this.loadProductsByCategory(0, this.pageSize, category[0]);
       }
     });
   }
@@ -63,7 +71,42 @@ export class ProductListComponent {
 
   // Al aplicar filtros volver a cargar productos
   onFiltersApplied(filters: FilterClass) {
-    this.productService.getProductsFilter(0, this.pageSize, this.selectedCategoryId, filters)
+    console.log('peticion filtros')
+    this.filterApplied = filters;
+    this.productService.getProductsFilter(0, this.pageSize, this.selectedCategoryId, filters, this.orderApplied)
+    .subscribe((data)=> {
+      this.products = data.content;
+      this.totalElements = data.page.totalElements;
+      this.totalPages = data.page.totalPages;
+      this.currentPage = data.page.number;
+    },
+    (error)=> {
+      console.log(error)
+
+      // Logout
+    })
+  }
+
+  // Indiciar que se han incorporado filtros
+  onFilterChange(areFilter: boolean) {
+    this.arefiltersApplied = areFilter;
+    // this.productService.getProductsFilter(0, this.pageSize, this.selectedCategoryId, this.filterApplied, this.orderApplied)
+    // .subscribe((data)=> {
+    //   this.products = data.content;
+    //   this.totalElements = data.page.totalElements;
+    //   this.totalPages = data.page.totalPages;
+    //   this.currentPage = data.page.number;
+    // },
+    // (error)=> {
+    //   console.log(error)
+    // })
+  }
+
+  // Ordenar los productos
+  onOrderApplied(order : string) {
+    this.orderApplied = order;
+    console.log('peticion order' + order)
+    this.productService.getProductsFilter(0, this.pageSize, this.selectedCategoryId, this.filterApplied, this.orderApplied)
     .subscribe((data)=> {
       this.products = data.content;
       this.totalElements = data.page.totalElements;
@@ -75,13 +118,8 @@ export class ProductListComponent {
     })
   }
 
-  // Indiciar que se han incorporado filtros
-  onFilterChange(areFilter: boolean) {
-    this.arefiltersApplied = areFilter;
-  }
-
   // Cargar los productos filtrando por categoria
-  loadProductsByCategory(page: number, size: number, categoryId:number ) : void {
+  loadProductsByCategory(page: number, size: number, categoryId:number) : void {
 
     this.productService.getProductsByCategory(page, size, categoryId).subscribe(
       (data: Page<ProductResponseSummaryDTO>) => {
@@ -93,8 +131,6 @@ export class ProductListComponent {
         this.isError = false;
       }, 
       (error) => {
-        //console.error('Error al cargar los productos', error.error)
-
         const message = error.error && error.error.message ? error.error.message : "Ha ocurrido un error al cargar los productos. Por favor, inténtalo de nuevo"
 
         Swal.fire({
@@ -160,6 +196,10 @@ export class ProductListComponent {
     // Cargar productos al cambiar de página
     onPageChange(page: number): void {
       this.loadProducts(page, this.pageSize);
+    }
+
+    private logout() {
+
     }
     
 }
