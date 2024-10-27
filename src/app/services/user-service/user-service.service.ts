@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 
@@ -10,8 +10,24 @@ export class UserServiceService {
 
   private url = 'http://localhost:8080';
   private pathRegister = "/user/registrar";
+  private pathGetUser = '/user/profile'; 
+  private pathUpdateUser = '/user/update'; 
+
 
   constructor(private http: HttpClient) { }
+
+  // Obtener datos de usuario
+  getUsuario(): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get<any>(this.url + this.pathGetUser, { headers });
+  }
+  // Editar usuario
+  updateUsuario(user: any): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.put<any>(this.url + this.pathUpdateUser, user, { headers });
+  }
 
   isAuth(): boolean {
     const token = localStorage.getItem('token');

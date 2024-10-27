@@ -28,5 +28,11 @@ export const routes: Routes = [
         title: 'Home',
         component: HomeComponent,
         canActivate: [authGuard]
+    },
+    {
+        path: 'perfil',
+        title: 'Perfil',
+        component: PerfilComponent,
+        canActivate: [authGuard]
     }
 ];
