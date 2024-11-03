@@ -27,7 +27,7 @@ export class PerfilComponent {
     password: ''
   };
 
-  constructor(private userService: UserServiceService) { }
+  constructor(private userService: UserServiceService, private router: Router) { }
 
   ngOnInit(): void {
     this.userService.getUsuario().subscribe(datos => {
@@ -46,6 +46,41 @@ export class PerfilComponent {
         console.error('Error al actualizar el perfil', error);
       }
     );
+  }
+
+  // método para eliminar el perfil de usuario
+  eliminarPerfil(): void {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: "¡No podrás revertir esto!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminarlo'
+    }).then((result: { isConfirmed: any; }) => {
+      if (result.isConfirmed) {
+        this.userService.deleteUsuario().subscribe(
+          response => {
+            Swal.fire(
+              '¡Eliminado!',
+              'Tu perfil ha sido eliminado.',
+              'success'
+            );
+            this.userService.logOut();
+            this.router.navigate(['/login']);
+          },
+          error => {
+            console.error('Error al eliminar el perfil', error);
+            Swal.fire(
+              'Error',
+              'Hubo un problema al eliminar tu perfil. Inténtalo de nuevo más tarde.',
+              'error'
+            );
+          }
+        );
+      }
+    })
   }
   
     

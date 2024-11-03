@@ -12,6 +12,7 @@ export class UserServiceService {
   private pathRegister = "/user/registrar";
   private pathGetUser = '/user/profile'; 
   private pathUpdateUser = '/user/update'; 
+  private pathDeleteUser = '/user/delete'; 
 
 
   constructor(private http: HttpClient) { }
@@ -27,6 +28,12 @@ export class UserServiceService {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this.http.put<any>(this.url + this.pathUpdateUser, user, { headers });
+  }
+  // Eliminar usuario
+  deleteUsuario(): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.delete<any>(this.url + this.pathDeleteUser, { headers });
   }
 
   isAuth(): boolean {
