@@ -22,7 +22,7 @@
 
           <div class="mb-3">
             <label for="email" class="form-label">Email*:</label>
-            <input type="email" class="form-control" id="email" name="email" formControlName="email">
+            <input type="email" class="form-control" id="email" name="email" formControlName="email" (blur)="checkEmail()">
             <app-error-messages [control]="userRegister.get('email')" 
             [errorMessage]="{
               pattern: 'Introduce un correo electrónico valido.'

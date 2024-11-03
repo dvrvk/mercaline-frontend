@@ -14,6 +14,8 @@ export class UserServiceService {
   private pathUpdateUser = '/user/update'; 
   private pathDeleteUser = '/user/delete'; 
   private pathCheckUsername = '/user/check-username'; // verificar Ya registrado
+  private pathCheckEmail = '/user/check-email'; // verificar email ya registrado
+
 
   constructor(private http: HttpClient) { }
 
@@ -39,6 +41,11 @@ export class UserServiceService {
   checkUsername(username: string): Observable<any> {
     const params = new HttpParams().set('username', username);
     return this.http.get<any>(`${this.url}${this.pathCheckUsername}`, { params });
+  }
+  // Verificar si email ya está registrado
+  checkEmail(email: string): Observable<any> {
+    const params = new HttpParams().set('email', email);
+    return this.http.get<any>(`${this.url}${this.pathCheckEmail}`, { params });
   }
   
 

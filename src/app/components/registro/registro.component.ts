@@ -17,6 +17,7 @@ export class RegistroComponent {
 
   userRegister: FormGroup;
   usernameExists = false;
+  emailExists = false;
 
   constructor(
     private fb: FormBuilder,
@@ -71,6 +72,32 @@ export class RegistroComponent {
             icon: 'error',
             title: 'Error al comprobar el usuario',
             text: 'Ha ocurrido un error al verificar si el usuario ya está registrado. Inténtalo de nuevo.'
+          });
+        }
+      });
+    }
+  }
+  checkEmail() {
+    const email = this.userRegister.get('email')?.value;
+    if (email) {
+      this.userService.checkEmail(email).subscribe({
+        next: (response) => {
+          if (response.exists) {
+            this.emailExists = true;
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'El correo electrónico ya está registrado. Por favor, usa otro.'
+            });
+          } else {
+            this.emailExists = false;
+          }
+        },
+        error: (error) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error al comprobar el correo electrónico',
+            text: 'Ha ocurrido un error al verificar si el correo electrónico ya está registrado. Inténtalo de nuevo.'
           });
         }
       });
