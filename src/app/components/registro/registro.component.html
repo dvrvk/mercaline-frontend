@@ -13,7 +13,7 @@
         <form [formGroup]="userRegister" (ngSubmit)="onSubmit()" #registerForm="ngForm">
           <div class="mb-3">
             <label for="username" class="form-label">Nombre de usuario*:</label>
-            <input type="text" class="form-control" id="username" name="username" formControlName="username">
+            <input type="text" class="form-control" id="username" name="username" formControlName="username" (blur)="checkUsername()">
             <app-error-messages [control]="userRegister.get('username')"
             [errorMessage]="{
               pattern: 'El nombre de usuario solo puede contener letras y numeros.'
@@ -55,10 +55,11 @@
             }"></app-error-messages>
           </div>
           <div class="text-center">
-            <button type="submit" class="btn btn-primary me-2">Registrarse</button>
+            <button type="submit" class="btn btn-login me-2">Registrarse</button>
             <a class="btn btn-outline-primary" routerLink="/login">Volver</a>
           </div>
         </form>
       </div>
     </div>
   </div>
+</div>

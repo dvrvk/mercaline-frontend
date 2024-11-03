@@ -1,29 +1,28 @@
 import { Component } from '@angular/core';
-import { FormsModule, Validators, FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, Validators, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ErrorMessagesComponent } from '../validation/error-messages/error-messages.component';
 import { UserServiceService } from '../../services/user-service/user-service.service';
-
-declare var Swal: any;
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-registro',
   standalone: true,
   imports: [FormsModule, RouterLink, CommonModule, ReactiveFormsModule, ErrorMessagesComponent],
   templateUrl: './registro.component.html',
-  styleUrl: './registro.component.css'
+  styleUrls: ['./registro.component.css']
 })
 export class RegistroComponent {
 
   userRegister: FormGroup;
+  usernameExists = false;
 
   constructor(
     private fb: FormBuilder,
     private userService: UserServiceService,
-    private router: Router,
-
-  ) { 
+    private router: Router
+  ) {
     this.userRegister = this.fb.group({
       username: ['', [
         Validators.required, 
@@ -49,37 +48,58 @@ export class RegistroComponent {
       tel: ['', [
         Validators.pattern('^(\\+34|0034|34)?[6-7][0-9]{8}$')]]
     });
+  }
 
+  checkUsername() {
+    const username = this.userRegister.get('username')?.value;
+    if (username) {
+      this.userService.checkUsername(username).subscribe({
+        next: (response) => {
+          if (response.exists) {
+            this.usernameExists = true;
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'El nombre de usuario ya está registrado. Por favor, elige otro.'
+            });
+          } else {
+            this.usernameExists = false;
+          }
+        },
+        error: (error) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error al comprobar el usuario',
+            text: 'Ha ocurrido un error al verificar si el usuario ya está registrado. Inténtalo de nuevo.'
+          });
+        }
+      });
+    }
   }
 
   onSubmit() {
-    if(this.userRegister.valid) {
-      // Formateo los datos
+    if (this.userRegister.valid && !this.usernameExists) {
       this.userService.formatUserDataRegister(this.userRegister.value);
-      // Petición POST
       this.userService.registrarUsuario(this.userRegister.value).subscribe({
-        next : (response) => {
-          // Notificación usuario registrado
+        next: (response) => {
           Swal.fire({
-            position: "center",
-            icon: "success",
+            position: 'center',
+            icon: 'success',
             title: `${response.username} se ha registrado`,
             showConfirmButton: false,
             timer: 1500
           });
-          // Login - redirigimos a su home
           this.login();
         },
-        error : (error) => {
-          // Mensaje de error
+        error: (error) => {
           Swal.fire({
-            icon: "error",
-            title: "Oops...",
+            icon: 'error',
+            title: 'Oops...',
             text: (Object.values(error.error.mensaje)).join(' ')
           });
-      }})
+        }
+      });
     } else {
-      // Mensajes de validacion
       this.userRegister.markAllAsTouched();
     }
   }
@@ -87,11 +107,11 @@ export class RegistroComponent {
   login() {
     this.userService.logIn(this.userRegister.value).subscribe(
       response => {
-        this.router.navigate(["/home"]);
+        this.router.navigate(['/home']);
       },
       error => {
-        console.log(error)
+        console.log(error);
       }
-    )
+    );
   }
 }

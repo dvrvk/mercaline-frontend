@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 
@@ -13,7 +13,7 @@ export class UserServiceService {
   private pathGetUser = '/user/profile'; 
   private pathUpdateUser = '/user/update'; 
   private pathDeleteUser = '/user/delete'; 
-
+  private pathCheckUsername = '/user/check-username'; // verificar Ya registrado
 
   constructor(private http: HttpClient) { }
 
@@ -35,6 +35,12 @@ export class UserServiceService {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this.http.delete<any>(this.url + this.pathDeleteUser, { headers });
   }
+  // Verificar si el usuario ya está registrado
+  checkUsername(username: string): Observable<any> {
+    const params = new HttpParams().set('username', username);
+    return this.http.get<any>(`${this.url}${this.pathCheckUsername}`, { params });
+  }
+  
 
   isAuth(): boolean {
     const token = localStorage.getItem('token');
