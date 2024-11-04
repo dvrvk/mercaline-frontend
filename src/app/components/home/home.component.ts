@@ -1,17 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserServiceService } from '../../services/user-service/user-service.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from '../navbar/navbar.component';
-import { ProductListComponent } from '../product-list/product-list.component';
+import { SidebarComponent } from "../sidebar/sidebar.component";
+import { FooterComponent } from '../footer/footer.component';
+import { UserServiceService } from '../../services/user-service/user-service.service';
+import { ProductListComponent } from "../product-list/product-list.component";
+import { CategoriesComponent } from '../categories/categories.component';
+import { FilterComponent } from '../filter/filter.component';
 
 declare var Swal: any;
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, NavbarComponent, ProductListComponent],
+  imports: [CommonModule, NavbarComponent, CategoriesComponent, 
+    SidebarComponent, FooterComponent, ProductListComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })

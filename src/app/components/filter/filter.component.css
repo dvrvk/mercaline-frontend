@@ -1,0 +1,15 @@
+.custom-check:checked {
+    background-color: var(--lighter-main-color);
+    border: 4px solid var(--main-color)
+}
+
+.custom-btn {
+    background-color: var(--darker-main-color);
+    color: white;
+    transform: background 0.2s;
+}
+
+.custom-btn:hover {
+    background-color: var(--darker-btn-main-color);
+    color: white;
+}

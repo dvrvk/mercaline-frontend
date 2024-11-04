@@ -14,16 +14,21 @@
         <div class="col-md-6">
             <h2 class="text-center p-3">Inicia Sesión</h2>
             <div class="card p-5 m-auto">
-                <form (ngSubmit)="iniciarSesion()" #loginForm="ngForm">
+                <form [formGroup]="userLogin" (ngSubmit)="iniciarSesion()" #loginForm="ngForm">
                     <div class="mb-3">
                         <label for="username" class="form-label">Nombre de usuario</label>
                         <input type="text" class="form-control" id="username" name="username"
-                            [(ngModel)]="user.username" required>
+                        formControlName="username" required>
+                        <app-error-messages [control]="userLogin.get('username')"
+        [errorMessage]="{
+          pattern: 'El nombre de usuario solo puede contener letras y numeros.'
+        }"></app-error-messages>
                     </div>
                     <div class="mb-3">
                         <label for="pass" class="form-label">Contraseña</label>
-                        <input type="password" class="form-control" id="pass" name="pass" [(ngModel)]="user.password"
+                        <input type="password" class="form-control" id="pass" name="pass" formControlName="password"
                             required>
+                            <app-error-messages [control]="userLogin.get('password')"></app-error-messages>
                     </div>
                     <button type="submit" class="btn btn-login" [disabled]="!loginForm.form.valid">
                         Iniciar Sesión

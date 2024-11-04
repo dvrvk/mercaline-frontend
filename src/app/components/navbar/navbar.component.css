@@ -1,3 +1,15 @@
 .navbar-custom {
-    background: var(--main-color)
+    background: var(--darker-main-color)
+}
+
+.logo-nav {
+    max-width: 50px;
+}
+
+a {
+    transition: transform 0.1s;
+}
+
+a:hover {
+    transform: scale(1.1);
 }

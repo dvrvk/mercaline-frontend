@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { UserServiceService } from '../../services/user-service/user-service.service';
 import { FormsModule, Validators, FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ErrorMessagesComponent } from '../validation/error-messages/error-messages.component';
+import { UserServiceService } from '../../services/user-service/user-service.service';
 
 declare var Swal: any;
 
@@ -56,7 +56,7 @@ export class RegistroComponent {
     if(this.userRegister.valid) {
       // Formateo los datos
       this.userService.formatUserDataRegister(this.userRegister.value);
-      // Petición POST al servidor
+      // Petición POST
       this.userService.registrarUsuario(this.userRegister.value).subscribe({
         next : (response) => {
           // Notificación usuario registrado

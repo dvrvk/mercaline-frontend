@@ -1,0 +1,14 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+#sidebar{
+    float: left;
+}
+
+.category-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.category-link:hover {
+    color: var(--darker-main-color);
+    cursor: pointer;
+}
