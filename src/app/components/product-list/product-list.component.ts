@@ -9,6 +9,7 @@ import { CategoryService } from '../../services/category/category.service';
 import { SgvNotFoundComponent } from "../svg-icons/sgv-not-found/sgv-not-found.component";
 import { FilterComponent } from "../filter/filter.component";
 import { OrderByProductsComponent } from '../order-by-products/order-by-products.component';
+import { ErrorAlertComponent } from '../alerts/error-alert/error-alert.component';
 
 declare var Swal: any;
 
@@ -20,7 +21,8 @@ declare var Swal: any;
             CapitalizeFirstPipe, 
             SgvNotFoundComponent, 
             FilterComponent,
-            OrderByProductsComponent],
+            OrderByProductsComponent,
+            ErrorAlertComponent],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.css'
 })
@@ -45,6 +47,9 @@ export class ProductListComponent {
   //Errores
   isError : boolean = false;
   errorMessage : string = "Ups, lo sentimos no hemos podido conectarnos al servidor. Por favor, intentalo más tarde."
+  errorMessageAlert : string = '';
+  errorTitleAlert : string = ''
+  isErrorAlert : boolean = false;
 
   constructor(
     private productService: ProductService, 
@@ -81,25 +86,17 @@ export class ProductListComponent {
       this.currentPage = data.page.number;
     },
     (error)=> {
-      console.log(error)
+      const message = error.error && error.error.message ? error.error.message : "Ha ocurrido un error al cargar los productos. Por favor, inténtalo de nuevo"
+      this.onError(message, "Error al cargar los productos");
 
-      // Logout
+      // Si el token no es valido se hace logout()
+      this.onErrorStatus(error.error.status);
     })
   }
 
   // Indiciar que se han incorporado filtros
   onFilterChange(areFilter: boolean) {
     this.arefiltersApplied = areFilter;
-    // this.productService.getProductsFilter(0, this.pageSize, this.selectedCategoryId, this.filterApplied, this.orderApplied)
-    // .subscribe((data)=> {
-    //   this.products = data.content;
-    //   this.totalElements = data.page.totalElements;
-    //   this.totalPages = data.page.totalPages;
-    //   this.currentPage = data.page.number;
-    // },
-    // (error)=> {
-    //   console.log(error)
-    // })
   }
 
   // Ordenar los productos
@@ -114,7 +111,11 @@ export class ProductListComponent {
       this.currentPage = data.page.number;
     },
     (error)=> {
-      console.log(error)
+      const message = error.error && error.error.message ? error.error.message : "Ha ocurrido un error al cargar los productos. Por favor, inténtalo de nuevo"
+      this.onError(message, "Error al cargar los productos");
+
+      // Si el token no es valido se hace logout()
+      this.onErrorStatus(error.error.status);
     })
   }
 
@@ -132,24 +133,10 @@ export class ProductListComponent {
       }, 
       (error) => {
         const message = error.error && error.error.message ? error.error.message : "Ha ocurrido un error al cargar los productos. Por favor, inténtalo de nuevo"
-
-        Swal.fire({
-          position: "center",
-          icon: "error",
-          title: "Error al cargar los productos",
-          text: message,
-          showConfirmButton: true
-        });
-
-        this.isError = true;
+        this.onError(message, "Error al cargar los productos");
 
         // Si el token no es valido se hace logout()
-        if(Number(error.error.status) === 401) {
-          this.UserService.logOut();
-          this.router.navigate(["/login"]);
-          this.isError = false;
-          
-        }
+        this.onErrorStatus(error.error.status);
       }
     );
  
@@ -171,23 +158,10 @@ export class ProductListComponent {
           console.error('Error al cargar los productos', error.error)
   
           const message = error.error && error.error.message ? error.error.message : "Ha ocurrido un error al cargar los productos. Por favor, inténtalo de nuevo"
-          this.isError = true;
-          Swal.fire({
-            position: "center",
-            icon: "error",
-            title: "Error al cargar los productos",
-            text: message,
-            showConfirmButton: true
-          });
-          
-  
+          this.onError(message, "Error al cargar los productos");
+
           // Si el token no es valido se hace logout()
-          if(Number(error.error.status) === 401) {
-            this.UserService.logOut();
-            this.router.navigate(["/login"]);
-            this.isError = false;
-            
-          }
+          this.onErrorStatus(error.error.status);
         }
       );
    
@@ -198,8 +172,27 @@ export class ProductListComponent {
       this.loadProducts(page, this.pageSize);
     }
 
-    private logout() {
+    private onError(message: string, title: string): void {
+      this.errorMessageAlert = message;
+      this.errorTitleAlert = title;
+      this.isErrorAlert = true;
+      this.isError = true;
+    }
 
+    private onErrorStatus(status : number) : void {
+      if(Number(status) === 401) {
+        this.UserService.logOut();
+        setTimeout(()=> {
+          this.router.navigate(["/login"]);
+          this.isError = false;
+          this.isErrorAlert = false;
+        }, 100)
+        
+      }
+    }
+
+    onConfirmationError() : void {
+      this.isErrorAlert = false;
     }
     
 }
