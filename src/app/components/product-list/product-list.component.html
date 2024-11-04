@@ -67,6 +67,6 @@
       Ups, parece que no hay productos en esta categoría... ¡pero podrías ser el primero en subir uno y marcar la
       diferencia!
     </h3>
-
   </div>
 </ng-template>
+<app-error-alert *ngIf="isErrorAlert" [message]="errorMessageAlert" [title]="errorTitleAlert" (confirmation)="onConfirmationError()"></app-error-alert>
