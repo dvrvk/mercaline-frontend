@@ -1,55 +1,65 @@
-<div class="container">
-  <h2 class="text-center my-4">Formulario de Registro</h2>
-  <div class="card p-5 m-auto">
-    <form [formGroup]="userRegister" class="container" (ngSubmit)="onSubmit()" #registerForm="ngForm" >
+<div class="container d-flex justify-content-center align-items-center vh-100">
+  <div class="row align-items-center">
+    <div class="col-md-6 text-center">
+      <img src="assets/images/logo_sin_fondo.png" class="rounded mx-auto d-block">
+      <h1>Únete a Mercaline</h1>
+      <p>
+        Mercaline es tu plataforma ideal para la compraventa de artículos usados entre particulares. Nuestro objetivo es doble: ayudarte a ganar dinero vendiendo lo que ya no usas y permitirte ahorrar en la compra de artículos que necesitas. Además, al reutilizar y reciclar productos, juntos contribuimos a reducir las emisiones de CO2, promoviendo un consumo más sostenible y responsable.
+      </p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="text-center p-3">Formulario de Registro</h2>
+      <div class="card p-5 m-auto">
+        <form [formGroup]="userRegister" (ngSubmit)="onSubmit()" #registerForm="ngForm">
+          <div class="mb-3">
+            <label for="username" class="form-label">Nombre de usuario*:</label>
+            <input type="text" class="form-control" id="username" name="username" formControlName="username" (blur)="checkUsername()">
+            <app-error-messages [control]="userRegister.get('username')"
+            [errorMessage]="{
+              pattern: 'El nombre de usuario solo puede contener letras y numeros.'
+            }"></app-error-messages>
+          </div>
 
-      <div class="mb-3">
-        <label for="username" class="form-label">Nombre de usuario*:</label>
-        <input type="text" class="form-control" id="username" name="username" formControlName="username">
-        <app-error-messages [control]="userRegister.get('username')"
-        [errorMessage]="{
-          pattern: 'El nombre de usuario solo puede contener letras y numeros.'
-        }"></app-error-messages>
+          <div class="mb-3">
+            <label for="email" class="form-label">Email*:</label>
+            <input type="email" class="form-control" id="email" name="email" formControlName="email" (blur)="checkEmail()">
+            <app-error-messages [control]="userRegister.get('email')" 
+            [errorMessage]="{
+              pattern: 'Introduce un correo electrónico valido.'
+            }"></app-error-messages>
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Contraseña*:</label>
+            <input type="password" class="form-control" id="password" name="password" formControlName="password">
+            <app-error-messages [control]="userRegister.get('password')"></app-error-messages>
+          </div>
+          <div class="mb-3">
+            <label for="name" class="form-label">Nombre:</label>
+            <input type="text" class="form-control" id="name" name="name" formControlName="name">
+            <app-error-messages [control]="userRegister.get('name')" [errorMessage]="{
+              pattern: 'El nombre solo puede contener letras y un espacio en blanco entre palabras.'
+            }"></app-error-messages>
+          </div>
+          <div class="mb-3">
+            <label for="lastname" class="form-label">Apellidos:</label>
+            <input type="text" class="form-control" id="lastname" name="lastname" formControlName="lastname">
+            <app-error-messages [control]="userRegister.get('lastname')" [errorMessage]="{
+              pattern: 'El apellido solo puede contener letras y un espacio en blanco entre palabras.'
+            }"></app-error-messages>
+          </div>
+          <div class="mb-3">
+            <label for="tel" class="form-label">Teléfono:</label>
+            <input type="text" class="form-control" id="tel" name="tel" formControlName="tel">
+            <app-error-messages [control]="userRegister.get('tel')" [errorMessage]="{
+              pattern: 'Introduce un número de teléfono válido en España.'
+            }"></app-error-messages>
+          </div>
+          <div class="text-center">
+            <button type="submit" class="btn btn-login me-2">Registrarse</button>
+            <a class="btn btn-outline-primary" routerLink="/login">Volver</a>
+          </div>
+        </form>
       </div>
-
-      <div class="mb-3">
-        <label for="email" class="form-label">Email*:</label>
-        <input type="email" class="form-control" id="email" name="email" formControlName="email">
-        <app-error-messages [control]="userRegister.get('email')" 
-        [errorMessage]="{
-          pattern: 'Introduce un correo electrónico valido.'
-        }"></app-error-messages>
-      </div>
-      <div class="mb-3">
-        <label for="password" class="form-label">Contraseña*:</label>
-        <input type="password" class="form-control" id="password" name="password" formControlName="password">
-        <app-error-messages [control]="userRegister.get('password')"></app-error-messages>
-      </div>
-      <div class="mb-3">
-        <label for="name" class="form-label">Nombre:</label>
-        <input type="text" class="form-control" id="name" name="name" formControlName="name">
-        <app-error-messages [control]="userRegister.get('name')" [errorMessage]="{
-          pattern: 'El nombre solo puede contener letras y un espacio en blanco entre palabras.'
-        }"></app-error-messages>
-      </div>
-      <div class="mb-3">
-        <label for="lastname" class="form-label">Apellidos:</label>
-        <input type="text" class="form-control" id="lastname" name="lastname" formControlName="lastname">
-        <app-error-messages [control]="userRegister.get('lastname')" [errorMessage]="{
-          pattern: 'El apellido solo puede contener letras y un espacio en blanco entre palabras.'
-        }"></app-error-messages>
-      </div>
-      <div class="mb-3">
-        <label for="tel" class="form-label">Teléfono:</label>
-        <input type="text" class="form-control" id="tel" name="tel" formControlName="tel">
-        <app-error-messages [control]="userRegister.get('tel')" [errorMessage]="{
-          pattern: 'Introduce un número de teléfono válido en España.'
-        }"></app-error-messages>
-      </div>
-      <div class="">
-        <button type="submit" class="btn btn-primary me-2">Registrarse</button>
-        <a class="btn btn-outline-primary" routerLink="/login">Volver</a>
-      </div>
-    </form>
+    </div>
   </div>
 </div>

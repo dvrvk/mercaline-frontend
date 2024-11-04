@@ -15,8 +15,15 @@ declare var Swal: any;
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
+guardarPerfil() {
+throw new Error('Method not implemented.');
+}
+eliminarPerfil() {
+throw new Error('Method not implemented.');
+}
 
   userLogin: FormGroup;
+user: any;
 
   constructor(
     private userService : UserServiceService,

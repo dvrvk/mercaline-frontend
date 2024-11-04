@@ -1,13 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { HomeComponent } from '../home/home.component';
-import { Router, RouterOutlet } from '@angular/router';
+import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { UserServiceService } from '../../services/user-service/user-service.service';
 
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [HomeComponent, RouterOutlet],
+  imports: [HomeComponent, RouterOutlet, RouterModule],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
