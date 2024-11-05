@@ -26,14 +26,14 @@ throw new Error('Method not implemented.');
 }
 
   userLogin: FormGroup;
-user: any;
+  user: any;
 
   isError : boolean = false;
   titleError : string = '';
   errorMessage : string = '';
 
   isSuccess : boolean = false;
-  successTitle : string = ''
+  successTitle : string = '';
 
   constructor(
     private userService : UserServiceService,
@@ -75,13 +75,6 @@ user: any;
           this.isError = true;
           this.titleError = "Error al iniciar sesión";
           this.errorMessage = error.error.mensaje;
-          // Swal.fire({
-          //   position: "center",
-          //   icon: "error",
-          //   title: "Error al iniciar sesión",
-          //   text: error.error.mensaje,
-          //   showConfirmButton: true
-          // });
         }
       })
     } else {
