@@ -5,11 +5,21 @@ import { CommonModule } from '@angular/common';
 import { ErrorMessagesComponent } from '../validation/error-messages/error-messages.component';
 import { UserServiceService } from '../../services/user-service/user-service.service';
 import Swal from 'sweetalert2';
+import { SvgSignupComponent } from "../svg-icons/svg-signup/svg-signup.component";
+import { ErrorAlertComponent } from '../alerts/error-alert/error-alert.component';
+import { SuccessAlertComponent } from '../alerts/success-alert/success-alert.component';
 
 @Component({
   selector: 'app-registro',
   standalone: true,
-  imports: [FormsModule, RouterLink, CommonModule, ReactiveFormsModule, ErrorMessagesComponent],
+  imports: [FormsModule, 
+            RouterLink, 
+            CommonModule, 
+            ReactiveFormsModule, 
+            ErrorMessagesComponent, 
+            SvgSignupComponent,
+            ErrorAlertComponent,
+            SuccessAlertComponent],
   templateUrl: './registro.component.html',
   styleUrls: ['./registro.component.css']
 })
@@ -18,6 +28,13 @@ export class RegistroComponent {
   userRegister: FormGroup;
   usernameExists = false;
   emailExists = false;
+
+  isError : boolean = false;
+  titleError : string = '';
+  errorMessage : string = '';
+
+  isSuccess : boolean = false;
+  successTitle : string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -51,79 +68,28 @@ export class RegistroComponent {
     });
   }
 
-  checkUsername() {
-    const username = this.userRegister.get('username')?.value;
-    if (username) {
-      this.userService.checkUsername(username).subscribe({
-        next: (response) => {
-          if (response.exists) {
-            this.usernameExists = true;
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'El nombre de usuario ya está registrado. Por favor, elige otro.'
-            });
-          } else {
-            this.usernameExists = false;
-          }
-        },
-        error: (error) => {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error al comprobar el usuario',
-            text: 'Ha ocurrido un error al verificar si el usuario ya está registrado. Inténtalo de nuevo.'
-          });
-        }
-      });
-    }
-  }
-  checkEmail() {
-    const email = this.userRegister.get('email')?.value;
-    if (email) {
-      this.userService.checkEmail(email).subscribe({
-        next: (response) => {
-          if (response.exists) {
-            this.emailExists = true;
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'El correo electrónico ya está registrado. Por favor, usa otro.'
-            });
-          } else {
-            this.emailExists = false;
-          }
-        },
-        error: (error) => {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error al comprobar el correo electrónico',
-            text: 'Ha ocurrido un error al verificar si el correo electrónico ya está registrado. Inténtalo de nuevo.'
-          });
-        }
-      });
-    }
-  }
-
   onSubmit() {
-    if (this.userRegister.valid && !this.usernameExists) {
+    if (this.userRegister.valid) {
       this.userService.formatUserDataRegister(this.userRegister.value);
       this.userService.registrarUsuario(this.userRegister.value).subscribe({
         next: (response) => {
-          Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: `${response.username} se ha registrado`,
-            showConfirmButton: false,
-            timer: 1500
-          });
-          this.login();
+          
+          // Mensaje exito
+          this.isSuccess = true;
+          this.successTitle = 'Usuario registrado correctamente'
+          // Login - redirigimos a su home
+          setTimeout(()=> {
+            this.login();
+          }, 1000)
+          
         },
         error: (error) => {
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: (Object.values(error.error.mensaje)).join(' ')
-          });
+
+          // Mensaje de error
+          this.isError = true;
+          this.titleError = "Ooops...";
+          this.errorMessage = (Object.values(error.error.mensaje)).join(' ');
+
         }
       });
     } else {
@@ -140,5 +106,11 @@ export class RegistroComponent {
         console.log(error);
       }
     );
+  }
+
+  onConfirmation(confirmed: boolean) {
+    if(confirmed === false) {
+      this.isError = false;
+    }
   }
 }
