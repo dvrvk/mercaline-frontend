@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
       <div *ngIf="control?.hasError('pattern')">{{ getErrorMessage('pattern') || 'Formato inválido.' }}</div>
       <!-- <div *ngIf="control?.hasError('pattern')">Solo puede contener letras y números sin espacios.</div> -->
       <div *ngIf="control?.hasError('email')">Introduce un correo electrónico válido.</div>
-      
+      <div *ngIf="control?.hasError('min')">{{ getErrorMessage('min') || 'Formato inválido.' }}</div>
     </div>
   `,
   styleUrls: ['./error-messages.component.css'],

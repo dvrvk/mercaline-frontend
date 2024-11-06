@@ -1,0 +1,80 @@
+<app-navbar></app-navbar>
+<section class="container mt-5 py-2 px-2">
+    <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
+        <div class="mb-3">
+            <label for="name" class="form-label">Nombre del Producto</label>
+            <input id="name" formControlName="name" type="text" class="form-control"
+                [ngClass]="{'is-invalid': productForm.get('name')?.invalid && productForm.get('name')?.touched}" />
+            <div class="invalid-feedback">
+                <app-error-messages [control]="productForm.get('name')"
+                [errorMessage]="{
+                  pattern: 'El nombre del producto solo puede contener letras y numeros.'
+                }"></app-error-messages>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="description" class="form-label">Descripción</label>
+            <textarea id="description" formControlName="description" class="form-control" rows="3"
+                [ngClass]="{'is-invalid': productForm.get('description')?.invalid && productForm.get('description')?.touched}"></textarea>
+            <div class="invalid-feedback">
+                <app-error-messages [control]="productForm.get('description')"></app-error-messages>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="price" class="form-label">Precio</label>
+            <input id="price" formControlName="price" type="number" step="0.01" class="form-control"
+                [ngClass]="{'is-invalid': productForm.get('price')?.invalid && productForm.get('price')?.touched}" />
+            <div class="invalid-feedback">
+                <app-error-messages [control]="productForm.get('price')" [errorMessage]="{
+                    min: 'Tiene que ser mayor que 0.',
+                    pattern: 'Formato invalido. Tienes que introducir máximo 2 decimales.'
+                  }">
+
+                </app-error-messages>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="status" class="form-label">Estado</label>
+            <select
+              id="status"
+              formControlName="status"
+              class="form-select"
+              [ngClass]="{'is-invalid': productForm.get('status')?.invalid && productForm.get('status')?.touched}"
+            >
+              <option value="">Seleccione el estado</option>
+              <option *ngFor="let status of statusList" [value]="status.id">{{ status.name | capitalizeFirst }}</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="category" class="form-label">Estado</label>
+            <select
+              id="category"
+              formControlName="category"
+              class="form-select"
+              [ngClass]="{'is-invalid': productForm.get('category')?.invalid && productForm.get('category')?.touched}"
+            >
+              <option value="">Seleccione el estado</option>
+              <option *ngFor="let category of categoriesList" [value]="category.id">{{ category.name | capitalizeFirst }}</option>
+            </select>
+            <div class="invalid-feedback">
+                {{ productForm.get('category')?.errors | json }}
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="image" class="form-label">Imagen del Producto</label>
+            <input id="image" type="file" formControlName="urlImage" class="form-control" (change)="onFileSelected($event)"
+                [ngClass]="{'is-invalid': !selectedFile && productForm.get('urlImage')?.touched}" />
+            <div class="invalid-feedback">
+                Se requiere una imagen del producto.
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary" [disabled]="!productForm.valid || !selectedFile">
+            Guardar Producto
+        </button>
+    </form>
+</section>
+<app-success-alert *ngIf="isSuccess" [title]="successTitle"></app-success-alert>
