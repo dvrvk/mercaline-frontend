@@ -24,10 +24,10 @@
   </div>
   </div>
   <div class="row gx-4 gx-lg-3 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-    <div class="col mb-5" *ngFor="let product of products; let i = index">
+    <div class="col mb-5" *ngFor="let product of products">
       <div class="card h-100">
         <!-- Product image-->
-        <img class="card-img-top img-limited-height" [src]="images[i]" alt="{{ product.name }}"
+        <img class="card-img-top img-limited-height" [src]="product.imageUrl" alt="{{ product.name }}"
           *ngIf="product.imageUrl" />
         <!-- Product details-->
         <div class="card-body p-2">

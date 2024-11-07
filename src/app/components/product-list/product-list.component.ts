@@ -32,7 +32,6 @@ declare var Swal: any;
 export class ProductListComponent {
   // Productos y paginacion
   products: ProductResponseSummaryDTO[] = [];
-  images: any[] = [];
   totalElements: number = 0;
   totalPages: number = 0;
   currentPage: number = 0;
@@ -90,6 +89,7 @@ export class ProductListComponent {
         this.totalElements = data.page.totalElements;
         this.totalPages = data.page.totalPages;
         this.currentPage = data.page.number;
+        this.getImages(data.content);
       },
         (error) => {
           const message = error.error && error.error.message ? error.error.message : "Ha ocurrido un error al cargar los productos. Por favor, inténtalo de nuevo"
@@ -115,6 +115,7 @@ export class ProductListComponent {
         this.totalElements = data.page.totalElements;
         this.totalPages = data.page.totalPages;
         this.currentPage = data.page.number;
+        this.getImages(data.content);
       },
         (error) => {
           const message = error.error && error.error.message ? error.error.message : "Ha ocurrido un error al cargar los productos. Por favor, inténtalo de nuevo"
@@ -158,6 +159,7 @@ export class ProductListComponent {
       (data: Page<ProductResponseSummaryDTO>) => {
 
         this.products = data.content;
+        console.log(this.products)
         this.totalElements = data.page.totalElements;
         this.totalPages = data.page.totalPages;
         this.currentPage = data.page.number;
@@ -208,7 +210,6 @@ export class ProductListComponent {
 
   getImages(products: ProductResponseSummaryDTO[]): void {
     // Hacer la petición para cada producto para obtener su imagen
-    this.images = []; // Limpiar el array antes de llenarlo
     this.products.forEach((product) => {
       this.productService.getProductImage(product.id).subscribe(
         (imageBlob) => {
@@ -218,17 +219,16 @@ export class ProductListComponent {
               // Convertir el Blob a un Object URL
               const objectURL = URL.createObjectURL(imageBlob);
               // Sanitize la URL para Angular y agregarla al array de imágenes
-              this.images.push(this.sanitizer.bypassSecurityTrustUrl(objectURL));
+              product.imageUrl = this.sanitizer.bypassSecurityTrustUrl(objectURL);
             } else {
-              this.images.push(product.imageUrl)
+              product.imageUrl = product.imageUrl;
             }
           }
 
         },
         (error) => {
           console.error('Error al obtener la imagen del producto:', error);
-          // Aquí puedes manejar el error, como agregar una imagen predeterminada
-          this.images.push(this.sanitizer.bypassSecurityTrustUrl('assets/images/not_found.png'));
+          product.imageUrl = this.sanitizer.bypassSecurityTrustUrl('assets/images/not_found.png');
         }
       );
     });

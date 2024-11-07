@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { SafeUrl } from '@angular/platform-browser';
 
 @Injectable({
   providedIn: 'root'
@@ -116,14 +117,15 @@ export interface Status {
 }
 
 export interface ProductResponseSummaryDTO {
-  id: number;
-  name: string;
-  description: string;
-  status: string;
-  imageUrl: string;
-  price: number;
-  category: string;
-  seller: ResponseUserProductDTO;
+  id: number,
+  name: string,
+  description: string,
+  status: string,
+  //imageUrl: string;
+  imageUrl : SafeUrl | string,
+  price: number,
+  category: string,
+  seller: ResponseUserProductDTO
 }
 
 export interface ResponseUserProductDTO {

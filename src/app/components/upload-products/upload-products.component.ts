@@ -24,7 +24,7 @@ import { ErrorAlertComponent } from '../alerts/error-alert/error-alert.component
 })
 export class UploadProductsComponent implements OnInit{
   productForm: FormGroup;
-  selectedFile: File | null = null;
+  selectedFiles: File[] = [];
 
   statusList : Status[] = [];
   categoriesList : Categories[] = [];
@@ -78,28 +78,29 @@ export class UploadProductsComponent implements OnInit{
     )
   }
 
-  // Manejar el archivo de imagen seleccionado
-  onFileSelected(event: any) {
-    
-    const file: File = event.target.files[0];
-    if (file) {
-      this.selectedFile = file;
+  // Manejar los archivos de imagen seleccionados
+  onFilesSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files) {
+        // Convierte la lista de archivos a un array y guárdalos
+        this.selectedFiles = Array.from(input.files);
+        console.log("Archivos seleccionados:", this.selectedFiles);
     }
-
-    console.log(this.selectedFile);
-
   }
 
   // Enviar el formulario
-  onSubmit() {
-    if (this.productForm.valid && this.selectedFile) {
+  onSubmit() : void {
+    if (this.productForm.valid && this.selectedFiles?.length > 0) {
       const formData = new FormData();
       formData.append('name', this.productForm.get('name')?.value);
       formData.append('description', this.productForm.get('description')?.value);
       formData.append('price', this.productForm.get('price')?.value);
       formData.append('status', this.productForm.get('status')?.value);
       formData.append('category', this.productForm.get('category')?.value);
-      formData.append('urlImage', this.selectedFile);  
+      this.selectedFiles.forEach((file) => {
+        // Puedes usar un índice para cada archivo o tratarlos como un array
+        formData.append('images', file, file.name);
+      });
 
       this.productService.uploadProduct(formData).subscribe({
         next: (response : any) => {

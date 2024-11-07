@@ -66,13 +66,13 @@
         </div>
         <div class="mb-3">
             <label for="image" class="form-label">Imagen del Producto</label>
-            <input id="image" type="file" formControlName="urlImage" class="form-control" (change)="onFileSelected($event)"
-                [ngClass]="{'is-invalid': !selectedFile && productForm.get('urlImage')?.touched}" />
+            <input id="image" type="file" formControlName="urlImage" class="form-control"
+                [ngClass]="{'is-invalid': selectedFiles.length <= 0 && productForm.get('urlImage')?.touched}" (change)="onFilesSelected($event)" multiple />
             <div class="invalid-feedback">
                 Se requiere una imagen del producto.
             </div>
         </div>
-        <button type="submit" class="btn btn-primary" [disabled]="!productForm.valid || !selectedFile">
+        <button type="submit" class="btn btn-primary" [disabled]="!productForm.valid || selectedFiles.length <= 0">
             Guardar Producto
         </button>
     </form>
