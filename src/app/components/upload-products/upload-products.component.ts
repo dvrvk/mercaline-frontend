@@ -13,7 +13,8 @@ import { SvgUploadProductComponent } from "../svg-icons/svg-upload-product/svg-u
 @Component({
   selector: 'app-upload-products',
   standalone: true,
-  imports: [CommonModule,
+  imports: [
+    CommonModule,
     ReactiveFormsModule,
     NavbarComponent,
     CapitalizeFirstPipe,
@@ -34,6 +35,7 @@ export class UploadProductsComponent implements OnInit{
   isError : boolean = false;
   titleError : string = '';
   errorMessage : string = '';
+  imgError : string = '';
 
   isSuccess : boolean = false;
   successTitle : string = '';
@@ -64,7 +66,12 @@ export class UploadProductsComponent implements OnInit{
         this.statusList = datos;
       }, 
       (error)=> {
-        console.log(error);
+       // Mensaje de error
+       this.isError = true;
+       this.titleError = "Ooops...";
+       this.errorMessage = typeof error.error.mensaje === 'string' ? 
+         error.error.mensaje : 
+         (Object.values(error.error.mensaje)).join(' ');
       }
     )
   }
@@ -75,7 +82,12 @@ export class UploadProductsComponent implements OnInit{
         this.categoriesList = datos.content;
       }, 
       (error)=> {
-        console.log(error);
+        // Mensaje de error
+        this.isError = true;
+        this.titleError = "Ooops...";
+        this.errorMessage = typeof error.error.mensaje === 'string' ? 
+          error.error.mensaje : 
+          (Object.values(error.error.mensaje)).join(' ');
       }
     )
   }
@@ -84,9 +96,16 @@ export class UploadProductsComponent implements OnInit{
   onFilesSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files) {
-        // Convierte la lista de archivos a un array y guárdalos
+      if(input.files.length > 0 && input.files.length <= 5) {
+        // Convierte la lista de archivos a un array
         this.selectedFiles = Array.from(input.files);
-        console.log("Archivos seleccionados:", this.selectedFiles);
+      } else {
+        this.imgError = 'Se requiere mínimo 1 imagen y máximo 5.'
+        this.selectedFiles = [];
+      }
+    } else {
+      this.imgError = 'Se requiere mínimo 1 imagen y máximo 5.'
+      this.selectedFiles = [];
     }
   }
 
@@ -117,12 +136,13 @@ export class UploadProductsComponent implements OnInit{
           
         },
         error: (error) => {
-          console.log(error);
+          console.log(error); // TODO 
           // Mensaje de error
-          // this.isError = true;
-          // this.titleError = "Ooops...";
-          // this.errorMessage = (Object.values(error.error.mensaje)).join(' ');
-
+          this.isError = true;
+          this.titleError = "Ooops...";
+          this.errorMessage = typeof error.error.mensaje === 'string' ? 
+            error.error.mensaje : 
+            (Object.values(error.error.mensaje)).join(' ');
         }
 
       })
@@ -130,6 +150,10 @@ export class UploadProductsComponent implements OnInit{
     } else {
       console.log('Formulario no válido o imagen no seleccionada');
     }
+  }
+
+  onConfirmationError() : void {
+    this.isError = false;
   }
 }
 

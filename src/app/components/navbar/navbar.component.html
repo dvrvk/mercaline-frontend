@@ -23,10 +23,9 @@
         <div class="dropdown d-flex justify-content-center" id="botonUsuario">
           <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton1"
             data-bs-toggle="dropdown" aria-expanded="false">
-            {{ usuario }}
+            {{ userData.username }}
           </button>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-            <li><a class="dropdown-item" href="#">Subir producto</a></li>
             <li><a class="dropdown-item" [routerLink]="['/perfil']">Mi perfil</a></li>
             <li><a class="dropdown-item text-danger" (click)="logOut()">Cerrar sesión</a></li>
           </ul>

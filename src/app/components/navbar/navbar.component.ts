@@ -2,28 +2,38 @@ import { Component, Input, OnInit } from '@angular/core';
 import { HomeComponent } from '../home/home.component';
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { UserServiceService } from '../../services/user-service/user-service.service';
+import { Subscription } from 'rxjs';
 
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [HomeComponent, RouterOutlet, RouterModule],
+  imports: [
+    RouterOutlet, 
+    RouterModule],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
   [x: string]: any;
 
-  @Input()
-  usuario: string | undefined;
+  userData: any;
+  private userDataSubscription: Subscription | null = null;
 
-  constructor(private UserServiceService:UserServiceService, private router:Router) { }
+  username : string = '';
+
+  constructor(private userServiceService: UserServiceService, private router:Router) { }
 
   ngOnInit() {
+    this.userDataSubscription = this.userServiceService.userData$.subscribe(
+      data => {
+        this.userData = data; // Actualiza el campo en el nav
+      }
+    );
   }
 
   logOut(){
-    this.UserServiceService.logOut();
+    this.userServiceService.logOut();
     this.router.navigate(['login']);
   }
 

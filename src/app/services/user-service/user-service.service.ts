@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +16,9 @@ export class UserServiceService {
   private pathCheckUsername = '/user/check-username'; // verificar Ya registrado
   private pathCheckEmail = '/user/check-email'; // verificar email ya registrado
 
+  // Inicializa con el valor actual en localStorage (si existe)
+  private userDataSubject = new BehaviorSubject<any>(JSON.parse(localStorage.getItem('userdata') || 'null'));
+  userData$ = this.userDataSubject.asObservable();
 
   constructor(private http: HttpClient) { }
 
@@ -25,6 +28,18 @@ export class UserServiceService {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this.http.get<any>(this.url + this.pathGetUser, { headers });
   }
+
+  // Método para actualizar los datos del usuario
+  updateUserData(newUserData: any): void {
+    this.userDataSubject.next(newUserData);
+    localStorage.setItem('userdata', JSON.stringify(newUserData));
+  }
+  // Borrar posiblemente
+  getUserName() : string {
+     const userData = JSON.parse(localStorage.getItem('userdata') || '{}') ?? '';
+     return userData?.username ?? '';
+  }
+
   // Editar usuario
   updateUsuario(user: any): Observable<any> {
     const token = localStorage.getItem('token');

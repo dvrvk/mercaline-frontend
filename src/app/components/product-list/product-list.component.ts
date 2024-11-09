@@ -92,7 +92,7 @@ export class ProductListComponent {
         this.getImages(data.content);
       },
         (error) => {
-          const message = error.error && error.error.message ? error.error.message : "Ha ocurrido un error al cargar los productos. Por favor, inténtalo de nuevo"
+          const message = error.error && error.error.mensaje ? error.error.mensaje : "Ha ocurrido un error al cargar los productos. Por favor, inténtalo de nuevo"
           this.onError(message, "Error al cargar los productos");
 
           // Si el token no es valido se hace logout()
@@ -118,7 +118,7 @@ export class ProductListComponent {
         this.getImages(data.content);
       },
         (error) => {
-          const message = error.error && error.error.message ? error.error.message : "Ha ocurrido un error al cargar los productos. Por favor, inténtalo de nuevo"
+          const message = error.error && error.error.mensaje ? error.error.mensaje : "Ha ocurrido un error al cargar los productos. Por favor, inténtalo de nuevo"
           this.onError(message, "Error al cargar los productos");
 
           // Si el token no es valido se hace logout()
@@ -142,7 +142,7 @@ export class ProductListComponent {
 
       },
       (error) => {
-        const message = error.error && error.error.message ? error.error.message : "Ha ocurrido un error al cargar los productos. Por favor, inténtalo de nuevo"
+        const message = error.error && error.error.mensaje ? error.error.mensaje : "Ha ocurrido un error al cargar los productos. Por favor, inténtalo de nuevo"
         this.onError(message, "Error al cargar los productos");
 
         // Si el token no es valido se hace logout()
@@ -169,7 +169,7 @@ export class ProductListComponent {
       (error) => {
         console.error('Error al cargar los productos', error.error)
 
-        const message = error.error && error.error.message ? error.error.message : "Ha ocurrido un error al cargar los productos. Por favor, inténtalo de nuevo"
+        const message = error.error && error.error.mensaje ? error.error.mensaje : "Ha ocurrido un error al cargar los productos. Por favor, inténtalo de nuevo"
         this.onError(message, "Error al cargar los productos");
 
         // Si el token no es valido se hace logout()
