@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { SafeUrl } from '@angular/platform-browser';
 
 @Injectable({
@@ -95,7 +95,7 @@ export class ProductService {
   getProductImage(id : number): Observable<Blob | URL> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http.get(this.apiUrlImageMain + id, { headers, responseType: 'blob' });
+    return this.http.get(this.apiUrlImageMain + id, { headers, responseType: 'blob' })
   }
 
 }

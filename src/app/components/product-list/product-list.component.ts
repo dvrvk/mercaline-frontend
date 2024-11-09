@@ -159,7 +159,6 @@ export class ProductListComponent {
       (data: Page<ProductResponseSummaryDTO>) => {
 
         this.products = data.content;
-        console.log(this.products)
         this.totalElements = data.page.totalElements;
         this.totalPages = data.page.totalPages;
         this.currentPage = data.page.number;
@@ -213,7 +212,6 @@ export class ProductListComponent {
     this.products.forEach((product) => {
       this.productService.getProductImage(product.id).subscribe(
         (imageBlob) => {
-
           if (imageBlob instanceof Blob) {
             if (imageBlob.type.startsWith('image/')) {
               // Convertir el Blob a un Object URL
@@ -227,7 +225,6 @@ export class ProductListComponent {
 
         },
         (error) => {
-          console.error('Error al obtener la imagen del producto:', error);
           product.imageUrl = this.sanitizer.bypassSecurityTrustUrl('assets/images/not_found.png');
         }
       );
