@@ -79,7 +79,7 @@ export class PerfilComponent {
 
   // método para guardar cambios en perfil (botón Guardar Cambios)
   guardarPerfil(): void {
-    console.log('Datos que se van a enviar:', this.user);// console.log de prueba
+    
     if (this.user.valid) {
       this.userService.updateUsuario(this.user.value).subscribe(
         response => {

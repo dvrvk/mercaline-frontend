@@ -8,17 +8,19 @@ import { ErrorMessagesComponent } from '../validation/error-messages/error-messa
 import { Router } from '@angular/router';
 import { SuccessAlertComponent } from '../alerts/success-alert/success-alert.component';
 import { ErrorAlertComponent } from '../alerts/error-alert/error-alert.component';
+import { SvgUploadProductComponent } from "../svg-icons/svg-upload-product/svg-upload-product.component";
 
 @Component({
   selector: 'app-upload-products',
   standalone: true,
-  imports: [CommonModule, 
-    ReactiveFormsModule, 
-    NavbarComponent, 
-    CapitalizeFirstPipe, 
-    ErrorMessagesComponent, 
+  imports: [CommonModule,
+    ReactiveFormsModule,
+    NavbarComponent,
+    CapitalizeFirstPipe,
+    ErrorMessagesComponent,
     SuccessAlertComponent,
-    ErrorAlertComponent],
+    ErrorAlertComponent, 
+    SvgUploadProductComponent],
   templateUrl: './upload-products.component.html',
   styleUrl: './upload-products.component.css'
 })
