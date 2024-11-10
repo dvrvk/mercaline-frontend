@@ -17,9 +17,7 @@ declare var Swal: any;
   standalone: true,
   imports: [CommonModule, 
             RouterModule, 
-            NavbarComponent, 
-            RouterOutlet, 
-            FooterComponent, 
+            NavbarComponent,
             FormsModule, 
             SvgProfileComponent, 
             ReactiveFormsModule,
@@ -79,7 +77,7 @@ export class PerfilComponent {
 
   // método para guardar cambios en perfil (botón Guardar Cambios)
   guardarPerfil(): void {
-    console.log('Datos que se van a enviar:', this.user);// console.log de prueba
+    
     if (this.user.valid) {
       this.userService.updateUsuario(this.user.value).subscribe(
         response => {
@@ -93,6 +91,8 @@ export class PerfilComponent {
             email: response.email,
             tel: response.tel
           }));
+          this.userService.updateUserData({'username' : response.username, 'email': response.email, 'tel': response.tel})
+         
           // Actualizo campos de nav
           const userDataString = localStorage.getItem('userdata');
           this.userGet = userDataString ? JSON.parse(userDataString) : null;
@@ -152,7 +152,6 @@ export class PerfilComponent {
       this.isError = false;
     }
   }
-  
     
     
 }

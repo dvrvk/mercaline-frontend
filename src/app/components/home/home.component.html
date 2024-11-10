@@ -1,8 +1,5 @@
 <div *ngIf="userdata">
-  <!-- Al llegar a HOME carga primero el NAVBAR
-   pasando el nombre de usuario por @input -->
-  <app-navbar [usuario]=userdata.username></app-navbar>
-  
+  <app-navbar></app-navbar>
   <main class="container-md">
     <app-categories></app-categories>
     <div class="row">

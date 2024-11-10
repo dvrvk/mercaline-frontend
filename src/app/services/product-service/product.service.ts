@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
+import { SafeUrl } from '@angular/platform-browser';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,8 @@ export class ProductService {
   private apiUrlUser = 'http://localhost:8080/user/products'
   private apiUrlfindByCategory = `http://localhost:8080/products/category/`;
   private apiUrlFilter = 'http://localhost:8080/products/filter2';
+  private apiUrlUpload = 'http://localhost:8080/products/create';
+  private apiUrlImageMain = 'http://localhost:8080/images/main/'
 
   constructor(private http: HttpClient) { }
 
@@ -26,12 +29,17 @@ export class ProductService {
     
   }
 
-  getCategories(page: number, size: number) : Observable<Page<Categories>> {
+  getCategories(page: number | null, size: number | null) : Observable<Page<Categories>> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    const params = new HttpParams().set('page', page.toString()).set('size', size.toString());
 
-    return this.http.get<Page<Categories>>(this.apiUrlCategories, {headers, params});
+    if(page != null && size != null) {
+      const params = new HttpParams().set('page', page.toString()).set('size', size.toString());
+      return this.http.get<Page<Categories>>(this.apiUrlCategories, {headers, params});
+    } else {
+      return this.http.get<Page<Categories>>(this.apiUrlCategories, {headers})
+    }
+    
   }
 
   getStatus() : Observable<Status[]> {
@@ -50,7 +58,7 @@ export class ProductService {
   }
   
   getProductsFilter(page: number, size: number, categoryId : number, filter : FilterClass | null, order : string | null): Observable<Page<ProductResponseSummaryDTO>> {
-    console.log(filter)
+
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     let params = new HttpParams()
@@ -77,6 +85,19 @@ export class ProductService {
     
   }
 
+  uploadProduct(product : FormData) {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.post(this.apiUrlUpload, product, {headers});
+  }
+
+  getProductImage(id : number): Observable<Blob | URL> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get(this.apiUrlImageMain + id, { headers, responseType: 'blob' })
+  }
+
 }
 
 export interface FilterClass {
@@ -96,19 +117,30 @@ export interface Status {
 }
 
 export interface ProductResponseSummaryDTO {
-  id: number;
-  name: string;
-  description: string;
-  status: string;
-  imageUrl: string;
-  price: number;
-  category: string;
-  seller: ResponseUserProductDTO;
+  id: number,
+  name: string,
+  description: string,
+  status: string,
+  //imageUrl: string;
+  imageUrl : SafeUrl | string,
+  price: number,
+  category: string,
+  seller: ResponseUserProductDTO
 }
 
 export interface ResponseUserProductDTO {
   id: number;
   username: string;
+}
+
+export interface ProductRequestDTO {
+  name: string;
+  description: string;
+  status: number;
+  imageUrl: File;
+  price: number;
+  category: number;
+  seller: ResponseUserProductDTO;
 }
 
 export interface Page<T> {
