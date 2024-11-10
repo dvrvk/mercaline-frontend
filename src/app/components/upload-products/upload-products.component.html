@@ -71,7 +71,7 @@
                     <label for="image" class="form-label">Imagen del Producto</label>
                     <input id="image" type="file" formControlName="urlImage" class="form-control"
                         [ngClass]="{'is-invalid': selectedFiles.length <= 0 && productForm.get('urlImage')?.touched}"
-                        (change)="onFilesSelected($event)" multiple />
+                        (change)="onFilesSelected($event)" accept=".jpg, .jpeg, .png" multiple />
                     <div class="invalid-feedback">
                         {{imgError.length > 0 ? imgError : 'Se requiere una imagen del producto.'}}
                     </div>
