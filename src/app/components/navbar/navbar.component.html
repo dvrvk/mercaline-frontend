@@ -21,7 +21,7 @@
         </ul> 
         <!-- Botón Usuario -->
         <div class="dropdown d-flex justify-content-center" id="botonUsuario">
-          <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton1"
+          <button *ngIf="userData?.username" class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton1"
             data-bs-toggle="dropdown" aria-expanded="false">
             {{ userData.username }}
           </button>

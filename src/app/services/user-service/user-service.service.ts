@@ -17,7 +17,7 @@ export class UserServiceService {
   private pathCheckEmail = '/user/check-email'; // verificar email ya registrado
 
   // Inicializa con el valor actual en localStorage (si existe)
-  private userDataSubject = new BehaviorSubject<any>(JSON.parse(localStorage.getItem('userdata') || 'null'));
+  private userDataSubject = new BehaviorSubject<any>(JSON.parse(localStorage.getItem('userdata') || '{}'));
   userData$ = this.userDataSubject.asObservable();
 
   constructor(private http: HttpClient) { }
@@ -33,11 +33,6 @@ export class UserServiceService {
   updateUserData(newUserData: any): void {
     this.userDataSubject.next(newUserData);
     localStorage.setItem('userdata', JSON.stringify(newUserData));
-  }
-  // Borrar posiblemente
-  getUserName() : string {
-     const userData = JSON.parse(localStorage.getItem('userdata') || '{}') ?? '';
-     return userData?.username ?? '';
   }
 
   // Editar usuario
@@ -66,7 +61,8 @@ export class UserServiceService {
 
   isAuth(): boolean {
     const token = localStorage.getItem('token');
-    return !!token;
+    const userData = localStorage.getItem('userdata');
+    return !!token && !!userData;
   }
 
   registrarUsuario(user: any): Observable<any> {
@@ -77,12 +73,9 @@ export class UserServiceService {
     return this.http.post<any>(this.url + "/auth/login", user).pipe(
       tap(response => {
         localStorage.setItem('token', response.token);
-        localStorage.setItem('userdata', JSON.stringify({
-          username: response.username,
-          email: response.email,
-          tel: response.tel
-        }));
+        this.updateUserData({'username' : response.username, 'email': response.email, 'tel': response.tel})
       }))
+      
   }
 
   logOut(): void {

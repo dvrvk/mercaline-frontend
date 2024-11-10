@@ -15,8 +15,11 @@ declare var Swal: any;
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, NavbarComponent, CategoriesComponent, 
-    SidebarComponent, FooterComponent, ProductListComponent],
+  imports: [
+    CommonModule, 
+    NavbarComponent, 
+    CategoriesComponent,
+    ProductListComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -26,27 +29,26 @@ export class HomeComponent implements OnInit{
   constructor(private router: Router, private userService: UserServiceService) {};
 
   ngOnInit(): void {
-    this.userData();
+    //this.userData();
   }
 
-  userData() {
-    const userString = localStorage.getItem('userdata');
-    if(userString) {
-      console.log(JSON.parse(userString));
-      this.userdata = JSON.parse(userString);
-    } else {
-      Swal.fire({
-        position: "center",
-        icon: "error",
-        title: "Error al cargar el perfil",
-        text: "No se han podido cargar los datos del perfil, vuelve a iniciar sesión",
-        showConfirmButton: true
-      });
+  // userData() {
+  //   const userString = localStorage.getItem('userdata');
+  //   if(userString) {
+  //     this.userdata = JSON.parse(userString);
+  //   } else {
+  //     Swal.fire({
+  //       position: "center",
+  //       icon: "error",
+  //       title: "Error al cargar el perfil",
+  //       text: "No se han podido cargar los datos del perfil, vuelve a iniciar sesión",
+  //       showConfirmButton: true
+  //     });
 
-      this.userService.logOut();
-      this.router.navigate(["/login"]);
+  //     this.userService.logOut();
+  //     this.router.navigate(["/login"]);
       
-    }
-  }
+  //   }
+  // }
 
 }
