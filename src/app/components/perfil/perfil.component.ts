@@ -11,6 +11,8 @@ import { ChangePasswordComponent } from "../change-password/change-password.comp
 import { DeleteUserComponent } from "../delete-user/delete-user.component";
 import { EditUserComponent } from "../edit-user/edit-user.component";
 import { Subscription } from 'rxjs';
+import { SvgPasswordComponent } from "../svg-icons/svg-password/svg-password.component";
+import { SvgDeleteUserComponent } from "../svg-icons/svg-delete-user/svg-delete-user.component";
 
 @Component({
   selector: 'app-perfil',
@@ -20,10 +22,9 @@ import { Subscription } from 'rxjs';
     SvgProfileComponent,
     SuccessAlertComponent,
     ErrorAlertComponent,
-    ChangePasswordComponent, 
-    DeleteUserComponent, 
-    EditUserComponent
-  ],
+    ChangePasswordComponent,
+    DeleteUserComponent,
+    EditUserComponent, SvgPasswordComponent, SvgDeleteUserComponent],
   templateUrl: './perfil.component.html',
   styleUrl: './perfil.component.css'
 })

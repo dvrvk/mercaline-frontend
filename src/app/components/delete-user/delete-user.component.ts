@@ -62,13 +62,15 @@ export class DeleteUserComponent {
       }).then((result: { isConfirmed: any; }) => {
         if (result.isConfirmed) {
 
-          this.userService.deleteUsuario2(this.passwordData.get('password')?.value).subscribe(
+          this.userService.deleteUsuario(this.passwordData.get('password')?.value).subscribe(
             response => {
-              Swal.fire(
-                '¡Eliminado!',
-                'Tu perfil ha sido eliminado.',
-                'success'
-              );
+              Swal.fire({
+                title: '¡Eliminado!',
+                text: 'Tu perfil ha sido eliminado.',
+                icon: 'success',
+                confirmButtonText: 'Ok',
+                confirmButtonColor: '#48be79'
+            });
               this.userService.logOut();
               this.router.navigate(['/login']);
             },

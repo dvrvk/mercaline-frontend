@@ -42,11 +42,17 @@ export class UserServiceService {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this.http.put<any>(this.url + this.pathUpdateUser, user, { headers });
   }
+
   // Eliminar usuario
-  deleteUsuario(): Observable<any> {
+  deleteUsuario(password : string): Observable<any> {
+    console.log(password);
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http.delete<any>(this.url + this.pathDeleteUser, { headers });
+    // Crear el FormData
+    const formData = new FormData();
+    formData.append('password', password);
+
+    return this.http.post<any>(`${this.url}${this.pathDeleteUser}`, formData, { headers });
   }
   // Verificar si el usuario ya está registrado
   checkUsername(username: string): Observable<any> {
@@ -62,7 +68,7 @@ export class UserServiceService {
   isAuth(): boolean {
     const token = localStorage.getItem('token');
     const userData = localStorage.getItem('userdata');
-    return !!token && !!userData;
+    return !!token || !!userData;
   }
 
   registrarUsuario(user: any): Observable<any> {
