@@ -57,13 +57,14 @@
                 }"></app-error-messages>
               </div>
             </div>
-            <div class="mt-5 text-center d-flex justify-content-center gap-2">
-              <button class="btn btn-custom" type="button" (click)="guardarPerfil()">Guardar cambios</button>
+            <div class="mt-4 text-center d-flex justify-content-center gap-2">
+              <button class="btn btn-custom" type="button" (click)="guardarPerfil()">Guardar</button>
               <!-- TO-DO: (click)="eliminarPerfil()" -->
               <button class="btn btn-outline-danger w-150" type="button" (click)="eliminarPerfil()">Eliminar perfil</button>
             </div>
           </div>
         </form>
+        <app-change-password></app-change-password>
       </div>
     </div>
   </div>

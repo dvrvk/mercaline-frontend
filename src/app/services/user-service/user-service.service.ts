@@ -15,6 +15,7 @@ export class UserServiceService {
   private pathDeleteUser = '/user/delete'; 
   private pathCheckUsername = '/user/check-username'; // verificar Ya registrado
   private pathCheckEmail = '/user/check-email'; // verificar email ya registrado
+  private pathChangePassword = '/user/change-password'
 
   // Inicializa con el valor actual en localStorage (si existe)
   private userDataSubject = new BehaviorSubject<any>(JSON.parse(localStorage.getItem('userdata') || '{}'));
@@ -58,7 +59,6 @@ export class UserServiceService {
     return this.http.get<any>(`${this.url}${this.pathCheckEmail}`, { params });
   }
   
-
   isAuth(): boolean {
     const token = localStorage.getItem('token');
     const userData = localStorage.getItem('userdata');
@@ -106,7 +106,16 @@ export class UserServiceService {
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
   }
-  
+
+   changePassword(passwordData : any) {
+
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type' : 'application/json'
+    })
+    return this.http.put<any>(`${this.url}${this.pathChangePassword}`, passwordData, { headers });
+   }
 
   
 } 

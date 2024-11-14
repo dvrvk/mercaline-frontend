@@ -9,21 +9,23 @@ import { SvgProfileComponent } from '../svg-icons/svg-profile/svg-profile.compon
 import { ErrorMessagesComponent } from '../validation/error-messages/error-messages.component';
 import { SuccessAlertComponent } from '../alerts/success-alert/success-alert.component';
 import { ErrorAlertComponent } from '../alerts/error-alert/error-alert.component';
+import { ChangePasswordComponent } from "../change-password/change-password.component";
 
 declare var Swal: any;
 
 @Component({
   selector: 'app-perfil',
   standalone: true,
-  imports: [CommonModule, 
-            RouterModule, 
-            NavbarComponent,
-            FormsModule, 
-            SvgProfileComponent, 
-            ReactiveFormsModule,
-            ErrorMessagesComponent,
-            SuccessAlertComponent,
-            ErrorAlertComponent],
+  imports: [CommonModule,
+    RouterModule,
+    NavbarComponent,
+    FormsModule,
+    SvgProfileComponent,
+    ReactiveFormsModule,
+    ErrorMessagesComponent,
+    SuccessAlertComponent,
+    ErrorAlertComponent, 
+    ChangePasswordComponent],
   templateUrl: './perfil.component.html',
   styleUrl: './perfil.component.css'
 })
