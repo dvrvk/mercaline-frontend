@@ -1,0 +1,51 @@
+<form [formGroup]="user" #registerForm="ngForm">
+    <div>
+      <div class="row mt-2">
+        <div class="col-md-6">
+          <label for="name" class="labels">Nombre</label>
+          <input id="name" type="text" class="form-control" formControlName="name" name="name">
+          <app-error-messages [control]="user.get('name')" [errorMessage]="{
+            pattern: 'El nombre solo puede contener letras y un espacio en blanco entre palabras.'
+          }"></app-error-messages>
+        </div>
+        <div class="col-md-6">
+          <label for="lastname" class="labels">Apellidos</label>
+          <input id="lastname" type="text" class="form-control" formControlName="lastname" name="lastname">
+          <app-error-messages [control]="user.get('lastname')" [errorMessage]="{
+            pattern: 'El apellido solo puede contener letras y un espacio en blanco entre palabras.'
+          }"></app-error-messages>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-md-12">
+          <label for="username" class="labels">Usuario</label>
+          <input id="username" type="text" class="form-control" formControlName="username" name="username">
+          <app-error-messages [control]="user.get('username')"
+          [errorMessage]="{
+            pattern: 'El nombre de usuario solo puede contener letras y numeros.'
+          }"></app-error-messages>
+        </div>
+        <div class="col-md-12 mt-2">
+          <label for="email" class="labels">Email</label>
+          <input id="email" type="text" class="form-control" formControlName="email" name="email">
+          <app-error-messages [control]="user.get('email')" 
+      [errorMessage]="{
+        pattern: 'Introduce un correo electrónico valido.'
+      }"></app-error-messages>
+        </div>
+        <div class="col-md-12 mt-2">
+          <label for="tel" class="labels">Teléfono</label>
+          <input id="tel" type="text" class="form-control" formControlName="tel" name="tel">
+          <app-error-messages [control]="user.get('tel')" [errorMessage]="{
+            pattern: 'Introduce un número de teléfono válido en España.'
+          }"></app-error-messages>
+        </div>
+      </div>
+      <div class="my-4 text-center d-flex justify-content-center gap-2">
+        <button class="btn btn-custom" type="button" (click)="guardarPerfil()">Guardar</button>
+      </div>
+    </div>
+  </form>
+  <app-success-alert *ngIf="isSuccess" [title]="successTitle"></app-success-alert>
+  <app-error-alert *ngIf="isError" [title]="titleError" [message]="errorMessage" (confirmation)="onConfirmation($event)"></app-error-alert>
+
