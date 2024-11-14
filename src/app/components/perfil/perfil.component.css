@@ -21,5 +21,13 @@
   .w-150 {
     max-width: 150px;
   }
+
+  .text-muted {
+    font-size: 1.15em;
+  }
+
+  .text-muted:hover, .text-select:hover {
+    cursor: pointer;
+  }
   
 

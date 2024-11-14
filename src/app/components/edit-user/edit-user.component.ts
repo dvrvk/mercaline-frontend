@@ -82,6 +82,9 @@ export class EditUserComponent {
           }));
           this.userService.updateUserData({'username' : response.username, 'email': response.email, 'tel': response.tel})
 
+          setTimeout(() => {
+            this.isSuccess = false;
+          }, 1000);
         },
         error => {
 

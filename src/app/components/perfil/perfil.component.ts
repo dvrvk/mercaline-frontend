@@ -33,6 +33,8 @@ export class PerfilComponent {
   email : string = ''
   private userDataSubscription: Subscription | null = null;
 
+  activeSection: string = 'edit';
+
   isError : boolean = false;
   titleError : string = '';
   errorMessage : string = '';
@@ -55,6 +57,10 @@ export class PerfilComponent {
         }, 0);
       }
     );
+  }
+
+  selectSection(section: string): void {
+    this.activeSection = section;
   }
 
   onConfirmation(confirmed: boolean) {

@@ -1,21 +1,44 @@
 <app-navbar></app-navbar>
 
 <div class="container rounded bg-white mt-5 mb-5">
-    <div class="row">
-      <div class="col-md-5 border-right">
-        <div class="d-flex flex-column align-items-center text-center p-md-3 py-md-5"> 
-          <app-svg-profile></app-svg-profile>
-          <span class="font-weight-bold">{{ userData.username }}</span>
-          <span class="text-black-50">{{ email }}</span>
-        </div>
+  <div class="row">
+    <div class="col-md-5 border-right">
+      <div class="d-flex flex-column align-items-center text-center p-md-3 py-md-5">
+        <app-svg-profile></app-svg-profile>
+        <span class="font-weight-bold">{{ userData.username }}</span>
+        <span class="text-black-50">{{ email }}</span>
       </div>
-      <div class="col-md-7 border-right">
+    </div>
+    <div class="col-md-7 border-right">
+      <div class="d-flex justify-content-start align-items-end mb-3 pt-5 gap-md-5 border-bottom pb-2 px-3">
+        <h4 class="text-right"
+          [ngClass]="{ 'text-select': activeSection === 'edit', 'text-muted': activeSection !== 'edit' }"
+          (click)="selectSection('edit')">
+          Editar perfil
+        </h4>
+        <h4 class="text-right"
+          [ngClass]="{ 'text-select': activeSection === 'changePassword', 'text-muted': activeSection !== 'changePassword' }"
+          (click)="selectSection('changePassword')">
+          Cambiar contraseña
+        </h4>
+        <h4 class="text-right"
+          [ngClass]="{ 'text-select': activeSection === 'deleteUser', 'text-muted': activeSection !== 'deleteUser' }"
+          (click)="selectSection('deleteUser')">
+          Eliminar Usuario
+        </h4>
+      </div>
+      <div *ngIf="activeSection === 'edit'">
         <app-edit-user></app-edit-user>
+      </div>
+      <div *ngIf="activeSection === 'changePassword'">
         <app-change-password></app-change-password>
+      </div>
+      <div *ngIf="activeSection === 'deleteUser'">
         <app-delete-user></app-delete-user>
       </div>
     </div>
   </div>
-  <app-success-alert *ngIf="isSuccess" [title]="successTitle"></app-success-alert>
-  <app-error-alert *ngIf="isError" [title]="titleError" [message]="errorMessage" (confirmation)="onConfirmation($event)"></app-error-alert>
-
+</div>
+<app-success-alert *ngIf="isSuccess" [title]="successTitle"></app-success-alert>
+<app-error-alert *ngIf="isError" [title]="titleError" [message]="errorMessage"
+  (confirmation)="onConfirmation($event)"></app-error-alert>

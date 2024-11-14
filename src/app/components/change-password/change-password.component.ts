@@ -71,6 +71,10 @@ export class ChangePasswordComponent {
 
           // Resetear el formulario tras el éxito
           this.passwordData.reset();
+
+          setTimeout(() => {
+            this.isSuccess = false;
+          }, 1000);
           
         },
         error: (error) => {
