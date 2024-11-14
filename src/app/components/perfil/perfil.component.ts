@@ -10,6 +10,7 @@ import { ErrorMessagesComponent } from '../validation/error-messages/error-messa
 import { SuccessAlertComponent } from '../alerts/success-alert/success-alert.component';
 import { ErrorAlertComponent } from '../alerts/error-alert/error-alert.component';
 import { ChangePasswordComponent } from "../change-password/change-password.component";
+import { DeleteUserComponent } from "../delete-user/delete-user.component";
 
 declare var Swal: any;
 
@@ -24,8 +25,8 @@ declare var Swal: any;
     ReactiveFormsModule,
     ErrorMessagesComponent,
     SuccessAlertComponent,
-    ErrorAlertComponent, 
-    ChangePasswordComponent],
+    ErrorAlertComponent,
+    ChangePasswordComponent, DeleteUserComponent],
   templateUrl: './perfil.component.html',
   styleUrl: './perfil.component.css'
 })

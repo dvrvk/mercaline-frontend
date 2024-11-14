@@ -3,8 +3,6 @@
     justify-content: center;
     align-items: center;
     margin-top: 0;
-  }
-  .container {
     background-color: #f8f9fa;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);

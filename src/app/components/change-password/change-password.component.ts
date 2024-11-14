@@ -81,7 +81,7 @@ export class ChangePasswordComponent {
             error.error.mensaje : 
             (Object.values(error.error.mensaje)).join(' ');
 
-          // Resetear el formulario tras el éxito
+          // Resetear el formulario tras error
           this.passwordData.reset();
 
         }
