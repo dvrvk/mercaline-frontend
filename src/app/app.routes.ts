@@ -6,6 +6,7 @@ import { PerfilComponent } from './components/perfil/perfil.component';
 import { authGuard } from './guards/auth.guard';
 import { redirectGuardGuard } from './guards/redirect-guard.guard';
 import { UploadProductsComponent } from './components/upload-products/upload-products.component';
+import { ProductDetailsComponent } from './components/product-details/product-details.component';
 
 export const routes: Routes = [
     {
@@ -40,6 +41,12 @@ export const routes: Routes = [
         path: 'subir-producto',
         title: 'Subir producto',
         component: UploadProductsComponent,
+        canActivate: [authGuard]
+    },
+    {
+        path: 'detalles-producto/:id',
+        title: 'Detalles producto',
+        component: ProductDetailsComponent,
         canActivate: [authGuard]
     }
 ];
