@@ -5,6 +5,10 @@
     --darker-btn-main-color: #3fa469;
 }
 
+.darker-main-color {
+  color: var(--darker-main-color)
+}
+
 .custom-link {
     text-decoration: none;
     border-bottom: 2px solid var(--main-color); /* Color del subrayado */

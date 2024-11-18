@@ -3,7 +3,7 @@ import { ProductService, ProductResponseSummaryDTO, Page, FilterClass } from '..
 import { CommonModule } from '@angular/common';
 import { CustomCurrencyFormatPipe } from '../../utils/custom-currency/custom-currency-format.pipe';
 import { UserServiceService } from '../../services/user-service/user-service.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink, RouterModule, RouterOutlet } from '@angular/router';
 import { CapitalizeFirstPipe } from '../../utils/capitalizeFirst/capitalize-first.pipe';
 import { CategoryService } from '../../services/category/category.service';
 import { SgvNotFoundComponent } from "../svg-icons/sgv-not-found/sgv-not-found.component";
@@ -24,7 +24,8 @@ declare var Swal: any;
     SgvNotFoundComponent,
     FilterComponent,
     OrderByProductsComponent,
-    ErrorAlertComponent],
+    ErrorAlertComponent,
+    RouterModule],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.css'
 })
@@ -230,7 +231,6 @@ export class ProductListComponent {
       );
     });
   }
-
 
 }
 
