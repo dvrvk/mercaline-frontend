@@ -12,12 +12,14 @@
             <!-- Product name-->
             <h5 class="fw-bolder">{{ favoriteList.nameList | capitalizeFirst}}</h5>
             <!-- Cantidad de productos dentro de cada lista-->
-            <p>{{ favoriteList.productSize || 0 }} Productos</p>
+            <p class="d-flex flex-column justify-content-center align-items-center gap-2">
+              <span [ngClass]="{ 'badge-cat-red': favoriteList.productSize === 0, 'badge-cat': favoriteList.productSize > 0 }" class="badge ">{{ favoriteList.productSize || 0 }} Productos</span>
+            </p>
           </div>
         </div>
         <!-- Product actions-->
         <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-          <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Ver lista</a>
+          <div class="text-center"><a [ngClass]="{ 'disabled': favoriteList.productSize === 0 }" class="btn btn-outline-dark mt-auto" href="#">Ver lista</a>
           </div>
         </div>
       </div>
