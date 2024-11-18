@@ -7,6 +7,8 @@ import { authGuard } from './guards/auth.guard';
 import { redirectGuardGuard } from './guards/redirect-guard.guard';
 import { UploadProductsComponent } from './components/upload-products/upload-products.component';
 import { FavoritesComponent } from "./components/favorites/favorites.component";
+import { ProductDetailsComponent } from './components/product-details/product-details.component';
+
 
 export const routes: Routes = [
     {
@@ -47,6 +49,12 @@ export const routes: Routes = [
         path: 'favorites',
         title: 'Productos favoritos',
         component: FavoritesComponent,
+        canActivate: [authGuard]
+    },
+    {
+        path: 'detalles-producto/:id',
+        title: 'Detalles producto',
+        component: ProductDetailsComponent,
         canActivate: [authGuard]
     }
 ];
