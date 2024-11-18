@@ -18,7 +18,8 @@ declare var Swal: any;
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [CommonModule,
+  imports: [
+    CommonModule,
     CustomCurrencyFormatPipe,
     CapitalizeFirstPipe,
     SgvNotFoundComponent,
