@@ -15,6 +15,7 @@ export class UserServiceService {
   private pathDeleteUser = '/user/delete'; 
   private pathCheckUsername = '/user/check-username'; // verificar Ya registrado
   private pathCheckEmail = '/user/check-email'; // verificar email ya registrado
+  private pathChangePassword = '/user/change-password'
 
   // Inicializa con el valor actual en localStorage (si existe)
   private userDataSubject = new BehaviorSubject<any>(JSON.parse(localStorage.getItem('userdata') || '{}'));
@@ -41,11 +42,17 @@ export class UserServiceService {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this.http.put<any>(this.url + this.pathUpdateUser, user, { headers });
   }
+
   // Eliminar usuario
-  deleteUsuario(): Observable<any> {
+  deleteUsuario(password : string): Observable<any> {
+    console.log(password);
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http.delete<any>(this.url + this.pathDeleteUser, { headers });
+    // Crear el FormData
+    const formData = new FormData();
+    formData.append('password', password);
+
+    return this.http.post<any>(`${this.url}${this.pathDeleteUser}`, formData, { headers });
   }
   // Verificar si el usuario ya está registrado
   checkUsername(username: string): Observable<any> {
@@ -58,11 +65,10 @@ export class UserServiceService {
     return this.http.get<any>(`${this.url}${this.pathCheckEmail}`, { params });
   }
   
-
   isAuth(): boolean {
     const token = localStorage.getItem('token');
     const userData = localStorage.getItem('userdata');
-    return !!token && !!userData;
+    return !!token || !!userData;
   }
 
   registrarUsuario(user: any): Observable<any> {
@@ -106,7 +112,16 @@ export class UserServiceService {
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
   }
-  
+
+   changePassword(passwordData : any) {
+
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type' : 'application/json'
+    })
+    return this.http.put<any>(`${this.url}${this.pathChangePassword}`, passwordData, { headers });
+   }
 
   
 } 

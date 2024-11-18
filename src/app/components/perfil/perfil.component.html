@@ -1,72 +1,46 @@
 <app-navbar></app-navbar>
 
 <div class="container rounded bg-white mt-5 mb-5">
-    <div class="row">
-      <div class="col-md-5 border-right">
-        <div class="d-flex flex-column align-items-center text-center p-md-3 py-md-5"> 
-          <app-svg-profile></app-svg-profile>
-          <span class="font-weight-bold">{{ userGet.username }}</span>
-          <span class="text-black-50">{{ userGet.email }}</span>
-          <span> </span>
-        </div>
+  <div class="row">
+    <div class="col-md-5 border-right">
+      <div class="d-flex flex-column align-items-center text-center p-md-3 py-md-5">
+        <app-svg-profile *ngIf="activeSection === 'edit'"></app-svg-profile>
+        <app-svg-password *ngIf="activeSection === 'changePassword'"></app-svg-password>
+        <app-svg-delete-user *ngIf="activeSection === 'deleteUser'"></app-svg-delete-user>
+        <span class="font-weight-bold">{{ userData.username }}</span>
+        <span class="text-black-50">{{ email }}</span>
       </div>
-      <div class="col-md-7 border-right">
-        <form [formGroup]="user" #registerForm="ngForm">
-          <div class="p-3 py-5">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <h4 class="text-right">Editar perfil</h4>
-            </div>
-            <div class="row mt-2">
-              <div class="col-md-6">
-                <label for="name" class="labels">Nombre</label>
-                <input id="name" type="text" class="form-control" formControlName="name" name="name">
-                <app-error-messages [control]="user.get('name')" [errorMessage]="{
-                  pattern: 'El nombre solo puede contener letras y un espacio en blanco entre palabras.'
-                }"></app-error-messages>
-              </div>
-              <div class="col-md-6">
-                <label for="lastname" class="labels">Apellidos</label>
-                <input id="lastname" type="text" class="form-control" formControlName="lastname" name="lastname">
-                <app-error-messages [control]="user.get('lastname')" [errorMessage]="{
-                  pattern: 'El apellido solo puede contener letras y un espacio en blanco entre palabras.'
-                }"></app-error-messages>
-              </div>
-            </div>
-            <div class="row mt-3">
-              <div class="col-md-12">
-                <label for="username" class="labels">Usuario</label>
-                <input id="username" type="text" class="form-control" formControlName="username" name="username">
-                <app-error-messages [control]="user.get('username')"
-                [errorMessage]="{
-                  pattern: 'El nombre de usuario solo puede contener letras y numeros.'
-                }"></app-error-messages>
-              </div>
-              <div class="col-md-12 mt-2">
-                <label for="email" class="labels">Email</label>
-                <input id="email" type="text" class="form-control" formControlName="email" name="email">
-                <app-error-messages [control]="user.get('email')" 
-            [errorMessage]="{
-              pattern: 'Introduce un correo electrónico valido.'
-            }"></app-error-messages>
-              </div>
-              <div class="col-md-12 mt-2">
-                <label for="tel" class="labels">Teléfono</label>
-                <input id="tel" type="text" class="form-control" formControlName="tel" name="tel">
-                <app-error-messages [control]="user.get('tel')" [errorMessage]="{
-                  pattern: 'Introduce un número de teléfono válido en España.'
-                }"></app-error-messages>
-              </div>
-            </div>
-            <div class="mt-5 text-center d-flex justify-content-center gap-2">
-              <button class="btn btn-custom" type="button" (click)="guardarPerfil()">Guardar cambios</button>
-              <!-- TO-DO: (click)="eliminarPerfil()" -->
-              <button class="btn btn-outline-danger w-150" type="button" (click)="eliminarPerfil()">Eliminar perfil</button>
-            </div>
-          </div>
-        </form>
+    </div>
+    <div class="col-md-7 border-right">
+      <div class="d-flex justify-content-start align-items-end mb-3 pt-5 gap-md-5 border-bottom pb-2 px-3">
+        <h4 class="text-right"
+          [ngClass]="{ 'text-select': activeSection === 'edit', 'text-muted': activeSection !== 'edit' }"
+          (click)="selectSection('edit')">
+          Editar perfil
+        </h4>
+        <h4 class="text-right"
+          [ngClass]="{ 'text-select': activeSection === 'changePassword', 'text-muted': activeSection !== 'changePassword' }"
+          (click)="selectSection('changePassword')">
+          Cambiar contraseña
+        </h4>
+        <h4 class="text-right"
+          [ngClass]="{ 'text-select': activeSection === 'deleteUser', 'text-muted': activeSection !== 'deleteUser' }"
+          (click)="selectSection('deleteUser')">
+          Eliminar Usuario
+        </h4>
+      </div>
+      <div *ngIf="activeSection === 'edit'">
+        <app-edit-user></app-edit-user>
+      </div>
+      <div *ngIf="activeSection === 'changePassword'">
+        <app-change-password></app-change-password>
+      </div>
+      <div *ngIf="activeSection === 'deleteUser'">
+        <app-delete-user></app-delete-user>
       </div>
     </div>
   </div>
-  <app-success-alert *ngIf="isSuccess" [title]="successTitle"></app-success-alert>
-  <app-error-alert *ngIf="isError" [title]="titleError" [message]="errorMessage" (confirmation)="onConfirmation($event)"></app-error-alert>
-
+</div>
+<app-success-alert *ngIf="isSuccess" [title]="successTitle"></app-success-alert>
+<app-error-alert *ngIf="isError" [title]="titleError" [message]="errorMessage"
+  (confirmation)="onConfirmation($event)"></app-error-alert>
