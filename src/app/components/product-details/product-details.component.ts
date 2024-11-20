@@ -7,6 +7,7 @@ import { ProductService } from '../../services/product-service/product.service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser'
 
+
 @Component({
   selector: 'app-product-details',
   standalone: true,
@@ -25,12 +26,20 @@ export class ProductDetailsComponent implements OnInit {
   product : any = [];
   images: SafeUrl[] = [];
 
+  currentPage: number = 0;
+
   constructor(private productService: ProductService,
               private route : ActivatedRoute,
               private sanitizer: DomSanitizer
   ) {}
   
   ngOnInit(): void {
+    this.route.queryParams.subscribe((params) => {
+      // Si el parámetro 'page' existe, lo usamos; si no, usamos 0
+      this.currentPage = params['page'] ? parseInt(params['page'], 10) : 0;
+    });
+
+
     // Capturar el ID de la URL
     const id = this.route.snapshot.paramMap.get('id');
     // Cargar datos
@@ -54,7 +63,7 @@ export class ProductDetailsComponent implements OnInit {
   loadProductImages(id : number): void {
 
     this.productService.getProductImages(id).subscribe(response => {
-      console.log("hola")
+
       if (typeof response.mensaje === 'string') {
         this.images = response.mensaje.split(',').map(item => { 
         return this.sanitizer.bypassSecurityTrustUrl(this.formatImage(item)); }); 
