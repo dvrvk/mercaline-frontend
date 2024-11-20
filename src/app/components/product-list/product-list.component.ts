@@ -71,7 +71,15 @@ export class ProductListComponent {
     // Para mantener la página al volver de detalles producto
     this.activatedRoute.queryParams.subscribe((params) => {
       this.categoryPage = params['page'] ? parseInt(params['page'], 10) : 0;
-        this.loadProducts(this.categoryPage, this.pageSize);
+      this.selectedCategoryId = params['category'] ? parseInt(params['category'], 10) : 0;
+      
+        if(this.selectedCategoryId == 0) {
+          this.loadProducts(this.categoryPage, this.pageSize);
+        } else {
+          
+          this.loadProductsByCategory(this.categoryPage, this.pageSize, this.selectedCategoryId);
+        }
+        
       })
 
 
@@ -80,15 +88,9 @@ export class ProductListComponent {
       if (Object.keys(category).length != 0) {
         this.selectedCategory = category[1];
         this.selectedCategoryId = category[0];
-        // Para mantener la página al volver de detalles producto
-        this.activatedRoute.queryParams.subscribe((params) => {
-          this.categoryPage = params['page'] ? parseInt(params['page'], 10) : 0;
-          if(this.selectedCategoryId != 0) {
-            this.loadProductsByCategory(this.categoryPage, this.pageSize, this.selectedCategoryId);
-          }
-        });
 
-        // this.loadProductsByCategory(0, this.pageSize, category[0]);
+
+        this.loadProductsByCategory(0, this.pageSize, category[0]);
         
       }
     });
@@ -255,7 +257,9 @@ export class ProductListComponent {
 
   onViewProduct(productId: number) : void {
     this.router.navigate([`/detalles-producto/${productId}`], {
-      queryParams: { page: this.currentPage }
+      queryParams: { page: this.currentPage,
+                    category : this.selectedCategoryId
+                  }
     });
   }
 

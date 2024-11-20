@@ -27,6 +27,7 @@ export class ProductDetailsComponent implements OnInit {
   images: SafeUrl[] = [];
 
   currentPage: number = 0;
+  currentCategory : number = 0;
 
   constructor(private productService: ProductService,
               private route : ActivatedRoute,
@@ -37,6 +38,7 @@ export class ProductDetailsComponent implements OnInit {
     this.route.queryParams.subscribe((params) => {
       // Si el parámetro 'page' existe, lo usamos; si no, usamos 0
       this.currentPage = params['page'] ? parseInt(params['page'], 10) : 0;
+      this.currentCategory = params['category'] ? parseInt(params['category'], 10) : 0;
     });
 
 
