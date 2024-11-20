@@ -227,7 +227,7 @@ export class ProductListComponent {
 
         },
         (error) => {
-          product.imageUrl = this.sanitizer.bypassSecurityTrustUrl('assets/images/not_found.png');
+          product.imageUrl = this.sanitizer.bypassSecurityTrustUrl('assets/images/image_not_available.png');
         }
       );
     });

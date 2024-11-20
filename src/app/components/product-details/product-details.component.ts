@@ -4,7 +4,7 @@ import { CustomCurrencyFormatPipe } from '../../utils/custom-currency/custom-cur
 import { CommonModule, NgClass } from '@angular/common';
 import { CapitalizeFirstPipe } from '../../utils/capitalizeFirst/capitalize-first.pipe';
 import { ProductService } from '../../services/product-service/product.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser'
 
 @Component({
@@ -15,7 +15,8 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser'
     CustomCurrencyFormatPipe,
     NgClass,
     CapitalizeFirstPipe,
-    CommonModule
+    CommonModule,
+    RouterLink
   ],
   templateUrl: './product-details.component.html',
   styleUrl: './product-details.component.css'
@@ -43,7 +44,6 @@ export class ProductDetailsComponent implements OnInit {
   loadProductDetails(id : number) : void {
     this.productService.getProductDetails(id).subscribe(
     response => {
-      console.log(response)
       this.product = response;
     },
     error => {
@@ -54,18 +54,22 @@ export class ProductDetailsComponent implements OnInit {
   loadProductImages(id : number): void {
 
     this.productService.getProductImages(id).subscribe(response => {
-
+      console.log("hola")
       if (typeof response.mensaje === 'string') {
         this.images = response.mensaje.split(',').map(item => { 
-          return this.sanitizer.bypassSecurityTrustUrl(this.formatImage(item)); }); 
-          console.log(this.images);
+        return this.sanitizer.bypassSecurityTrustUrl(this.formatImage(item)); }); 
         
-          // Convierte la cadena en un array y luego en URLs de datos
-          //this.images = response.mensaje.split(',').map(base64 => `data:image/jpeg;base64,${base64}`);
       } else {
+        this.images.push(this.sanitizer.bypassSecurityTrustUrl('assets/images/not_found.png'));
         console.error('Expected a string but got', response.mensaje);
       }
-    });
+    },
+    error => {
+      console.log("hola")
+      this.images.push(this.sanitizer.bypassSecurityTrustUrl('assets/images/image_not_available.png'));
+      console.error('Expected a string but got', error);
+    }
+  );
   }
 
   formatImage(item: string): string { 
