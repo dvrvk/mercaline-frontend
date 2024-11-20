@@ -88,7 +88,6 @@ export class ProductListComponent {
       if (Object.keys(category).length != 0) {
         this.selectedCategory = category[1];
         this.selectedCategoryId = category[0];
-
         this.loadProductsByCategory(0, this.pageSize, category[0]);
         
       }
