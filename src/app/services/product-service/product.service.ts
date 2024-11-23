@@ -18,6 +18,7 @@ export class ProductService {
   private apiUrlImageMain = 'http://localhost:8080/images/main/'
   private apiUrlImages = 'http://localhost:8080/images'
   private apiUrlProductDetails = 'http://localhost:8080/products/';
+  private apiUrlProductIsMine = 'http://localhost:8080/products/is-mine/';
 
   constructor(private http: HttpClient) { }
 
@@ -113,6 +114,13 @@ export class ProductService {
 
     return this.http.get<any>(`${this.apiUrlProductDetails}${productId}`, {headers})
   }
+
+  checkIsMine(productId : number) {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.get<any>(`${this.apiUrlProductIsMine}${productId}`, {headers})
+  } 
 
 }
 
