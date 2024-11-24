@@ -19,6 +19,7 @@ export class ProductService {
   private apiUrlImages = 'http://localhost:8080/images'
   private apiUrlProductDetails = 'http://localhost:8080/products/';
   private apiUrlProductIsMine = 'http://localhost:8080/products/is-mine/';
+  private apiUrlUpdate = 'http://localhost:8080/products/update'
 
   constructor(private http: HttpClient) { }
 
@@ -120,7 +121,14 @@ export class ProductService {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
     return this.http.get<any>(`${this.apiUrlProductIsMine}${productId}`, {headers})
-  } 
+  }
+
+  putProduct(form : FormData) {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.put(this.apiUrlUpdate,form,{headers});
+  }
 
 }
 

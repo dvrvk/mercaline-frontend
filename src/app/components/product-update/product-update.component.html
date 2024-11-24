@@ -1,20 +1,26 @@
 <app-navbar></app-navbar>
 <section class="container rounded bg-white mt-md-5 mb-5 p-3 p-md-5">
+    <app-spinner-load [isLoading]="isLoading"></app-spinner-load>
     <div class="row">
-        <div class="col-md-4 d-flex justify-content-center align-items-center w-md-100">
-            <app-svg-upload-product></app-svg-upload-product>
+        <div class="col-md-5 d-flex justify-content-center align-items-center w-md-100">
+            <app-carousel-images [productID]="getProductID()"></app-carousel-images>
         </div>
-        <div class="col-md-8">
+        <div class="col-md-7">
             <h4 class="text-right">Actualizar Producto</h4>
             <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
                 <div class="mb-3">
                     <label for="name" class="form-label">Nombre del Producto</label>
-                    <input id="name" formControlName="name" type="text" class="form-control"
-                        [ngClass]="{'is-invalid': productForm.get('name')?.invalid && productForm.get('name')?.touched}" />
+                    <input 
+                        id="name" 
+                        formControlName="name" 
+                        type="text" 
+                        class="form-control"
+                        [ngClass]="{'is-invalid': productForm.get('name')?.invalid && productForm.get('name')?.touched}" 
+                        [value]="productForm.get('name')?.value | capitalizeFirst"/>
                     <div class="invalid-feedback">
                         <app-error-messages [control]="productForm.get('name')" [errorMessage]="{
-                  pattern: 'El nombre del producto solo puede contener letras y numeros.'
-                }"></app-error-messages>
+                      pattern: 'El nombre del producto solo puede contener letras y numeros.'
+                    }"></app-error-messages>
                     </div>
                 </div>
 
@@ -29,13 +35,18 @@
 
                 <div class="mb-3">
                     <label for="price" class="form-label">Precio</label>
-                    <input id="price" formControlName="price" type="number" step="0.01" class="form-control"
-                        [ngClass]="{'is-invalid': productForm.get('price')?.invalid && productForm.get('price')?.touched}" />
+                    <input 
+                        id="price" 
+                        formControlName="price" 
+                        type="number" step="0.01" 
+                        class="form-control"
+                        [ngClass]="{'is-invalid': productForm.get('price')?.invalid && productForm.get('price')?.touched}" 
+                        [value]="productForm.get('price')?.value"/>
                     <div class="invalid-feedback">
                         <app-error-messages [control]="productForm.get('price')" [errorMessage]="{
-                    min: 'Tiene que ser mayor que 0.',
-                    pattern: 'Formato invalido. Tienes que introducir máximo 2 decimales.'
-                  }">
+                        min: 'Tiene que ser mayor que 0.',
+                        pattern: 'Formato invalido. Tienes que introducir máximo 2 decimales.'
+                      }">
 
                         </app-error-messages>
                     </div>
@@ -71,35 +82,45 @@
                     <label for="image" class="form-label">Imagen del Producto</label>
                     <div class="d-flex gap-3 pb-2">
                         <div class="form-check">
-                            <input class="form-check-input custom-radio" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked>
-                            <label class="form-check-label" for="flexRadioDefault1">
+                            <input class="form-check-input custom-radio" type="radio" name="selectedOption"
+                                id="no-modificar" formControlName="selectedOption" value="no-modificar" checked>
+                            <label class="form-check-label" for="no-modificar">
                                 No modificar
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input custom-radio" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
-                            <label class="form-check-label" for="flexRadioDefault2">
+                            <input class="form-check-input custom-radio" type="radio" name="selectedOption"
+                                id="sustituir" formControlName="selectedOption" value="sustituir">
+                            <label class="form-check-label" for="sustituir">
                                 Sustituir imagenes
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input custom-radio" type="radio" name="flexRadioDefault" id="flexRadioDefault3">
-                            <label class="form-check-label" for="flexRadioDefault3">
+                            <input class="form-check-input custom-radio" type="radio" name="selectedOption" id="agregar"
+                                formControlName="selectedOption" value="agregar">
+                            <label class="form-check-label" for="agregar">
                                 Agregar imagenes
                             </label>
                         </div>
                     </div>
+
                     <input id="image" type="file" formControlName="urlImage" class="form-control"
-                        [ngClass]="{'is-invalid': selectedFiles.length <= 0 && productForm.get('urlImage')?.touched}"
-                        (change)="onFilesSelected($event)" accept=".jpg, .jpeg, .png" multiple />
+                        [ngClass]="{'is-invalid': !validateImages()}" (change)="onFilesSelected($event)"
+                        accept=".jpg, .jpeg, .png" multiple
+                        [hidden]="productForm.get('selectedOption')?.value == 'no-modificar'" />
                     <div class="invalid-feedback">
                         {{imgError.length > 0 ? imgError : 'Se requiere una imagen del producto.'}}
                     </div>
                 </div>
-                <button type="submit" class="btn btn-custom"
-                    [disabled]="!productForm.valid || selectedFiles.length <= 0">
-                    Actualizar
-                </button>
+                <div class="d-flex justify-content-center gap-3 mb-2">
+                    <button type="submit" class="btn btn-custom" [disabled]="!productForm.valid">
+                        Actualizar
+                    </button>
+                    <button type="button" class="btn btn-outline-custom">
+                        Volver
+                    </button>
+                </div>
+                
             </form>
         </div>
     </div>
