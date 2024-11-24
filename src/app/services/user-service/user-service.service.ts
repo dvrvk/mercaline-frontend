@@ -29,6 +29,11 @@ export class UserServiceService {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this.http.get<any>(this.url + this.pathGetUser, { headers });
   }
+  // Obtener usuario por ID
+  getUserId(): number | null { 
+    const userData = this.userDataSubject.value; 
+    return userData?.id || null;
+  }
 
   // Método para actualizar los datos del usuario
   updateUserData(newUserData: any): void {
@@ -113,7 +118,7 @@ export class UserServiceService {
       .join(' ');
   }
 
-   changePassword(passwordData : any) {
+  changePassword(passwordData : any) {
 
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
@@ -121,7 +126,5 @@ export class UserServiceService {
       'Content-Type' : 'application/json'
     })
     return this.http.put<any>(`${this.url}${this.pathChangePassword}`, passwordData, { headers });
-   }
-
-  
+  }
 } 
