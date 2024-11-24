@@ -89,6 +89,7 @@
                             </label>
                         </div>
                         <div class="form-check">
+
                             <input class="form-check-input custom-radio" type="radio" name="selectedOption"
                                 id="sustituir" formControlName="selectedOption" value="sustituir">
                             <label class="form-check-label" for="sustituir">
@@ -96,6 +97,7 @@
                             </label>
                         </div>
                         <div class="form-check">
+
                             <input class="form-check-input custom-radio" type="radio" name="selectedOption" id="agregar"
                                 formControlName="selectedOption" value="agregar">
                             <label class="form-check-label" for="agregar">
@@ -112,6 +114,7 @@
                         {{imgError.length > 0 ? imgError : 'Se requiere una imagen del producto.'}}
                     </div>
                 </div>
+
                 <div class="d-flex justify-content-center gap-3 mb-2">
                     <button type="submit" class="btn btn-custom" [disabled]="!productForm.valid">
                         Actualizar

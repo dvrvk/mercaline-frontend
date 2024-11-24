@@ -21,6 +21,7 @@ export class ProductService {
   private apiUrlProductIsMine = 'http://localhost:8080/products/is-mine/';
   private apiUrlUpdate = 'http://localhost:8080/products/update'
 
+
   constructor(private http: HttpClient) { }
 
   getProduct(page: number, size: number): Observable<Page<ProductResponseSummaryDTO>> {

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavbarComponent } from "../navbar/navbar.component";
+
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Categories, ProductService, Status } from '../../services/product-service/product.service';
@@ -109,7 +110,6 @@ export class ProductUpdateComponent {
           }, 1000);
         }
       )
-
     } else {
       this.isError = true;
       this.titleError = "Error";
@@ -148,8 +148,7 @@ export class ProductUpdateComponent {
         this.isError = true;
         this.titleError = "Ooops...";
         this.errorMessage = typeof error.error.mensaje === 'string' ?
-          error.error.mensaje :
-          (Object.values(error.error.mensaje)).join(' ');
+          error.error.mensaje : (Object.values(error.error.mensaje)).join(' ');
       }
     )
   }
@@ -182,6 +181,7 @@ export class ProductUpdateComponent {
       formData.append('status', this.productForm.get('status')?.value);
       formData.append('category', this.productForm.get('category')?.value);
       formData.append('imageOption', this.productForm.get('selectedOption')?.value)
+      
       if(this.selectedFiles.length > 0) {
         this.selectedFiles.forEach((file) => {
           // Puedes usar un índice para cada archivo o tratarlos como un array

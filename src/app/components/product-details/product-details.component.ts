@@ -27,12 +27,12 @@ export class ProductDetailsComponent implements OnInit {
   images: SafeUrl[] = [];
 
   currentPage: number = 0;
-  currentCategory: number = 0;
 
-  constructor(
-    private productService: ProductService,
-    private route: ActivatedRoute,
-    private sanitizer: DomSanitizer
+  currentCategory : number = 0;
+
+  constructor(private productService: ProductService,
+              private route : ActivatedRoute,
+              private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
@@ -61,6 +61,7 @@ export class ProductDetailsComponent implements OnInit {
       error => {
         console.error(error)
       })
+
   }
 
   loadProductImages(id: number): void {
@@ -82,6 +83,7 @@ export class ProductDetailsComponent implements OnInit {
         console.error('Expected a string but got', error);
       }
     );
+
   }
 
   formatImage(item: string): string {
