@@ -35,11 +35,19 @@ export class ProductService {
     });
   }
 
+  // getUserProducts(userId: number): Observable<ProductResponseSummaryDTO[]> {
+  //   const token = localStorage.getItem('token');
+  //   const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  //   return this.http.get<ProductResponseSummaryDTO[]>(
+  //     `${this.apiUrlUser}/${userId}`,
+  //     { headers }
+  //   );
+  // }
   getUserProducts(userId: number): Observable<ProductResponseSummaryDTO[]> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this.http.get<ProductResponseSummaryDTO[]>(
-      `${this.apiUrlUser}/${userId}`,
+      `http://localhost:8080/products/user/${userId}`,
       { headers }
     );
   }
@@ -153,6 +161,12 @@ export class ProductService {
     return this.http.get<any>(`${this.apiUrlProductDetails}${productId}`, {
       headers,
     });
+  }
+
+  deleteProduct(productId: number): Observable<void> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.delete<void>(`${this.apiUrlProductDetails}/${productId}`, { headers });
   }
 }
 

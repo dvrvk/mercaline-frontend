@@ -1,16 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import { ProductService, ProductResponseSummaryDTO, Page, FilterClass } from '../../services/product-service/product.service';
+import {
+  ProductService,
+  ProductResponseSummaryDTO,
+  Page,
+  FilterClass,
+} from '../../services/product-service/product.service';
 import { CommonModule } from '@angular/common';
 import { CustomCurrencyFormatPipe } from '../../utils/custom-currency/custom-currency-format.pipe';
 import { UserServiceService } from '../../services/user-service/user-service.service';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CapitalizeFirstPipe } from '../../utils/capitalizeFirst/capitalize-first.pipe';
 import { SgvNotFoundComponent } from '../svg-icons/sgv-not-found/sgv-not-found.component';
 import { FilterComponent } from '../filter/filter.component';
 import { OrderByProductsComponent } from '../order-by-products/order-by-products.component';
 import { ErrorAlertComponent } from '../alerts/error-alert/error-alert.component';
 import { DomSanitizer } from '@angular/platform-browser';
-import { NavbarComponent } from "../navbar/navbar.component";
+import { NavbarComponent } from '../navbar/navbar.component';
+import { ProductDetailsComponent } from '../product-details/product-details.component';
 
 @Component({
   selector: 'app-my-products',
@@ -23,12 +29,14 @@ import { NavbarComponent } from "../navbar/navbar.component";
     FilterComponent,
     OrderByProductsComponent,
     ErrorAlertComponent,
-    NavbarComponent],
+    NavbarComponent,
+    ProductDetailsComponent,
+    RouterModule,
+  ],
   templateUrl: './my-products.component.html',
-  styleUrls: ['./my-products.component.css']
+  styleUrls: ['./my-products.component.css'],
 })
 export class MyProductsComponent implements OnInit {
-
   products: ProductResponseSummaryDTO[] = [];
   totalElements: number = 0;
   totalPages: number = 0;
@@ -40,7 +48,8 @@ export class MyProductsComponent implements OnInit {
   filterApplied: FilterClass | null = null;
   orderApplied: string | null = null;
   isError: boolean = false;
-  errorMessage: string = "Ups, lo sentimos no hemos podido conectarnos al servidor. Por favor, intentalo más tarde.";
+  errorMessage: string =
+    'Ups, lo sentimos no hemos podido conectarnos al servidor. Por favor, intentalo más tarde.';
   errorMessageAlert: string = '';
   errorTitleAlert: string = '';
   isErrorAlert: boolean = false;
@@ -58,21 +67,29 @@ export class MyProductsComponent implements OnInit {
 
   loadUserProducts(page: number, size: number): void {
     const userId = this.userService.getUserId();
+    console.log('User ID:', userId); // Verificar que el ID de usuario se obtiene correctamente
     if (userId) {
       this.productService.getUserProducts(userId).subscribe(
         (data) => {
+          console.log('Datos recibidos:', data); // Verificar que los datos se reciban correctamente
           this.products = data;
-          this.totalElements = data.length; // Suponiendo que el total es el tamaño del array devuelto
+          this.totalElements = data.length;
           this.totalPages = Math.ceil(this.totalElements / this.pageSize);
           this.currentPage = page;
+          this.isError = false;
         },
         (error) => {
           console.error('Error al cargar los productos del usuario', error);
-          this.onError("Ha ocurrido un error al cargar los productos. Por favor, inténtalo de nuevo", "Error al cargar los productos");
+          this.onError(
+            'Ha ocurrido un error al cargar los productos. Por favor, inténtalo de nuevo',
+            'Error al cargar los productos'
+          );
+          this.isError = true;
         }
       );
     } else {
       console.error('No se encontró el ID del usuario.');
+      this.isError = true;
     }
   }
 
@@ -96,6 +113,15 @@ export class MyProductsComponent implements OnInit {
     }
   }
 
+  onViewProduct(productId: number): void {
+    this.router.navigate(['/detalles-producto', productId], {
+      queryParams: {
+        page: this.currentPage,
+        category: this.selectedCategoryId,
+      },
+    });
+  }
+
   private onError(message: string, title: string): void {
     this.errorMessageAlert = message;
     this.errorTitleAlert = title;
@@ -114,14 +140,17 @@ export class MyProductsComponent implements OnInit {
           if (imageBlob instanceof Blob) {
             if (imageBlob.type.startsWith('image/')) {
               const objectURL = URL.createObjectURL(imageBlob);
-              product.imageUrl = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+              product.imageUrl =
+                this.sanitizer.bypassSecurityTrustUrl(objectURL);
             } else {
               product.imageUrl = product.imageUrl;
             }
           }
         },
         (error) => {
-          product.imageUrl = this.sanitizer.bypassSecurityTrustUrl('assets/images/not_found.png');
+          product.imageUrl = this.sanitizer.bypassSecurityTrustUrl(
+            'assets/images/not_found.png'
+          );
         }
       );
     });

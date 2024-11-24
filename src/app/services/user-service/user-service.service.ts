@@ -29,11 +29,13 @@ export class UserServiceService {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this.http.get<any>(this.url + this.pathGetUser, { headers });
   }
-  // Obtener usuario por ID
-  getUserId(): number | null { 
-    const userData = this.userDataSubject.value; 
+
+  //Obtener usuario por ID
+  getUserId(): number | null {
+    const userData = this.userDataSubject.value;
+    console.log('Datos del usuario:', userData); // Añadir depuración
     return userData?.id || null;
-  }
+  }  
 
   // Método para actualizar los datos del usuario
   updateUserData(newUserData: any): void {
@@ -80,14 +82,29 @@ export class UserServiceService {
     return this.http.post<any>(this.url + this.pathRegister, user);
   }
 
+  // logIn(user: any): Observable<any> {
+  //   return this.http.post<any>(this.url + "/auth/login", user).pipe(
+  //     tap(response => {
+  //       localStorage.setItem('token', response.token);
+  //       this.updateUserData({'username' : response.username, 'email': response.email, 'tel': response.tel})
+  //     }))
+  // }
   logIn(user: any): Observable<any> {
     return this.http.post<any>(this.url + "/auth/login", user).pipe(
       tap(response => {
         localStorage.setItem('token', response.token);
-        this.updateUserData({'username' : response.username, 'email': response.email, 'tel': response.tel})
-      }))
-      
+        const newUser = {
+          id: response.id, // Asegúrate de que este campo coincide con el campo de la respuesta del backend
+          username: response.username,
+          email: response.email,
+          tel: response.tel
+        };
+        this.updateUserData(newUser);
+        console.log('Datos del usuario almacenados:', newUser);
+      })
+    );
   }
+  
 
   logOut(): void {
     localStorage.removeItem('token');
