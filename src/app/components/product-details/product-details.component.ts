@@ -1,111 +1,99 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { ProductService } from '../../services/product-service/product.service';
-import { UserServiceService } from '../../services/user-service/user-service.service'; // Importa tu servicio de usuario
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { NavbarComponent } from '../navbar/navbar.component';
+import { Component, Input, OnInit } from '@angular/core';
+import { NavbarComponent } from "../navbar/navbar.component";
 import { CustomCurrencyFormatPipe } from '../../utils/custom-currency/custom-currency-format.pipe';
+import { CommonModule, NgClass } from '@angular/common';
 import { CapitalizeFirstPipe } from '../../utils/capitalizeFirst/capitalize-first.pipe';
-import { CommonModule } from '@angular/common';
+import { ProductService } from '../../services/product-service/product.service';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser'
+
 
 @Component({
   selector: 'app-product-details',
-  templateUrl: './product-details.component.html',
-  styleUrls: ['./product-details.component.css'],
-  standalone:true,
+  standalone: true,
   imports: [
     NavbarComponent,
     CustomCurrencyFormatPipe,
+    NgClass,
     CapitalizeFirstPipe,
     CommonModule,
-    RouterModule
-  ]
+    RouterLink
+  ],
+  templateUrl: './product-details.component.html',
+  styleUrl: './product-details.component.css'
 })
 export class ProductDetailsComponent implements OnInit {
   product: any = [];
   images: SafeUrl[] = [];
-  isUserProduct: boolean = false;
 
   currentPage: number = 0;
+
   currentCategory: number = 0;
 
-  constructor(
-    private productService: ProductService,
+  constructor(private productService: ProductService,
     private route: ActivatedRoute,
-    private sanitizer: DomSanitizer,
-    private router: Router,
-    private userService: UserServiceService
-  ) {}
+    private sanitizer: DomSanitizer
+  ) { }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
+      // Si el parámetro 'page' existe, lo usamos; si no, usamos 0
       this.currentPage = params['page'] ? parseInt(params['page'], 10) : 0;
       this.currentCategory = params['category'] ? parseInt(params['category'], 10) : 0;
     });
 
+
+    // Capturar el ID de la URL
     const id = this.route.snapshot.paramMap.get('id');
+    // Cargar datos
     if (id != null) {
       this.loadProductDetails(parseInt(id));
       this.loadProductImages(parseInt(id));
     }
+
   }
 
   loadProductDetails(id: number): void {
     this.productService.getProductDetails(id).subscribe(
       response => {
         this.product = response;
-        const userId = this.userService.getUserId(); // Obtén el ID del usuario actual
-        this.isUserProduct = userId === this.product.seller.id; // Comprueba si el producto pertenece al usuario actual
       },
       error => {
-        console.error(error);
-      }
-    );
+        console.error(error)
+      })
+
   }
 
   loadProductImages(id: number): void {
-    this.productService.getProductImages(id).subscribe(
-      response => {
-        if (typeof response.mensaje === 'string') {
-          this.images = response.mensaje.split(',').map(item => { 
-            return this.sanitizer.bypassSecurityTrustUrl(this.formatImage(item)); 
-          });
-        } else {
-          this.images.push(this.sanitizer.bypassSecurityTrustUrl('assets/images/not_found.png'));
-          console.error('Expected a string but got', response.mensaje);
-        }
-      },
+
+    this.productService.getProductImages(id).subscribe(response => {
+
+      if (typeof response.mensaje === 'string') {
+        this.images = response.mensaje.split(',').map(item => {
+          return this.sanitizer.bypassSecurityTrustUrl(this.formatImage(item));
+        });
+
+      } else {
+        this.images.push(this.sanitizer.bypassSecurityTrustUrl('assets/images/not_found.png'));
+        console.error('Expected a string but got', response.mensaje);
+      }
+    },
       error => {
         this.images.push(this.sanitizer.bypassSecurityTrustUrl('assets/images/image_not_available.png'));
         console.error('Expected a string but got', error);
       }
     );
+
   }
 
-  formatImage(item: string): string { 
-    return this.isUrl(item) ? item : `data:image/jpeg;base64,${item}`; 
+  formatImage(item: string): string {
+    if (this.isUrl(item)) { return item; } else {
+      return `data:image/jpeg;base64,${item}`;
+    }
   }
 
   isUrl(str: string): boolean {
-    const urlPattern = /^(https?:\/\/|www\.)[^\s$.?#].[^\s]*$/; 
-    return urlPattern.test(str);
-  }
-
-  onEditProduct(id: number): void {
-    this.router.navigate(['/editar-producto', id]);
-  }
-
-  onDeleteProduct(id: number): void {
-    if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
-      this.productService.deleteProduct(id).subscribe(
-        () => {
-          this.router.navigate(['/mis-productos']);
-        },
-        error => {
-          console.error('Error al eliminar el producto:', error);
-          alert('Ocurrió un error al eliminar el producto. Inténtalo de nuevo.');
-        }
-      );
-    }
+    // Comprueba si la cadena tiene un formato típico de URL 
+    const urlPattern = /^(https?:\/\/|www\.)[^\s$.?#].[^\s]*$/; return urlPattern.test(str);
   }
 }

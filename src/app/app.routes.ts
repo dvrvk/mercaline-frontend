@@ -9,6 +9,7 @@ import { UploadProductsComponent } from './components/upload-products/upload-pro
 import { FavoritesComponent } from "./components/favorites/favorites.component";
 import { ProductDetailsComponent } from './components/product-details/product-details.component';
 import { MyProductsComponent } from './components/my-products/my-products.component';
+import { ProductUpdateComponent } from './components/product-update/product-update.component';
 
 
 export const routes: Routes = [
@@ -62,6 +63,12 @@ export const routes: Routes = [
         path: 'mis-productos',
         title: 'Mis productos',
         component: MyProductsComponent,
+        canActivate: [authGuard]
+    },
+    {
+        path: 'actualizar-producto/:id',
+        title: 'Actualizar producto',
+        component: ProductUpdateComponent,
         canActivate: [authGuard]
     }
 ];
