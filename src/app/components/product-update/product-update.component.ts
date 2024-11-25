@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavbarComponent } from "../navbar/navbar.component";
 
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Categories, ProductService, Status } from '../../services/product-service/product.service';
 import { ErrorMessagesComponent } from "../validation/error-messages/error-messages.component";
 import { CommonModule } from '@angular/common';
@@ -26,7 +26,8 @@ import { CustomCurrencyFormatPipe } from '../../utils/custom-currency/custom-cur
     SuccessAlertComponent,
     ErrorAlertComponent,
     CarouselImagesComponent,
-    SpinnerLoadComponent
+    SpinnerLoadComponent,
+    RouterLink
 ],
   templateUrl: './product-update.component.html',
   styleUrl: './product-update.component.css'

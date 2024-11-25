@@ -48,7 +48,6 @@ export class DeleteUserComponent {
 
   // método para eliminar el perfil de usuario
   eliminarPerfil(): void {
-    console.log(this.passwordData);
     if (this.passwordData.valid) {
       Swal.fire({
         title: '¿Estás seguro de eliminar tu perfil?',

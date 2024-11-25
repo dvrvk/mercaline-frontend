@@ -20,6 +20,8 @@ export class ProductService {
   private apiUrlProductDetails = 'http://localhost:8080/products/';
   private apiUrlProductIsMine = 'http://localhost:8080/products/is-mine/';
   private apiUrlUpdate = 'http://localhost:8080/products/update'
+  private apiUrlUserProducts = 'http://localhost:8080/products/myproducts'
+  private apiUrlDeleteProduct = 'http://localhost:8080/products/delete/'
 
 
   constructor(private http: HttpClient) { }
@@ -32,6 +34,18 @@ export class ProductService {
 
     return this.http.get<Page<ProductResponseSummaryDTO>>(this.apiUrlUser, { headers, params });
 
+  }
+
+  getUserProducts(page: number | null, size: number | null): Observable<Page<ProductResponseSummaryDTO>> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    if (page != null && size != null) {
+      const params = new HttpParams().set('page', page.toString()).set('size', size.toString());
+      return this.http.get<Page<ProductResponseSummaryDTO>>(this.apiUrlUserProducts, { headers, params });
+    } else {
+      return this.http.get<Page<ProductResponseSummaryDTO>>(this.apiUrlCategories, { headers })
+    }
   }
 
   getCategories(page: number | null, size: number | null): Observable<Page<Categories>> {
@@ -131,6 +145,14 @@ export class ProductService {
     return this.http.put(this.apiUrlUpdate,form,{headers});
   }
 
+  deleteProduct(id : number) {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.delete(`${this.apiUrlDeleteProduct}${id}`,{headers});
+
+  }
+
 }
 
 export interface ApiResponse { 
@@ -160,10 +182,10 @@ export interface ProductResponseSummaryDTO {
   name: string,
   description: string,
   status: string,
-  //imageUrl: string;
   imageUrl: SafeUrl | string,
   price: number,
   category: string,
+  createDate : Date,
   seller: ResponseUserProductDTO
 }
 
