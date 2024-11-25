@@ -26,6 +26,7 @@
             {{ userData.username | uppercase }}
           </button>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li><a class="dropdown-item" [routerLink]="['/mis-productos']">Mis productos</a></li>
             <li><a class="dropdown-item" [routerLink]="['/perfil']">Mi perfil</a></li>
             <li><a class="dropdown-item text-danger" (click)="logOut()">Cerrar sesión</a></li>
           </ul>
