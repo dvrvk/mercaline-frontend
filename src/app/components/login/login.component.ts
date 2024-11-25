@@ -4,19 +4,36 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { UserServiceService } from '../../services/user-service/user-service.service';
 import { CommonModule } from '@angular/common';
 import { ErrorMessagesComponent } from '../validation/error-messages/error-messages.component';
+import { ErrorAlertComponent } from '../alerts/error-alert/error-alert.component';
+import { SuccessAlertComponent } from '../alerts/success-alert/success-alert.component';
 
-declare var Swal: any;
+//declare var Swal: any;
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, RouterLink, CommonModule, ReactiveFormsModule, ErrorMessagesComponent],
+  imports: [FormsModule, RouterLink, CommonModule, ReactiveFormsModule, 
+    ErrorMessagesComponent, ErrorAlertComponent, SuccessAlertComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
+guardarPerfil() {
+throw new Error('Method not implemented.');
+}
+eliminarPerfil() {
+throw new Error('Method not implemented.');
+}
 
   userLogin: FormGroup;
+  user: any;
+
+  isError : boolean = false;
+  titleError : string = '';
+  errorMessage : string = '';
+
+  isSuccess : boolean = false;
+  successTitle : string = '';
 
   constructor(
     private userService : UserServiceService,
@@ -45,32 +62,31 @@ export class LoginComponent {
       this.userService.logIn(this.userLogin.value).subscribe({
         next: (response) => {
           // Notificación usuario logeado
-          Swal.fire({
-            position: "center",
-            icon: "success",
-            title: "Inicio de sesión exitoso",
-            showConfirmButton: false,
-            timer: 1500
-          })
+          this.isSuccess = true;
+          this.successTitle = 'Sesión iniciada correctamente'
           // Login - redirigimos a su home
-          this.router.navigate(["/home"]);
+          setTimeout(()=> {
+            this.router.navigate(["/home"]);
+          }, 500)
+          
         },
         error: (error) => {
           // Mensaje de error
-          Swal.fire({
-            position: "center",
-            icon: "error",
-            title: "Error al iniciar sesión",
-            text: error.error.mensaje,
-            showConfirmButton: true
-          });
+          this.isError = true;
+          this.titleError = "Error al iniciar sesión";
+          this.errorMessage = error.error.mensaje;
         }
       })
     } else {
       // Mensajes de validacion
       this.userLogin.markAllAsTouched();
     }
-
     
+  }
+
+  onConfirmation(confirmed: boolean) {
+    if(confirmed === false) {
+      this.isError = false;
+    }
   }
 }

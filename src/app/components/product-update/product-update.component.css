@@ -1,0 +1,26 @@
+.container {
+    margin-top: 0;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Media query para dispositivos pequeños */
+@media (max-width: 480px) {
+  .w-md-100 {
+      max-width: 200px;
+      padding: 10px;
+      margin: auto;
+  }
+}
+
+.custom-radio:checked {
+  background-color: #48be79;
+  border-color: #48be79;
+}
+
+.custom-radio {
+  border: 1px solid #48be79;
+  background-color: white;
+}
+  

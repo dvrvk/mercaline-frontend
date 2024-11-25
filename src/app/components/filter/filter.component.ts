@@ -37,7 +37,6 @@ export class FilterComponent {
 
   // Outputs para emitir los valores de filtros aplciados y estatus de filtros a otros componentes
   @Output() filterApplied = new EventEmitter<FilterClass>();
-  //@Output() filterApplied = new EventEmitter<number[]>();
   @Output() filterPriceApplied = new EventEmitter<number[]>()
   @Output() filterStatusChanged = new EventEmitter<boolean>();
 
@@ -71,12 +70,6 @@ export class FilterComponent {
         this.selectedTemporalStatus.splice(index, 1);
       }
     }
-
-    // POSIBLE MODIFICACION
-    //this.areFiltersApplied = this.selectedStatus.length > 0;
-    //this.areStatusFilterApplied = this.selectedStatus.length > 0;
-    //this.filterStatusChanged.emit(this.areFiltersApplied);
-
   }
 
   // Boton para borrar los estados
@@ -87,11 +80,6 @@ export class FilterComponent {
     checkboxes.forEach((checkbox) => {
       (checkbox as HTMLInputElement).checked = false;
     });
-
-    // POSIBLE MODIFICACION
-    //this.areStatusFilterApplied = false;
-    //this.areFiltersApplied =  this.areFilterPriceAppliedF()
-    //this.filterStatusChanged.emit(this.areFiltersApplied);
   }
 
   // Comprueba si se han aplicado filtros de precio
@@ -101,7 +89,6 @@ export class FilterComponent {
 
   // POSIBLE ELIMINACION
   changePrice(event : Event) : void {
-    
     this.areFiltersApplied =  this.areFilterPriceAppliedF()
     this.filterStatusChanged.emit(this.areFiltersApplied);
   }

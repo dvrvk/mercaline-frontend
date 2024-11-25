@@ -11,5 +11,8 @@
     </div>
   </div>
   <a class="btn btn-next-prev rounded-circle mx-3" (click)="onPageChange(currentPage + 1)" *ngIf="currentPage + 2 <= totalPages"><i class="bi bi-chevron-compact-right"></i></a>
-
+  <div *ngIf="isError">
+    <i class="bi bi-exclamation-triangle text-warning"></i> Error al cargar las categorías
+  </div>
 </div>
+

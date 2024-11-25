@@ -20,6 +20,9 @@ export class CategoriesComponent {
   pageSize: number = 8;
   selectedCategory : Object = {};
 
+  isError : boolean = false;
+
+
   constructor(private productService : ProductService,
               private categoryService : CategoryService
   ) {}
@@ -62,7 +65,8 @@ export class CategoriesComponent {
         this.currentPage = data.page.number;
       }, 
       (error) => {
-        // Error al cargar las categorias
+        this.isError = true;
+        console.log(error);
       }
     );
   }

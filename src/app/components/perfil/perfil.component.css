@@ -1,0 +1,33 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .img-profile {
+    max-width: 200px;
+  }
+
+  .w-150 {
+    max-width: 150px;
+  }
+
+  .text-muted {
+    font-size: 1.15em;
+  }
+
+  .text-muted:hover, .text-select:hover {
+    cursor: pointer;
+  }
+  
+

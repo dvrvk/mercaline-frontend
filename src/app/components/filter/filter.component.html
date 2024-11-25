@@ -7,9 +7,9 @@
         </div>
         <div class="modal-body">
           <form>
+            <!--Filtrar por estado del producto-->
             <div class="mb-3">
               <label class="form-label">Estado del producto</label>
-  
               <div class="dropdown">
                 <button class="btn btn-outline-dark dropdown-toggle position-relative" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                   Selecciona estados
@@ -30,6 +30,7 @@
                 </ul>
               </div>
             </div>
+            <!--Filtrar por precio-->
             <div class="mb-3">
               <div class="row g-3 align-items-center">
                 <!-- Input de Precio Mínimo -->
@@ -47,6 +48,8 @@
                 El precio mínimo no puede ser mayor que el precio máximo.
               </div>
             </div>
+            
+            <!-- Botones de aplicar y eliminar filtros -->
             <button [disabled]="errorRange" class="btn custom-btn" (click)="applyFilters()" data-bs-dismiss="modal" aria-label="Close"> Aplicar filtros</button>
             <a class="btn btn-danger mx-3" (click)="clearFilter()" data-bs-dismiss="modal" aria-label="Close">Limpiar filtros</a>
           </form>

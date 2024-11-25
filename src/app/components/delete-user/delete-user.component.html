@@ -1,0 +1,21 @@
+<div class="p-3" [formGroup]="passwordData">
+    <div>
+        <div class="mb-3">
+            <label for="password-delete" class="labels">Confirma que eres tú</label>
+            <div class="input-group gap-2">
+                <input id="password-delete" type="{{ showPassword ? 'text' : 'password' }}" class="form-control"
+                    formControlName="password" name="password" placeholder="Introduce tu contraseña">
+                <div class="input-group-append">
+                    <button id="v-pass" type="button" class="btn" (click)="togglePasswordVisibility($event)">
+                        <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+                    </button>
+                </div>
+            </div>
+            <app-error-messages [control]="passwordData.get('password')"></app-error-messages>
+        </div>
+        <button class="btn btn-outline-danger w-150 my-4" type="button" (click)="eliminarPerfil()">Eliminar perfil</button>
+    </div>
+
+</div>
+<app-success-alert *ngIf="isSuccess" [title]="successTitle"></app-success-alert>
+<app-error-alert *ngIf="isError" [title]="titleError" [message]="errorMessage" (confirmation)="onConfirmation($event)"></app-error-alert>

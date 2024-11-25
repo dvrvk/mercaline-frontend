@@ -2,28 +2,28 @@
   <!--Encabezado categoría, filtros, order -->
   <div *ngIf="selectedCategory" class="container">
     <div class="row align-items-center justify-content-center">
-    <!-- Título con filtros -->
-    <div class="col-12 col-md-6 text-center text-md-start py-3">
-      <h2 class="d-inline">{{ selectedCategory | capitalizeFirst}}</h2>
+      <!-- Título con filtros -->
+      <div class="col-12 col-md-6 text-center text-md-start py-3">
+        <h2 class="d-inline">{{ selectedCategory | capitalizeFirst}}</h2>
+      </div>
+      <!-- Botón de Filtros -->
+      <div class="col-12 col-md-6 col-md-3 text-center text-md-end d-flex flex-row justify-content-end mb-3 mb-md-0">
+        <button class="btn btn-dark position-relative me-2" data-bs-toggle="modal" data-bs-target="#filterModal">
+          <i class="bi bi-funnel"></i> Filtros
+          <span *ngIf="arefiltersApplied"
+            class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+            <span class="visually-hidden">New alerts</span>
+          </span>
+        </button>
+        <!-- Ordenación -->
+        <app-order-by-products (orderApplied)="onOrderApplied($event)"></app-order-by-products>
+      </div>
+      <!-- Modal para seleccionar filtrar los productos -->
+      <app-filter (filterApplied)="onFiltersApplied($event)"
+        (filterStatusChanged)="onFilterChange($event)"></app-filter>
     </div>
-    <!-- Botón de Filtros -->
-    <div class="col-12 col-md-6 col-md-3 text-center text-md-end d-flex flex-row justify-content-end mb-3 mb-md-0">
-      <button class="btn btn-dark position-relative me-2" data-bs-toggle="modal"
-        data-bs-target="#filterModal">
-        <i class="bi bi-funnel"></i> Filtros
-        <span *ngIf="arefiltersApplied"
-          class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
-          <span class="visually-hidden">New alerts</span>
-        </span>
-      </button>
-    <!-- Ordenación -->
-      <app-order-by-products (orderApplied)="onOrderApplied($event)"></app-order-by-products>
-    </div>
-    <!-- Modal para seleccionar filtrar los productos -->
-    <app-filter (filterApplied)="onFiltersApplied($event)" (filterStatusChanged)="onFilterChange($event)"></app-filter>
   </div>
-  </div>
-  <div class="row gx-4 gx-lg-3 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+  <div class="row gx-4 gx-lg-3 row-cols-1 row-cols-md-2 row-cols-xl-4 justify-content-center">
     <div class="col mb-5" *ngFor="let product of products">
       <div class="card h-100">
         <!-- Product image-->
@@ -44,8 +44,9 @@
         </div>
         <!-- Product actions-->
         <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-          <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Ver producto</a>
-          </div>
+          <!--<div class="text-center"><a class="btn btn-outline-dark mt-auto" [routerLink]="['/detalles-producto', product.id]">Ver producto</a>
+          </div>-->
+          <div class="text-center"><a class="btn btn-outline-dark mt-auto" (click)="onViewProduct(product.id)">Ver producto</a></div>
         </div>
       </div>
     </div>
@@ -67,6 +68,7 @@
       Ups, parece que no hay productos en esta categoría... ¡pero podrías ser el primero en subir uno y marcar la
       diferencia!
     </h3>
-
   </div>
 </ng-template>
+<app-error-alert *ngIf="isErrorAlert" [message]="errorMessageAlert" [title]="errorTitleAlert"
+  (confirmation)="onConfirmationError()"></app-error-alert>

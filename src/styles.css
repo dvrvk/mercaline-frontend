@@ -5,6 +5,10 @@
     --darker-btn-main-color: #3fa469;
 }
 
+.darker-main-color {
+  color: var(--darker-main-color)
+}
+
 .custom-link {
     text-decoration: none;
     border-bottom: 2px solid var(--main-color); /* Color del subrayado */
@@ -13,12 +17,50 @@
     font-weight: 500;
   }
   
-  .custom-link:hover {
-    border-bottom-color: 2px solid var(--darker-main-color); /* Color del subrayado al pasar el ratón */
-    font-weight: bold;
+.custom-link:hover {
+  border-bottom-color: 2px solid var(--darker-main-color); /* Color del subrayado al pasar el ratón */
+  font-weight: bold;
 }
 
 .text-justify {
   text-align: justify;
+}
+
+.btn-custom {
+  background: var(--darker-main-color);
+  border: 1px solid var(--darker-main-color);
+  color: white;
+  font-weight: 600;
+  max-width: 150px;
+}
+
+.btn-custom:hover {
+    cursor: pointer;
+    color: var(--darker-main-color);
+    border: 1px solid var(--main-color);
+}
+
+.btn-custom:disabled {
+  background: var(--darker-main-color);
+  border: 1px solid var(--darker-main-color);
+  color: white;
+  font-weight: 600;
+  max-width: 150px;
+}
+
+.btn-outline-custom {
+  background: white;
+  border: 1px solid var(--darker-main-color);
+  color: var(--darker-btn-main-color);
+  font-weight: 600;
+  max-width: 150px;
+}
+
+
+.btn-outline-custom:hover {
+    cursor: pointer;
+    background: var(--darker-main-color);
+    color: white;
+    border: 1px solid var(--main-color);
 }
   

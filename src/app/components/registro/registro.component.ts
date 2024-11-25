@@ -1,29 +1,46 @@
 import { Component } from '@angular/core';
-import { FormsModule, Validators, FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, Validators, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ErrorMessagesComponent } from '../validation/error-messages/error-messages.component';
 import { UserServiceService } from '../../services/user-service/user-service.service';
-
-declare var Swal: any;
+import Swal from 'sweetalert2';
+import { SvgSignupComponent } from "../svg-icons/svg-signup/svg-signup.component";
+import { ErrorAlertComponent } from '../alerts/error-alert/error-alert.component';
+import { SuccessAlertComponent } from '../alerts/success-alert/success-alert.component';
 
 @Component({
   selector: 'app-registro',
   standalone: true,
-  imports: [FormsModule, RouterLink, CommonModule, ReactiveFormsModule, ErrorMessagesComponent],
+  imports: [FormsModule, 
+            RouterLink, 
+            CommonModule, 
+            ReactiveFormsModule, 
+            ErrorMessagesComponent, 
+            SvgSignupComponent,
+            ErrorAlertComponent,
+            SuccessAlertComponent],
   templateUrl: './registro.component.html',
-  styleUrl: './registro.component.css'
+  styleUrls: ['./registro.component.css']
 })
 export class RegistroComponent {
 
   userRegister: FormGroup;
+  usernameExists = false;
+  emailExists = false;
+
+  isError : boolean = false;
+  titleError : string = '';
+  errorMessage : string = '';
+
+  isSuccess : boolean = false;
+  successTitle : string = '';
 
   constructor(
     private fb: FormBuilder,
     private userService: UserServiceService,
-    private router: Router,
-
-  ) { 
+    private router: Router
+  ) {
     this.userRegister = this.fb.group({
       username: ['', [
         Validators.required, 
@@ -49,37 +66,33 @@ export class RegistroComponent {
       tel: ['', [
         Validators.pattern('^(\\+34|0034|34)?[6-7][0-9]{8}$')]]
     });
-
   }
 
   onSubmit() {
-    if(this.userRegister.valid) {
-      // Formateo los datos
+    if (this.userRegister.valid) {
       this.userService.formatUserDataRegister(this.userRegister.value);
-      // Petición POST
       this.userService.registrarUsuario(this.userRegister.value).subscribe({
-        next : (response) => {
-          // Notificación usuario registrado
-          Swal.fire({
-            position: "center",
-            icon: "success",
-            title: `${response.username} se ha registrado`,
-            showConfirmButton: false,
-            timer: 1500
-          });
+        next: (response) => {
+          
+          // Mensaje exito
+          this.isSuccess = true;
+          this.successTitle = 'Usuario registrado correctamente'
           // Login - redirigimos a su home
-          this.login();
+          setTimeout(()=> {
+            this.login();
+          }, 1000)
+          
         },
-        error : (error) => {
+        error: (error) => {
+
           // Mensaje de error
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: (Object.values(error.error.mensaje)).join(' ')
-          });
-      }})
+          this.isError = true;
+          this.titleError = "Ooops...";
+          this.errorMessage = (Object.values(error.error.mensaje)).join(' ');
+
+        }
+      });
     } else {
-      // Mensajes de validacion
       this.userRegister.markAllAsTouched();
     }
   }
@@ -87,11 +100,17 @@ export class RegistroComponent {
   login() {
     this.userService.logIn(this.userRegister.value).subscribe(
       response => {
-        this.router.navigate(["/home"]);
+        this.router.navigate(['/home']);
       },
       error => {
-        console.log(error)
+        console.log(error);
       }
-    )
+    );
+  }
+
+  onConfirmation(confirmed: boolean) {
+    if(confirmed === false) {
+      this.isError = false;
+    }
   }
 }

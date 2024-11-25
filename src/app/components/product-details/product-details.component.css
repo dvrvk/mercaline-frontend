@@ -1,0 +1,50 @@
+.container {
+    margin-top: 0;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-shadow {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 10px; /* Optional: Adds some rounding to the corners */
+}
+
+.category {
+    color: var(--darker-main-color);
+    font-weight: bold;
+    font-size: large;
+}
+
+.badge-cat {
+    background-color: var(--darker-main-color);
+    color: white;
+}
+
+.line {
+    border-top: 1px solid #000;
+}
+
+.price {
+    color: rgb(71, 71, 71)
+}
+
+.img-limited-height {
+    max-height: 440px; 
+    object-fit: contain; 
+  }
+
+  .carousel-indicators button { 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 
+    0 3px 6px rgba(0, 0, 0, 0.1); 
+    border: none; 
+    width: 12px; 
+    height: 12px; 
+    border-radius: 50%; 
+    background-color: #fff; 
+}
+
+.carousel-indicators .active { 
+    background-color: var(--darker-main-color); 
+
+}
