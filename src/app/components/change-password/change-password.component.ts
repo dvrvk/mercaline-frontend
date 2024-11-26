@@ -6,6 +6,7 @@ import { matchPasswords } from '../validation/match-passwords/match-passwords.co
 import { UserServiceService } from '../../services/user-service/user-service.service';
 import { SuccessAlertComponent } from "../alerts/success-alert/success-alert.component";
 import { ErrorAlertComponent } from "../alerts/error-alert/error-alert.component";
+import { SpinnerLoadComponent } from "../../utils/spinner-load/spinner-load.component";
 
 @Component({
   selector: 'app-change-password',
@@ -15,7 +16,8 @@ import { ErrorAlertComponent } from "../alerts/error-alert/error-alert.component
     ReactiveFormsModule,
     ErrorMessagesComponent,
     SuccessAlertComponent,
-    ErrorAlertComponent
+    ErrorAlertComponent,
+    SpinnerLoadComponent
 ],
   templateUrl: './change-password.component.html',
   styleUrl: './change-password.component.css'
@@ -33,6 +35,8 @@ export class ChangePasswordComponent {
   isError : boolean = false;
   titleError : string = '';
   errorMessage : string = '';
+
+  isSubmiting : boolean = false;
 
   constructor(private fb: FormBuilder,
     private userService : UserServiceService
@@ -60,11 +64,10 @@ export class ChangePasswordComponent {
 
   changePassword() : void {
     if(this.passwordData.valid) {
-      //const { password, newPassword } = this.passwordData.value;
-      //const data = { password, newPassword };
+      this.isSubmiting = true;
       this.userService.changePassword(this.passwordData.value).subscribe({
         next: (response) => {
-
+          this.isSubmiting = false;
           // Mensaje exito
           this.isSuccess = true;
           this.successTitle = response.mensaje;
@@ -78,6 +81,7 @@ export class ChangePasswordComponent {
           
         },
         error: (error) => {
+          this.isSubmiting = false;
           // Mensaje de error
           this.isError = true;
           this.titleError = "Ooops...";

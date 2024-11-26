@@ -1,4 +1,5 @@
 @defer {
+<ng-content *ngIf="!isLoading; else loading">
 <section class="container py-2 px-2" *ngIf="products.length > 0; else noProducts">
   <!--Encabezado categoría, filtros, order -->
   <div *ngIf="selectedCategory" class="container">
@@ -74,7 +75,10 @@
 </ng-template>
 <app-error-alert *ngIf="isErrorAlert" [message]="errorMessageAlert" [title]="errorTitleAlert"
   (confirmation)="onConfirmationError()"></app-error-alert>
-
+</ng-content>
+<ng-template #loading>
+  <app-spinner-load-notblock></app-spinner-load-notblock>
+</ng-template>
 } @loading {
   <app-spinner-load-notblock></app-spinner-load-notblock>
 } 

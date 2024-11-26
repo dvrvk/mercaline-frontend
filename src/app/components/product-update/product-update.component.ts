@@ -52,7 +52,7 @@ export class ProductUpdateComponent {
   isSuccess: boolean = false;
   successTitle: string = '';
 
-  isLoading : boolean = false;
+  isLoading : boolean = true;
 
   constructor(private fb: FormBuilder,
     private productService: ProductService,
@@ -96,11 +96,13 @@ export class ProductUpdateComponent {
                 category: product.id_category,
               });
               this.imagesLength = product.imageURL.split(';').length;
+              this.isLoading = false;
             },
             error => {
               this.isError = true;
               this.titleError = "Ooops...";
               this.errorMessage = "No se han podido cargar los productos."
+              this.isLoading = false;
             }
           )
         },
