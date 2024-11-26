@@ -12,6 +12,8 @@ import { ErrorAlertComponent } from "../alerts/error-alert/error-alert.component
 import { CarouselImagesComponent } from "../carousel-images/carousel-images.component";
 import { SpinnerLoadComponent } from "../../utils/spinner-load/spinner-load.component";
 import { CustomCurrencyFormatPipe } from '../../utils/custom-currency/custom-currency-format.pipe';
+import { SpinnerLoadNotblockComponent } from "../../utils/spinner-load-notblock/spinner-load-notblock.component";
+import { timeout } from 'rxjs';
 
 @Component({
   selector: 'app-product-update',
@@ -27,7 +29,8 @@ import { CustomCurrencyFormatPipe } from '../../utils/custom-currency/custom-cur
     ErrorAlertComponent,
     CarouselImagesComponent,
     SpinnerLoadComponent,
-    RouterLink
+    RouterLink,
+    SpinnerLoadNotblockComponent
 ],
   templateUrl: './product-update.component.html',
   styleUrl: './product-update.component.css'
@@ -49,7 +52,7 @@ export class ProductUpdateComponent {
   isSuccess: boolean = false;
   successTitle: string = '';
 
-  isLoading : boolean = true;
+  isLoading : boolean = false;
 
   constructor(private fb: FormBuilder,
     private productService: ProductService,
@@ -93,7 +96,6 @@ export class ProductUpdateComponent {
                 category: product.id_category,
               });
               this.imagesLength = product.imageURL.split(';').length;
-              this.isLoading = false;
             },
             error => {
               this.isError = true;

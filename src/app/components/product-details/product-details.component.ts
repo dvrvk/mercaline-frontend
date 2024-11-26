@@ -6,6 +6,8 @@ import { CapitalizeFirstPipe } from '../../utils/capitalizeFirst/capitalize-firs
 import { ProductService } from '../../services/product-service/product.service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser'
+import { SpinnerLoadNotblockComponent } from "../../utils/spinner-load-notblock/spinner-load-notblock.component";
+import { CarouselImagesComponent } from "../carousel-images/carousel-images.component";
 
 
 @Component({
@@ -14,11 +16,12 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser'
   imports: [
     NavbarComponent,
     CustomCurrencyFormatPipe,
-    NgClass,
     CapitalizeFirstPipe,
     CommonModule,
-    RouterLink
-  ],
+    RouterLink,
+    SpinnerLoadNotblockComponent,
+    CarouselImagesComponent
+],
   templateUrl: './product-details.component.html',
   styleUrl: './product-details.component.css'
 })
@@ -27,8 +30,9 @@ export class ProductDetailsComponent implements OnInit {
   images: SafeUrl[] = [];
 
   currentPage: number = 0;
-
   currentCategory : number = 0;
+
+  isProductLoading : boolean = true;
 
   constructor(private productService: ProductService,
               private route : ActivatedRoute,
@@ -56,10 +60,12 @@ export class ProductDetailsComponent implements OnInit {
   loadProductDetails(id: number): void {
     this.productService.getProductDetails(id).subscribe(
       response => {
+        this.isProductLoading = false;
         this.product = response;
       },
       error => {
         console.error(error)
+        this.isProductLoading = false;
       })
 
   }
@@ -95,5 +101,9 @@ export class ProductDetailsComponent implements OnInit {
   isUrl(str: string): boolean {
     // Comprueba si la cadena tiene un formato típico de URL 
     const urlPattern = /^(https?:\/\/|www\.)[^\s$.?#].[^\s]*$/; return urlPattern.test(str);
+  }
+
+  getProductID() : number {
+    return parseInt(this.route.snapshot.paramMap.get('id')|| '0', 10);
   }
 }

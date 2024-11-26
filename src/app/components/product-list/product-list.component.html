@@ -1,3 +1,4 @@
+@defer {
 <section class="container py-2 px-2" *ngIf="products.length > 0; else noProducts">
   <!--Encabezado categoría, filtros, order -->
   <div *ngIf="selectedCategory" class="container">
@@ -23,40 +24,41 @@
         (filterStatusChanged)="onFilterChange($event)"></app-filter>
     </div>
   </div>
-  <div class="row gx-4 gx-lg-3 row-cols-1 row-cols-md-2 row-cols-xl-4 justify-content-center">
-    <div class="col mb-5" *ngFor="let product of products">
-      <div class="card h-100">
-        <!-- Product image-->
-        <img class="card-img-top img-limited-height" [src]="product.imageUrl" alt="{{ product.name }}"
-          *ngIf="product.imageUrl" />
-        <!-- Product details-->
-        <div class="card-body p-2">
-          <div class="text-center">
-            <!-- Product name-->
-            <h5 class="fw-bolder">{{ product.name | capitalizeFirst}}</h5>
-            <!-- Product price-->
-            <p>{{ product.price | customCurrencyFormat }}</p>
-            <p class="d-flex flex-column justify-content-center align-items-center gap-2">
-              <span class="badge badge-cat">{{product.category | capitalizeFirst}}</span>
-              <span class="badge text-bg-light">{{product.status | capitalizeFirst}}</span>
-            </p>
+      <div class="row gx-4 gx-lg-3 row-cols-1 row-cols-md-2 row-cols-xl-4 justify-content-center">
+        <div class="col mb-5" *ngFor="let product of products">
+          <div class="card h-100">
+            <!-- Product image-->
+            <img class="card-img-top img-limited-height" [src]="product.imageUrl" alt="{{ product.name }}"
+              *ngIf="product.imageUrl" />
+            <!-- Product details-->
+            <div class="card-body p-2">
+              <div class="text-center">
+                <!-- Product name-->
+                <h5 class="fw-bolder">{{ product.name | capitalizeFirst}}</h5>
+                <!-- Product price-->
+                <p>{{ product.price | customCurrencyFormat }}</p>
+                <p class="d-flex flex-column justify-content-center align-items-center gap-2">
+                  <span class="badge badge-cat">{{product.category | capitalizeFirst}}</span>
+                  <span class="badge text-bg-light">{{product.status | capitalizeFirst}}</span>
+                </p>
+              </div>
+            </div>
+            <!-- Product actions-->
+            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+              <!--<div class="text-center"><a class="btn btn-outline-dark mt-auto" [routerLink]="['/detalles-producto', product.id]">Ver producto</a>
+              </div>-->
+              <div class="text-center"><a class="btn btn-outline-dark mt-auto" (click)="onViewProduct(product.id)">Ver producto</a></div>
+            </div>
           </div>
         </div>
-        <!-- Product actions-->
-        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-          <!--<div class="text-center"><a class="btn btn-outline-dark mt-auto" [routerLink]="['/detalles-producto', product.id]">Ver producto</a>
-          </div>-->
-          <div class="text-center"><a class="btn btn-outline-dark mt-auto" (click)="onViewProduct(product.id)">Ver producto</a></div>
-        </div>
       </div>
-    </div>
-  </div>
-  <div class="pagination d-flex justify-content-center align-items-center">
-    <a class="btn custom-link" (click)="onPageChange(currentPage - 1)" *ngIf="currentPage !== 0">Anterior</a>
-    <span class="mx-2 text-center align-middle">Página {{ currentPage + 1 }} de {{ totalPages }}</span>
-    <a class="btn custom-link" (click)="onPageChange(currentPage + 1)"
-      *ngIf="currentPage + 2 <= totalPages">Siguiente</a>
-  </div>
+      <div class="pagination d-flex justify-content-center align-items-center">
+        <a class="btn custom-link" (click)="onPageChange(currentPage - 1)" *ngIf="currentPage !== 0">Anterior</a>
+        <span class="mx-2 text-center align-middle">Página {{ currentPage + 1 }} de {{ totalPages }}</span>
+        <a class="btn custom-link" (click)="onPageChange(currentPage + 1)"
+          *ngIf="currentPage + 2 <= totalPages">Siguiente</a>
+      </div>
+    
 </section>
 <ng-template #noProducts>
   <div class="container d-flex flex-column justify-content-center align-items-center">
@@ -72,3 +74,7 @@
 </ng-template>
 <app-error-alert *ngIf="isErrorAlert" [message]="errorMessageAlert" [title]="errorTitleAlert"
   (confirmation)="onConfirmationError()"></app-error-alert>
+
+} @loading {
+  <app-spinner-load-notblock></app-spinner-load-notblock>
+} 
