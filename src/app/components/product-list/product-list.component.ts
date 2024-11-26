@@ -3,7 +3,7 @@ import { ProductService, ProductResponseSummaryDTO, Page, FilterClass } from '..
 import { CommonModule } from '@angular/common';
 import { CustomCurrencyFormatPipe } from '../../utils/custom-currency/custom-currency-format.pipe';
 import { UserServiceService } from '../../services/user-service/user-service.service';
-import { Router, RouterLink, RouterModule, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink, RouterModule, RouterOutlet } from '@angular/router';
 import { CapitalizeFirstPipe } from '../../utils/capitalizeFirst/capitalize-first.pipe';
 import { CategoryService } from '../../services/category/category.service';
 import { SgvNotFoundComponent } from "../svg-icons/sgv-not-found/sgv-not-found.component";
@@ -42,6 +42,7 @@ export class ProductListComponent {
   // Categoria seleccionada
   selectedCategory: string = '';
   selectedCategoryId: number = 0;
+  categoryPage : number = 0;
 
   // Indiciador de filtros aplicados
   arefiltersApplied: boolean = false;
@@ -55,26 +56,46 @@ export class ProductListComponent {
   errorTitleAlert: string = ''
   isErrorAlert: boolean = false;
 
-
+  
 
   constructor(
     private productService: ProductService,
     private UserService: UserServiceService,
     private router: Router,
     private categoryService: CategoryService,
-    private sanitizer: DomSanitizer) { }
+    private sanitizer: DomSanitizer,
+    private activatedRoute: ActivatedRoute) { }
 
   // Al inicio - cargar productos y suscribir los cambios de categoria
   ngOnInit(): void {
-    this.loadProducts(this.currentPage, this.pageSize);
+    // Para mantener la página al volver de detalles producto
+    this.activatedRoute.queryParams.subscribe((params) => {
+      this.categoryPage = params['page'] ? parseInt(params['page'], 10) : 0;
+      this.selectedCategoryId = params['category'] ? parseInt(params['category'], 10) : 0;
+      
+        if(this.selectedCategoryId == 0) {
+          this.loadProducts(this.categoryPage, this.pageSize);
+        } else {
+          
+          this.loadProductsByCategory(this.categoryPage, this.pageSize, this.selectedCategoryId);
+        }
+        
+      })
+
+
+    // this.loadProducts(this.currentPage, this.pageSize);
     this.categoryService.selectedCategory$.subscribe((category: any) => {
       if (Object.keys(category).length != 0) {
         this.selectedCategory = category[1];
         this.selectedCategoryId = category[0];
+
         this.loadProductsByCategory(0, this.pageSize, category[0]);
+        
       }
     });
+    
   }
+
 
   // Si cambian los productos
   ngOnChanges(): void {
@@ -227,9 +248,17 @@ export class ProductListComponent {
 
         },
         (error) => {
-          product.imageUrl = this.sanitizer.bypassSecurityTrustUrl('assets/images/not_found.png');
+          product.imageUrl = this.sanitizer.bypassSecurityTrustUrl('assets/images/image_not_available.png');
         }
       );
+    });
+  }
+
+  onViewProduct(productId: number) : void {
+    this.router.navigate([`/detalles-producto/${productId}`], {
+      queryParams: { page: this.currentPage,
+                    category : this.selectedCategoryId
+                  }
     });
   }
 

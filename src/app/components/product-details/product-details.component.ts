@@ -4,8 +4,9 @@ import { CustomCurrencyFormatPipe } from '../../utils/custom-currency/custom-cur
 import { CommonModule, NgClass } from '@angular/common';
 import { CapitalizeFirstPipe } from '../../utils/capitalizeFirst/capitalize-first.pipe';
 import { ProductService } from '../../services/product-service/product.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser'
+
 
 @Component({
   selector: 'app-product-details',
@@ -15,65 +16,83 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser'
     CustomCurrencyFormatPipe,
     NgClass,
     CapitalizeFirstPipe,
-    CommonModule
+    CommonModule,
+    RouterLink
   ],
   templateUrl: './product-details.component.html',
   styleUrl: './product-details.component.css'
 })
 export class ProductDetailsComponent implements OnInit {
-  product : any = [];
+  product: any = [];
   images: SafeUrl[] = [];
+
+  currentPage: number = 0;
+
+  currentCategory : number = 0;
 
   constructor(private productService: ProductService,
               private route : ActivatedRoute,
               private sanitizer: DomSanitizer
   ) {}
-  
+
   ngOnInit(): void {
+    this.route.queryParams.subscribe((params) => {
+      // Si el parámetro 'page' existe, lo usamos; si no, usamos 0
+      this.currentPage = params['page'] ? parseInt(params['page'], 10) : 0;
+      this.currentCategory = params['category'] ? parseInt(params['category'], 10) : 0;
+    });
+
+
     // Capturar el ID de la URL
     const id = this.route.snapshot.paramMap.get('id');
     // Cargar datos
-    if(id != null) {
+    if (id != null) {
       this.loadProductDetails(parseInt(id));
       this.loadProductImages(parseInt(id));
     }
-    
+
   }
 
-  loadProductDetails(id : number) : void {
+  loadProductDetails(id: number): void {
     this.productService.getProductDetails(id).subscribe(
-    response => {
-      console.log(response)
-      this.product = response;
-    },
-    error => {
-      console.error(error)
-    })
+      response => {
+        this.product = response;
+      },
+      error => {
+        console.error(error)
+      })
+
   }
 
-  loadProductImages(id : number): void {
+  loadProductImages(id: number): void {
 
     this.productService.getProductImages(id).subscribe(response => {
 
       if (typeof response.mensaje === 'string') {
-        this.images = response.mensaje.split(',').map(item => { 
-          return this.sanitizer.bypassSecurityTrustUrl(this.formatImage(item)); }); 
-          console.log(this.images);
-        
-          // Convierte la cadena en un array y luego en URLs de datos
-          //this.images = response.mensaje.split(',').map(base64 => `data:image/jpeg;base64,${base64}`);
+        this.images = response.mensaje.split(',').map(item => {
+          return this.sanitizer.bypassSecurityTrustUrl(this.formatImage(item));
+        });
+
       } else {
+        this.images.push(this.sanitizer.bypassSecurityTrustUrl('assets/images/not_found.png'));
         console.error('Expected a string but got', response.mensaje);
       }
-    });
+    },
+      error => {
+        this.images.push(this.sanitizer.bypassSecurityTrustUrl('assets/images/image_not_available.png'));
+        console.error('Expected a string but got', error);
+      }
+    );
+
   }
 
-  formatImage(item: string): string { 
-    if (this.isUrl(item)) { return item; } else { 
-      return `data:image/jpeg;base64,${item}`; 
-    } }
+  formatImage(item: string): string {
+    if (this.isUrl(item)) { return item; } else {
+      return `data:image/jpeg;base64,${item}`;
+    }
+  }
 
-  isUrl(str: string): boolean { 
+  isUrl(str: string): boolean {
     // Comprueba si la cadena tiene un formato típico de URL 
     const urlPattern = /^(https?:\/\/|www\.)[^\s$.?#].[^\s]*$/; return urlPattern.test(str);
   }

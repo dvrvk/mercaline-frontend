@@ -8,6 +8,9 @@ import { redirectGuardGuard } from './guards/redirect-guard.guard';
 import { UploadProductsComponent } from './components/upload-products/upload-products.component';
 import { FavoritesComponent } from "./components/favorites/favorites.component";
 import { ProductDetailsComponent } from './components/product-details/product-details.component';
+import { ProductUpdateComponent } from './components/product-update/product-update.component';
+import { MyProductsComponent } from './components/my-products/my-products.component';
+
 
 
 export const routes: Routes = [
@@ -55,6 +58,18 @@ export const routes: Routes = [
         path: 'detalles-producto/:id',
         title: 'Detalles producto',
         component: ProductDetailsComponent,
+        canActivate: [authGuard]
+    },
+    {
+        path: 'mis-productos',
+        title: 'Mis productos',
+        component: MyProductsComponent,
+        canActivate: [authGuard]
+    },
+    {
+        path: 'actualizar-producto/:id',
+        title: 'Actualizar producto',
+        component: ProductUpdateComponent,
         canActivate: [authGuard]
     }
 ];
