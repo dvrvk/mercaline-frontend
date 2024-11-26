@@ -6,10 +6,15 @@
     max-width: 50px;
 }
 
-a {
+.nav-item {
     transition: transform 0.1s;
 }
 
-a:hover {
+.nav-item:hover {
     transform: scale(1.1);
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    cursor: pointer;
 }
