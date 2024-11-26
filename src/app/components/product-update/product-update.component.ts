@@ -12,6 +12,8 @@ import { ErrorAlertComponent } from "../alerts/error-alert/error-alert.component
 import { CarouselImagesComponent } from "../carousel-images/carousel-images.component";
 import { SpinnerLoadComponent } from "../../utils/spinner-load/spinner-load.component";
 import { CustomCurrencyFormatPipe } from '../../utils/custom-currency/custom-currency-format.pipe';
+import { SpinnerLoadNotblockComponent } from "../../utils/spinner-load-notblock/spinner-load-notblock.component";
+import { timeout } from 'rxjs';
 
 @Component({
   selector: 'app-product-update',
@@ -27,7 +29,8 @@ import { CustomCurrencyFormatPipe } from '../../utils/custom-currency/custom-cur
     ErrorAlertComponent,
     CarouselImagesComponent,
     SpinnerLoadComponent,
-    RouterLink
+    RouterLink,
+    SpinnerLoadNotblockComponent
 ],
   templateUrl: './product-update.component.html',
   styleUrl: './product-update.component.css'
@@ -99,6 +102,7 @@ export class ProductUpdateComponent {
               this.isError = true;
               this.titleError = "Ooops...";
               this.errorMessage = "No se han podido cargar los productos."
+              this.isLoading = false;
             }
           )
         },

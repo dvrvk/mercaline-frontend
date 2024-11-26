@@ -19,3 +19,4 @@
 </div>
 <app-success-alert *ngIf="isSuccess" [title]="successTitle"></app-success-alert>
 <app-error-alert *ngIf="isError" [title]="titleError" [message]="errorMessage" (confirmation)="onConfirmation($event)"></app-error-alert>
+<app-spinner-load [isLoading]="isSubmiting"></app-spinner-load>

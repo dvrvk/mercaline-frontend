@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { ErrorMessagesComponent } from "../validation/error-messages/error-messages.component";
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { SpinnerLoadComponent } from "../../utils/spinner-load/spinner-load.component";
 
 declare var Swal: any;
 
@@ -17,8 +18,9 @@ declare var Swal: any;
     ReactiveFormsModule,
     SuccessAlertComponent,
     ErrorAlertComponent,
-    ErrorMessagesComponent
-  ],
+    ErrorMessagesComponent,
+    SpinnerLoadComponent
+],
   templateUrl: './delete-user.component.html',
   styleUrl: './delete-user.component.css'
 })
@@ -33,6 +35,8 @@ export class DeleteUserComponent {
   isError: boolean = false;
   titleError: string = '';
   errorMessage: string = '';
+
+  isSubmiting : boolean = false;
 
   constructor(private fb: FormBuilder,
     private userService: UserServiceService,
@@ -60,9 +64,10 @@ export class DeleteUserComponent {
         cancelButtonText: 'Cancelar'
       }).then((result: { isConfirmed: any; }) => {
         if (result.isConfirmed) {
-
+          this.isSubmiting = true;
           this.userService.deleteUsuario(this.passwordData.get('password')?.value).subscribe(
             response => {
+              this.isSubmiting = false;
               Swal.fire({
                 title: '¡Eliminado!',
                 text: 'Tu perfil ha sido eliminado.',
@@ -74,7 +79,7 @@ export class DeleteUserComponent {
               this.router.navigate(['/login']);
             },
             error => {
-              console.error('Error al eliminar el perfil', error);
+              this.isSubmiting = false;
               Swal.fire(
                 'Error',
                 error.error?.mensaje || 'Hubo un problema al eliminar tu perfil. Inténtalo de nuevo más tarde.',

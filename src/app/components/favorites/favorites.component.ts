@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { UserServiceService } from '../../services/user-service/user-service.service';
 import { FavoritesService, FavoriteListsResponseDTO, Page } from '../../services/favorites-service/favorites.service';
+import { SpinnerLoadNotblockComponent } from "../../utils/spinner-load-notblock/spinner-load-notblock.component";
 
 @Component({
   selector: 'app-favorites',
@@ -19,7 +20,9 @@ import { FavoritesService, FavoriteListsResponseDTO, Page } from '../../services
     CapitalizeFirstPipe,
     SgvNotFoundComponent,
     SvgFavoriteListsComponent,
-    ErrorAlertComponent],
+    ErrorAlertComponent,
+    SpinnerLoadNotblockComponent
+],
   templateUrl: './favorites.component.html',
   styleUrl: './favorites.component.css'
 })
@@ -37,6 +40,8 @@ export class FavoritesComponent implements OnInit {
   errorMessageAlert: string = '';
   errorTitleAlert: string = ''
   isErrorAlert: boolean = false;
+
+  isLoading : boolean = true;
 
   constructor(
     private UserService: UserServiceService,
@@ -64,10 +69,13 @@ export class FavoritesComponent implements OnInit {
         this.totalPages = data.page.totalPages;
         this.currentPage = data.page.number;
         this.isError = false;
+        this.isLoading = false;
 
       },
       (error) => {
         console.error('Error al cargar las listas de favoritos', error.error)
+
+        this.isLoading = false;
 
         const message = error.error && error.error.mensaje ? error.error.mensaje : "Ha ocurrido un error al cargar las listas de favoritos. Por favor, inténtalo de nuevo"
         this.onError(message, "Error al cargar las listas de favoritos");
