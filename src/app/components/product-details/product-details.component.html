@@ -1,35 +1,8 @@
 <app-navbar></app-navbar>
-<div class="container mt-5">
+<div class="container mt-5" *ngIf="!isProductLoading; else loading">
     <div class="row ,mx-2 my-2 mx-md-4 my-md-4">
       <div class="col-lg-6">
-        <!--Carrousel de fotos-->
-        <div id="productCarousel" class="carousel slide m-2 m-md-5 carousel-shadow">
-          <!-- Indicadores para saltar entre imagenes -->
-          <ng-container *ngIf="images.length > 1">
-            <div class="carousel-indicators">
-              <ng-container *ngFor="let image of images; let i = index">
-                <button type="button" [ngClass]="{'active': i === 0}" data-bs-target="#productCarousel" [attr.data-bs-slide-to]="i" [attr.aria-label]="i + 1" ></button>
-              </ng-container>
-            </div>
-          </ng-container>
-          <!-- Imagenes-->
-          <div class="carousel-inner rounded">
-            <div *ngFor="let image of images; let i = index" [ngClass]="{'carousel-item': true, 'active': i === 0}">
-              <img [src]="image" class="d-block w-100 img-limited-height" alt="Product Image">
-            </div>
-          </div>
-          <!-- Flechas para moverse -->
-          <ng-container *ngIf="images.length > 1">
-          <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-          </button>
-          <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-          </button>
-          </ng-container>
-        </div>
+        <app-carousel-images [productID]="getProductID()"></app-carousel-images>
       </div>
       <div class="col-lg-6 mt-lg-5">
         <p class="mt-2 mx-2 category">{{ product.category | capitalizeFirst }}</p>
@@ -65,4 +38,8 @@
       </div>
     </div>
   </div>
+  <ng-template #loading>
+    <app-spinner-load-notblock></app-spinner-load-notblock>
+  </ng-template>
+  
   

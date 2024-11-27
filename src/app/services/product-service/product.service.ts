@@ -30,7 +30,7 @@ export class ProductService {
 
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    const params = new HttpParams().set('page', page.toString()).set('size', size.toString());
+    const params = new HttpParams().set('page', page.toString()).set('size', size.toString()).set('sort', 'createDate');
 
     return this.http.get<Page<ProductResponseSummaryDTO>>(this.apiUrlUser, { headers, params });
 

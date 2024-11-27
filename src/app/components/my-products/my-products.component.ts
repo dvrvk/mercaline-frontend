@@ -8,6 +8,8 @@ import { SgvNotFoundComponent } from '../svg-icons/sgv-not-found/sgv-not-found.c
 import { ErrorAlertComponent } from '../alerts/error-alert/error-alert.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NavbarComponent } from '../navbar/navbar.component';
+import { SpinnerLoadComponent } from "../../utils/spinner-load/spinner-load.component";
+import { SpinnerLoadNotblockComponent } from "../../utils/spinner-load-notblock/spinner-load-notblock.component";
 
 declare var Swal: any;
 
@@ -22,7 +24,8 @@ declare var Swal: any;
     ErrorAlertComponent,
     NavbarComponent,
     RouterModule,
-  ],
+    SpinnerLoadNotblockComponent
+],
   templateUrl: './my-products.component.html',
   styleUrls: ['./my-products.component.css'],
 })
@@ -44,6 +47,8 @@ export class MyProductsComponent implements OnInit {
   errorTitleAlert: string = '';
   isErrorAlert: boolean = false;
 
+  isLoading : boolean = true;
+
   constructor(
     private productService: ProductService,
     private router: Router,
@@ -62,7 +67,7 @@ export class MyProductsComponent implements OnInit {
           this.totalPages = data.page.totalPages;
           this.currentPage = data.page.number;
           this.isError = false;
-
+          this.isLoading = false;
           this.getImages()
         },
         (error) => {
@@ -72,6 +77,7 @@ export class MyProductsComponent implements OnInit {
             'Error al cargar los productos'
           );
           this.isError = true;
+          this.isLoading = false;
         }
       );
   }
