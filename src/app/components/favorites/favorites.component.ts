@@ -8,7 +8,7 @@ import { CapitalizeFirstPipe } from '../../utils/capitalizeFirst/capitalize-firs
 import { CommonModule } from '@angular/common';
 import { UserServiceService } from '../../services/user-service/user-service.service';
 import { FavoritesService, FavoriteListsResponseDTO, Page } from '../../services/favorites-service/favorites.service';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { SpinnerLoadNotblockComponent } from "../../utils/spinner-load-notblock/spinner-load-notblock.component";
 
 @Component({
