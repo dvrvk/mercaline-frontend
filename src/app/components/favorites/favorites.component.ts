@@ -5,16 +5,17 @@ import { SgvNotFoundComponent } from "../svg-icons/sgv-not-found/sgv-not-found.c
 import { SvgFavoriteListsComponent } from "../svg-icons/svg-favorite-lists/svg-favorite-lists.component";
 import { ErrorAlertComponent } from '../alerts/error-alert/error-alert.component';
 import { CapitalizeFirstPipe } from '../../utils/capitalizeFirst/capitalize-first.pipe';
-import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { UserServiceService } from '../../services/user-service/user-service.service';
 import { FavoritesService, FavoriteListsResponseDTO, Page } from '../../services/favorites-service/favorites.service';
+import { Router, RouterModule } from '@angular/router';
 import { SpinnerLoadNotblockComponent } from "../../utils/spinner-load-notblock/spinner-load-notblock.component";
 
 @Component({
   selector: 'app-favorites',
   standalone: true,
   imports: [
+    RouterModule,
     CommonModule,
     NavbarComponent,
     CapitalizeFirstPipe,

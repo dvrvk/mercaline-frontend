@@ -10,7 +10,7 @@ import { FavoritesComponent } from "./components/favorites/favorites.component";
 import { ProductDetailsComponent } from './components/product-details/product-details.component';
 import { ProductUpdateComponent } from './components/product-update/product-update.component';
 import { MyProductsComponent } from './components/my-products/my-products.component';
-
+import { ProductsInAListComponent } from './components/product-in-a-list/product-in-a-list.component';
 
 export const routes: Routes = [
     {
@@ -49,7 +49,7 @@ export const routes: Routes = [
     }, 
     {
         path: 'favorites',
-        title: 'Productos favoritos',
+        title: 'Listas favoritas',
         component: FavoritesComponent,
         canActivate: [authGuard]
     },
@@ -69,6 +69,12 @@ export const routes: Routes = [
         path: 'actualizar-producto/:id',
         title: 'Actualizar producto',
         component: ProductUpdateComponent,
+        canActivate: [authGuard]
+    }, 
+    {
+        path: 'favorite-list/:id',
+        title: 'Productos favoritos',
+        component: ProductsInAListComponent,
         canActivate: [authGuard]
     }
 ];

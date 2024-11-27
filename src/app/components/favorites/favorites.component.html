@@ -1,6 +1,8 @@
 <app-navbar></app-navbar>
 <ng-content *ngIf="!isLoading; else loading">
-  <section class="container rounded bg-white mt-md-5 mb-5 p-3 p-md-5" *ngIf="favoriteLists.length > 0; else noFavoriteLists">
+  <!--Aqui va lo mio-->
+  <section class="container rounded bg-white mt-md-5 mb-5 p-3 p-md-5"
+    *ngIf="favoriteLists.length > 0; else noFavoriteLists">
     <div class="row gx-4 gx-lg-3 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
       <div class="col mb-5" *ngFor="let favoriteList of favoriteLists">
         <div class="card h-100">
@@ -12,12 +14,18 @@
               <!-- Product name-->
               <h5 class="fw-bolder">{{ favoriteList.nameList | capitalizeFirst}}</h5>
               <!-- Cantidad de productos dentro de cada lista-->
-              <p>{{ favoriteList.productSize || 0 }} Productos</p>
+              <p class="d-flex flex-column justify-content-center align-items-center gap-2">
+                <span
+                  [ngClass]="{ 'badge-cat-red': favoriteList.productSize === 0, 'badge-cat': favoriteList.productSize > 0 }"
+                  class="badge ">{{ favoriteList.productSize || 0 }} Productos</span>
+              </p>
             </div>
           </div>
           <!-- Product actions-->
           <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Ver lista</a>
+            <div class="text-center"><a [routerLink]="['/favorite-list', favoriteList.id]"
+                [ngClass]="{ 'disabled': favoriteList.productSize === 0 }" class="btn btn-outline-dark mt-auto">Ver
+                lista</a>
             </div>
           </div>
         </div>
@@ -37,7 +45,8 @@
         {{errorMessage}}
       </h3>
       <h3 class="text-center my-3" *ngIf="!isError">
-        Ups, parece que no tienes ningún producto añadido a tus favoritos...<br>¡Para guardar un producto, pulsa el icono de producto favorito (❤️)!
+        Ups, parece que no tienes ningún producto añadido a tus favoritos...<br>¡Para guardar un producto, pulsa el
+        icono de producto favorito (❤️)!
       </h3>
     </div>
   </ng-template>
@@ -47,4 +56,3 @@
 <ng-template #loading>
   <app-spinner-load-notblock></app-spinner-load-notblock>
 </ng-template>
-
