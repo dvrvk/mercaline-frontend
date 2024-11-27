@@ -95,7 +95,7 @@ export class ProductUpdateComponent {
                 status: product.statusId,
                 category: product.id_category,
               });
-              this.imagesLength = product.imageURL.split(';').length;
+              this.imagesLength = product.imageUrl.split(';').length;
               this.isLoading = false;
             },
             error => {
