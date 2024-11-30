@@ -49,7 +49,8 @@ export class CarouselImagesComponent implements OnChanges, OnInit{
         this.images.push(this.sanitizer.bypassSecurityTrustUrl('assets/images/not_found.png'));
         console.error('Expected a string but got', response.mensaje);
       }
-      this.isLoading = false;    },
+      this.isLoading = false;    
+    },
       error => {
         this.images.push(this.sanitizer.bypassSecurityTrustUrl('assets/images/image_not_available.png'));
         console.error('Expected a string but got', error);

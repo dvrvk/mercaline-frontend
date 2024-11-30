@@ -1,0 +1,25 @@
+.cookie-policy {
+    margin-top: 30px;
+}
+
+.cookie-policy h1,
+.cookie-policy h2 {
+    color: #2c3e50;
+}
+
+.cookie-policy p {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #34495e;
+}
+
+.cookie-policy .list-group-item {
+    background-color: #f8f9fa;
+}
+
+.content {
+    margin-top: 0;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
