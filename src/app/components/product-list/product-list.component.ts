@@ -261,7 +261,7 @@ export class ProductListComponent {
   onViewProduct(productId: number) : void {
     this.router.navigate([`/detalles-producto/${productId}`], {
       queryParams: { page: this.currentPage,
-                    category : this.selectedCategoryId
+                     category : this.selectedCategoryId
                   }
     });
   }

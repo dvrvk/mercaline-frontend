@@ -4,7 +4,7 @@ import { CustomCurrencyFormatPipe } from '../../utils/custom-currency/custom-cur
 import { CommonModule, NgClass } from '@angular/common';
 import { CapitalizeFirstPipe } from '../../utils/capitalizeFirst/capitalize-first.pipe';
 import { ProductService } from '../../services/product-service/product.service';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/router';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser'
 import { SpinnerLoadNotblockComponent } from "../../utils/spinner-load-notblock/spinner-load-notblock.component";
 import { CarouselImagesComponent } from "../carousel-images/carousel-images.component";
@@ -33,6 +33,9 @@ export class ProductDetailsComponent implements OnInit {
   currentCategory : number = 0;
 
   isProductLoading : boolean = true;
+  referrer: string = '/home';
+
+
 
   constructor(private productService: ProductService,
               private route : ActivatedRoute,
@@ -40,12 +43,13 @@ export class ProductDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    
     this.route.queryParams.subscribe((params) => {
       // Si el parámetro 'page' existe, lo usamos; si no, usamos 0
       this.currentPage = params['page'] ? parseInt(params['page'], 10) : 0;
       this.currentCategory = params['category'] ? parseInt(params['category'], 10) : 0;
+      this.referrer = params['referrer'] ? params['referrer'] : '/home';
     });
-
 
     // Capturar el ID de la URL
     const id = this.route.snapshot.paramMap.get('id');

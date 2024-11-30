@@ -5,12 +5,12 @@
       <h2>Mis productos</h2>
       <div class="row gx-4 gx-lg-3 row-cols-1 row-cols-md-2 row-cols-xl-4 justify-content-center">
         <div class="col mb-5" *ngFor="let product of products">
-          <div class="card h-100">
+          <div class="card h-100 shadow-drop-center">
             <!-- Imagen del producto-->
             <img class="card-img-top img-limited-height" [src]="product.imageUrl" alt="{{ product.name }}"
               *ngIf="product.imageUrl" />
             <!-- Detalles del producto-->
-            <div class="card-body p-2">
+            <div class="card-body p-2 tracking-in-expand">
               <div class="text-center">
                 <!-- Nombre del producto-->
                 <h5 class="fw-bolder">{{ product.name | capitalizeFirst}}</h5>
