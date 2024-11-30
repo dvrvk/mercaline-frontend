@@ -9,6 +9,8 @@ import { SgvNotFoundComponent } from '../svg-icons/sgv-not-found/sgv-not-found.c
 import { ErrorAlertComponent } from '../alerts/error-alert/error-alert.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NavbarComponent } from '../navbar/navbar.component';
+import { FavouritesIconComponent } from "../favourites-icon/favourites-icon.component";
+import { SpinnerLoadNotblockComponent } from "../../utils/spinner-load-notblock/spinner-load-notblock.component";
 
 declare var Swal: any;
 
@@ -23,8 +25,10 @@ declare var Swal: any;
     ErrorAlertComponent,
     NavbarComponent,
     RouterModule,
-    RouterLink
-  ],
+    RouterLink,
+    FavouritesIconComponent,
+    SpinnerLoadNotblockComponent
+],
   templateUrl: './product-in-a-list.component.html',
   styleUrls: ['./product-in-a-list.component.css'],
 })
@@ -43,6 +47,8 @@ export class ProductsInAListComponent implements OnInit {
   errorMessageAlert: string = '';
   errorTitleAlert: string = '';
   isErrorAlert: boolean = false;
+
+  isLoading : boolean = true;
 
   constructor(
     private favoritesService: FavoritesService,
@@ -85,45 +91,6 @@ export class ProductsInAListComponent implements OnInit {
     }
   }
 
-  onDeleteProductFromAList(productId: number, listId: number): void {
-    Swal.fire({
-      title: '¿Estás seguro de eliminar el producto de tu lista de favoritos?',
-      text: "¡No podrás revertir esto!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#48be79',
-      confirmButtonText: 'Sí, eliminarlo',
-      cancelButtonText: 'Cancelar'
-    }).then((result: { isConfirmed: any; }) => {
-      if (result.isConfirmed) {
-        this.favoritesService.deleteProductFromAList(productId, listId).subscribe(
-          response => {
-            Swal.fire({
-              title: '¡Eliminado!',
-              text: 'Tu producto ha sido eliminado de tu lista de favoritos.',
-              icon: 'success',
-              confirmButtonText: 'Ok',
-              confirmButtonColor: '#48be79'
-          });
-            setTimeout(() => {
-              window.location.reload();
-            }, 1000);
-           
-          },
-          error => {
-            console.error('Error al eliminar el producto de tu lista de favoritos', error);
-            Swal.fire(
-              'Error',
-              error.error?.mensaje || 'Hubo un problema al eliminar tu producto de tu lista de favoritos. Inténtalo de nuevo más tarde.',
-              'error'
-            );
-          }
-        );
-      }
-    })
-  }
-
   private onError(message: string, title: string): void {
     this.errorMessageAlert = message;
     this.errorTitleAlert = title;
@@ -155,6 +122,16 @@ export class ProductsInAListComponent implements OnInit {
           );
         }
       );
+    });
+    this.isLoading = false;
+  }
+
+  onViewProduct(productId: number, listId : number) : void {
+    this.router.navigate([`/detalles-producto/${productId}`], {
+      queryParams: { page: this.currentPage,
+                     category : this.selectedCategoryId,
+                     referrer : `/favorite-list/${listId}`
+                  }
     });
   }
 }
