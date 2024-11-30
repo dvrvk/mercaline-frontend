@@ -3,6 +3,7 @@
     background-color:  var(--lighter-main-color);
 }
 
+
 input, .card {
     border-color: var(--darker-main-color);
 }

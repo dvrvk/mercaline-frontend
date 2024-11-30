@@ -57,10 +57,10 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="category" class="form-label">Estado</label>
+                    <label for="category" class="form-label">Categoría</label>
                     <select id="category" formControlName="category" class="form-select"
                         [ngClass]="{'is-invalid': productForm.get('category')?.invalid && productForm.get('category')?.touched}">
-                        <option value="">Seleccione el estado</option>
+                        <option value="">Seleccione el categoría</option>
                         <option *ngFor="let category of categoriesList" [value]="category.id">{{ category.name |
                             capitalizeFirst }}</option>
                     </select>

@@ -11,6 +11,7 @@ import { ProductDetailsComponent } from './components/product-details/product-de
 import { ProductUpdateComponent } from './components/product-update/product-update.component';
 import { MyProductsComponent } from './components/my-products/my-products.component';
 import { ProductsInAListComponent } from './components/product-in-a-list/product-in-a-list.component';
+import { CookiePolicyComponent } from './components/cookie-policy/cookie-policy.component';
 
 export const routes: Routes = [
     {
@@ -22,6 +23,11 @@ export const routes: Routes = [
         path: 'registro', 
         title: 'registro',
         component: RegistroComponent
+    },
+    {
+        path: 'politica-de-cookies',
+        title: 'Politica de cookies',
+        component: CookiePolicyComponent
     },
     {
         path: 'login', 

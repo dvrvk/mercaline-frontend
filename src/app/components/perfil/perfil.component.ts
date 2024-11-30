@@ -13,6 +13,7 @@ import { EditUserComponent } from "../edit-user/edit-user.component";
 import { Subscription } from 'rxjs';
 import { SvgPasswordComponent } from "../svg-icons/svg-password/svg-password.component";
 import { SvgDeleteUserComponent } from "../svg-icons/svg-delete-user/svg-delete-user.component";
+import { SpinnerLoadNotblockComponent } from "../../utils/spinner-load-notblock/spinner-load-notblock.component";
 
 @Component({
   selector: 'app-perfil',
@@ -24,7 +25,9 @@ import { SvgDeleteUserComponent } from "../svg-icons/svg-delete-user/svg-delete-
     ErrorAlertComponent,
     ChangePasswordComponent,
     DeleteUserComponent,
-    EditUserComponent, SvgPasswordComponent, SvgDeleteUserComponent],
+    EditUserComponent, 
+    SvgPasswordComponent, 
+    SvgDeleteUserComponent],
   templateUrl: './perfil.component.html',
   styleUrl: './perfil.component.css'
 })
