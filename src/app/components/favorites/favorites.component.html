@@ -5,11 +5,11 @@
     *ngIf="favoriteLists.length > 0; else noFavoriteLists">
     <div class="row gx-4 gx-lg-3 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
       <div class="col mb-5" *ngFor="let favoriteList of favoriteLists">
-        <div class="card h-100">
+        <div class="card h-100 shadow-drop-center">
           <!-- Product image-->
           <app-svg-favorite-lists></app-svg-favorite-lists>
           <!-- Product details-->
-          <div class="card-body p-2">
+          <div class="card-body p-2 tracking-in-expand">
             <div class="text-center">
               <!-- Product name-->
               <h5 class="fw-bolder">{{ favoriteList.nameList | capitalizeFirst}}</h5>
@@ -46,7 +46,7 @@
       </h3>
       <h3 class="text-center my-3" *ngIf="!isError">
         Ups, parece que no tienes ningún producto añadido a tus favoritos...<br>¡Para guardar un producto, pulsa el
-        icono de producto favorito (❤️)!
+        icono de producto favorito <span><i class="bi bi-heart-fill text-danger"></i></span>!
       </h3>
     </div>
   </ng-template>

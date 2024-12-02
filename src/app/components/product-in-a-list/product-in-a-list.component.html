@@ -1,4 +1,6 @@
 <app-navbar></app-navbar>
+@defer {
+<ng-content *ngIf="!isLoading; else loading">
 <section class="container py-2 px-2 mt-5" *ngIf="list.length > 0; else noProducts">
   <button class="btn btn-outline-custom" [routerLink]="['/favorites']">Volver</button>
   <div class="btn mb-4 d-flex justify-content-center align-items-center">
@@ -6,11 +8,11 @@
   </div>
   <div class="row gx-4 gx-lg-3 row-cols-1 row-cols-md-2 row-cols-xl-4 justify-content-center">
     <div class="col mb-5" *ngFor="let product of list">
-      <div class="card h-100">
+      <div class="card h-100 shadow-drop-center">
         <!-- Imagen del producto-->
         <img class="card-img-top img-limited-height" [attr.src]="product.products.imageUrl" alt="{{ product.products.name }}" *ngIf="product.products.imageUrl" />
         <!-- Detalles del producto-->
-        <div class="card-body p-2">
+        <div class="card-body p-2 tracking-in-expand">
           <div class="text-center">
             <!-- Nombre del producto-->
             <h5 class="fw-bolder">{{ product.products.name | capitalizeFirst}}</h5>
@@ -24,9 +26,10 @@
         </div>
         <!-- Acciones del producto-->
         <div class="card-footer d-flex justify-content-center gap-2 pt-0 border-top-0 bg-transparent mb-3">
-          <div class="text-center"><a class="btn btn-outline-dark mt-auto" (click)="onDeleteProductFromAList(product.products.id, product.id)">
-            ❤️
-          </a></div>
+          <div class="text-center">
+            <a class="btn btn-outline-dark mt-auto" (click)="onViewProduct(product.products.id, product.id)">Ver producto</a>
+            <app-favourites-icon [productId]="product.products.id" [listId]="product.id" [initClass]="'bi-heart-fill'"></app-favourites-icon>
+        </div>
         </div>
       </div>
     </div>
@@ -54,3 +57,10 @@
   </div>
 </ng-template>
 <app-error-alert *ngIf="isErrorAlert" [message]="errorMessageAlert" [title]="errorTitleAlert" (confirmation)="onConfirmationError()"></app-error-alert>
+</ng-content>
+<ng-template #loading>
+  <app-spinner-load-notblock></app-spinner-load-notblock>
+</ng-template>
+} @loading {
+  <app-spinner-load-notblock></app-spinner-load-notblock>
+} 
