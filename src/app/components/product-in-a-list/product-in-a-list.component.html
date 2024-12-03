@@ -25,11 +25,9 @@
           </div>
         </div>
         <!-- Acciones del producto-->
-        <div class="card-footer d-flex justify-content-center gap-2 pt-0 border-top-0 bg-transparent mb-3">
-          <div class="text-center">
-            <a class="btn btn-outline-dark mt-auto" (click)="onViewProduct(product.products.id, product.id)">Ver producto</a>
-            <app-favourites-icon [productId]="product.products.id" [listId]="product.id" [initClass]="'bi-heart-fill'"></app-favourites-icon>
-        </div>
+        <div class="card-footer d-flex justify-content-center pt-0 border-top-0 bg-transparent mb-3 align-items-center">
+            <a class="btn btn-outline-dark text-center" (click)="onViewProduct(product.products.id, product.id)">Ver producto</a>
+            <app-favourites-icon [productId]="product.products.id" [listId]="product.id" [initClass]="'bi-heart-fill'" [favoriteAction]="true"></app-favourites-icon>
         </div>
       </div>
     </div>

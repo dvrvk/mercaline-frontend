@@ -1,0 +1,31 @@
+<div class="modal fade" id="favModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true"
+    (shown.bs.modal)="onModalOpen()">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="favModalLabel">Listas de favoritos {{idProduct}}</h5>
+                    <button id="close-modal-btn" type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <ul class="list-group">
+                        <label for="fav-{{fav.id}}" *ngFor="let fav of listFav" class="input-group mb-3">
+                            <li class="list-group-item list-group-item-action">
+                                <input class="form-check-input custom-checkbox" id="fav-{{fav.id}}" type="checkbox"
+                                    value="{{fav.id}}"> {{fav.nameList}}
+                            </li>
+                        </label>
+                    </ul>
+
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-custom" (click)="onSave()" data-bs-dismiss="modal">Guardar</a>
+                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

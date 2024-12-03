@@ -13,6 +13,8 @@ import { ErrorAlertComponent } from '../alerts/error-alert/error-alert.component
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Observable } from 'rxjs';
 import { SpinnerLoadNotblockComponent } from "../../utils/spinner-load-notblock/spinner-load-notblock.component";
+import { FavouritesIconComponent } from "../favourites-icon/favourites-icon.component";
+import { ModalFavComponent } from "../modal-fav/modal-fav.component";
 
 declare var Swal: any;
 
@@ -28,7 +30,9 @@ declare var Swal: any;
     OrderByProductsComponent,
     ErrorAlertComponent,
     RouterModule,
-    SpinnerLoadNotblockComponent
+    SpinnerLoadNotblockComponent,
+    FavouritesIconComponent,
+    ModalFavComponent
 ],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.css'
@@ -60,6 +64,8 @@ export class ProductListComponent {
   isErrorAlert: boolean = false;
 
   isLoading : boolean = true;
+
+  selectedProductId: number | null = null;
 
   constructor(
     private productService: ProductService,
@@ -264,6 +270,10 @@ export class ProductListComponent {
                      category : this.selectedCategoryId
                   }
     });
+  }
+
+  onProductSelected(productId: number): void {
+    this.selectedProductId = productId;
   }
 
 }

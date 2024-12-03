@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { SafeUrl } from '@angular/platform-browser';
 
 @Injectable({
@@ -42,6 +42,14 @@ export class FavoritesService {
     return this.http.delete<Page<FavoriteProductsInAListResponseDTO>>(`http://localhost:8080/user/delete-product/${idProduct}/favorite-list/${idList}`, {headers});
     
   }
+
+  getProductFavList(idProduct : number) : Observable<boolean> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.get<boolean>(`http://localhost:8080/user/product-fav-list/${idProduct}`, {headers});
+  }
+
 }
 
 export interface FavoriteListsResponseDTO {

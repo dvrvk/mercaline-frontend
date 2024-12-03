@@ -1,0 +1,23 @@
+.custom-checkbox {
+appearance: none;
+-webkit-appearance: none; /* Para navegadores basados en WebKit */
+width: 20px;
+height: 20px;
+border: 2px solid var(--darker-btn-main-color); /* Borde verde */
+border-radius: 4px; /* Esquinas redondeadas */
+background-color: white; /* Fondo inicial */
+cursor: pointer;
+display: inline-block;
+vertical-align: middle;
+position: relative;
+margin-right: 10px; 
+}
+
+.custom-checkbox:checked {
+background-color: var(--darker-btn-main-color); 
+border-color: var(--darker-btn-main-color);
+color: white; 
+}
+  
+
+  

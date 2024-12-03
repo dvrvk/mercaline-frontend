@@ -46,7 +46,12 @@
             </div>
             <!-- Product actions-->
             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-              <div class="text-center"><a class="btn btn-outline-dark mt-auto" (click)="onViewProduct(product.id)">Ver producto</a></div>
+              <div class="text-center">
+                <a class="btn btn-outline-dark mt-auto" (click)="onViewProduct(product.id)">Ver producto</a>
+                <div>
+                  <app-favourites-icon [productId]="product.id" data-bs-toggle="modal" data-bs-target="#favModal" (click)="onProductSelected(product.id)"></app-favourites-icon>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -57,7 +62,7 @@
         <a class="btn custom-link" (click)="onPageChange(currentPage + 1)"
           *ngIf="currentPage + 2 <= totalPages">Siguiente</a>
       </div>
-    
+      <app-modal-fav [idProduct]="selectedProductId"></app-modal-fav>
 </section>
 <ng-template #noProducts>
   <div class="container d-flex flex-column justify-content-center align-items-center">
