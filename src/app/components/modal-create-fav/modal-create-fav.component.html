@@ -1,0 +1,38 @@
+<div class="create-list-form p-3">
+    <h5 class="mb-3 text-center">Crear Nueva Lista</h5>
+    <form [formGroup]="createListForm" (ngSubmit)="onCreate()" class="needs-validation" novalidate>
+      <!-- Campo de nombre de la lista -->
+      <div class="mb-3">
+        <label for="listName" class="form-label">Nombre de la Lista</label>
+        <input
+          id="listName"
+          type="text"
+          class="form-control"
+          placeholder="Ingrese un nombre para la lista"
+          formControlName="listName"
+          (input)="checkDuplicate()"
+          [ngClass]="{ 'is-invalid': createListForm.get('listName')?.touched && createListForm.get('listName')?.invalid }"
+        />
+        <div class="invalid-feedback" *ngIf="createListForm.get('listName')?.touched && createListForm.get('listName')?.hasError('required')">
+          El nombre de la lista es obligatorio.
+        </div>
+        <div class="invalid-feedback" *ngIf="createListForm.get('listName')?.touched && createListForm.get('listName')?.hasError('minlength')">
+          El nombre debe tener al menos 3 caracteres.
+        </div>
+        <div *ngIf="duplicateName" class="text-danger">
+            El nombre de la lista ya existe.
+        </div>
+      </div>
+  
+      <!-- Botones -->
+      <div class="d-flex justify-content-between">
+        <button type="submit" class="btn btn-custom w-100 me-2" [disabled]="createListForm.invalid || duplicateName">
+          <i class="bi bi-plus-circle"></i> Crear
+        </button>
+        <button type="button" class="btn btn-outline-danger w-100" (click)="onCancel()">
+          <i class="bi bi-x-circle"></i> Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+  

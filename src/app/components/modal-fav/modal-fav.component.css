@@ -18,6 +18,15 @@ background-color: var(--darker-btn-main-color);
 border-color: var(--darker-btn-main-color);
 color: white; 
 }
+
+.icon-plus {
+    color: var(--darker-btn-main-color);
+    font-size: 20px;
+}
+
+.list-group-item:hover {
+    cursor: pointer;
+}
   
 
   

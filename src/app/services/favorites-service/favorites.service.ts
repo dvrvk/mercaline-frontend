@@ -50,6 +50,20 @@ export class FavoritesService {
     return this.http.get<boolean>(`http://localhost:8080/user/product-fav-list/${idProduct}`, {headers});
   }
 
+  putFavorites(body : UpdateListFavProd[]) : Observable<boolean> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.put<boolean>(`http://localhost:8080/user/update-favs`, body, { headers });
+  }
+
+  createNewList(name : string) :Observable<number> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.put<number>(`http://localhost:8080/user/create-list-fav`, name, {headers});
+  }
+
 }
 
 export interface FavoriteListsResponseDTO {
@@ -85,4 +99,11 @@ export interface PageContent {
   totalPages: number;
   size: number;
   number: number;
+}
+
+export interface UpdateListFavProd {
+  idList : number,
+  idProduct: number,
+  isDeleteProductList: boolean,
+  isAddProductList: boolean
 }
