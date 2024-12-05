@@ -2,4 +2,8 @@
     color: var(--darker-main-color); 
     font-weight: bold;
   }
+
+.dropdown-item:hover {
+  cursor: pointer;
+}
   
