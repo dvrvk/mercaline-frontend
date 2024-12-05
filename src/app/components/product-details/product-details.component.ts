@@ -41,6 +41,8 @@ export class ProductDetailsComponent implements OnInit {
 
   selectedProductId: number | null = null;
 
+  changedFav : boolean = false;
+
   constructor(private productService: ProductService,
               private route : ActivatedRoute,
               private sanitizer: DomSanitizer
@@ -117,5 +119,11 @@ export class ProductDetailsComponent implements OnInit {
 
   onProductSelected(productId: number): void {
     this.selectedProductId = productId;
+  }
+
+  onChangedFav(changed : boolean) {
+    if(changed) {
+      this.changedFav = !this.changedFav;
+    }
   }
 }

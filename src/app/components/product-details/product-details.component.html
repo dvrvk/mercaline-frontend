@@ -8,7 +8,7 @@
         <p class="mt-2 mx-2 category">{{ product.category | capitalizeFirst }}</p>
         <p class="text-secondary mt-4 mb-3 mx-md-2  border-bottom">Detalles del producto:</p>
         <div class="mx-md-4">
-          <h2 class="fs-1 ">{{ product.name | titlecase}}<span><app-favourites-icon [productId]="product.id" data-bs-toggle="modal" data-bs-target="#favModal" (click)="onProductSelected(product.id)"></app-favourites-icon></span></h2>
+          <h2 class="fs-1 ">{{ product.name | titlecase}}<span><app-favourites-icon [productId]="product.id" data-bs-toggle="modal" data-bs-target="#favModal" (click)="onProductSelected(product.id)" [favChanged]="changedFav"></app-favourites-icon></span></h2>
           <p class="fs-3 fw-bold price">{{ product.price | customCurrencyFormat }}</p>
           <p><span class="badge badge-cat fs-6">{{ product.status | capitalizeFirst }}</span></p>
           <p>{{ product.description }}</p>
@@ -38,7 +38,7 @@
       </div>
     </div>
   </div>
-  <app-modal-fav [idProduct]="selectedProductId"></app-modal-fav>
+  <app-modal-fav [idProduct]="selectedProductId" (changed)="onChangedFav($event)"></app-modal-fav>
   <ng-template #loading>
     <app-spinner-load-notblock></app-spinner-load-notblock>
   </ng-template>

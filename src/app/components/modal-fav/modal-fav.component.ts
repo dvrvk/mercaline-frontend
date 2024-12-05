@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FavoriteListsResponseDTO, FavoritesService, UpdateListFavProd } from '../../services/favorites-service/favorites.service';
 import { CommonModule } from '@angular/common';
 import { FormArray, FormBuilder, FormControl, FormGroup, NgModel, ReactiveFormsModule } from '@angular/forms';
@@ -14,6 +14,7 @@ import { UploadProductsComponent } from '../upload-products/upload-products.comp
 })
 export class ModalFavComponent implements OnInit {
   @Input() idProduct: number | null = null;
+  @Output() changed = new EventEmitter<boolean>();
 
   listFav: FavoriteListsResponseDTO[] = [];
   productInFavList: any[] = [];
@@ -85,7 +86,8 @@ export class ModalFavComponent implements OnInit {
       this.favService.putFavorites(this.listToSent).subscribe(
         data => {
           // MESAJE EXITO
-          console.log(data)
+          console.log(data) // TRUE O FALSE
+          this.changed.emit(data);
           this.listToSent = [];
           // A lo mejor hay que recargar si está en favoritos el icono
         },

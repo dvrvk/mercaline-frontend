@@ -67,6 +67,8 @@ export class ProductListComponent {
 
   selectedProductId: number | null = null;
 
+  changedFav : boolean = false;
+
   constructor(
     private productService: ProductService,
     private UserService: UserServiceService,
@@ -274,6 +276,12 @@ export class ProductListComponent {
 
   onProductSelected(productId: number): void {
     this.selectedProductId = productId;
+  }
+
+  onChangedFav(changed : boolean) {
+    if(changed) {
+      this.changedFav = !this.changedFav;
+    }
   }
 
 }
