@@ -10,6 +10,7 @@ import { UserServiceService } from '../../services/user-service/user-service.ser
 import { FavoritesService, FavoriteListsResponseDTO, Page } from '../../services/favorites-service/favorites.service';
 import { Router, RouterModule } from '@angular/router';
 import { SpinnerLoadNotblockComponent } from "../../utils/spinner-load-notblock/spinner-load-notblock.component";
+import { ModalCreateListFavComponent } from "../modal-create-list-fav/modal-create-list-fav.component";
 
 @Component({
   selector: 'app-favorites',
@@ -22,7 +23,8 @@ import { SpinnerLoadNotblockComponent } from "../../utils/spinner-load-notblock/
     SgvNotFoundComponent,
     SvgFavoriteListsComponent,
     ErrorAlertComponent,
-    SpinnerLoadNotblockComponent
+    SpinnerLoadNotblockComponent,
+    ModalCreateListFavComponent
 ],
   templateUrl: './favorites.component.html',
   styleUrl: './favorites.component.css'
@@ -112,5 +114,10 @@ export class FavoritesComponent implements OnInit {
 
   onConfirmationError(): void {
     this.isErrorAlert = false;
+  }
+
+  onListCreated(newList: any): void {
+    // Manejar la lista recién creada
+    this.favoriteLists.push(newList);
   }
 }
