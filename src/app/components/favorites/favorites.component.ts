@@ -46,6 +46,10 @@ export class FavoritesComponent implements OnInit {
 
   isLoading : boolean = true;
 
+  option: string = 'create';
+  idList: number | null = null;
+  nameList : string | null = null;;
+
   constructor(
     private UserService: UserServiceService,
     private favoritesService: FavoritesService,
@@ -120,4 +124,34 @@ export class FavoritesComponent implements OnInit {
     // Manejar la lista recién creada
     this.favoriteLists.push(newList);
   }
+
+  onOption(option : string) {
+    switch(option) {
+      case 'create':
+          this.option = option;
+          break;
+      case 'update':
+        this.option = option;
+        break;
+      default:
+        this.option = option;
+    }
+  }
+
+  selectFavList(id: number, name: string) {
+    this.idList = id;
+    this.nameList = name;
+  }
+
+  onSuccessEdit(list: any): void {
+    const index = this.favoriteLists.findIndex(fav => fav.id === list.id);
+    if (index !== -1) {
+      // Si se encuentra la lista, reemplázala
+      this.favoriteLists[index] = list;
+    } else {
+      // Si no se encuentra la lista, agregarla
+      this.favoriteLists.push(list);
+    }
+  }
+  
 }
