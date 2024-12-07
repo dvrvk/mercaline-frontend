@@ -3,6 +3,8 @@ import { FavoritesService } from '../../services/favorites-service/favorites.ser
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
+declare var Swal: any;
+
 @Component({
   selector: 'app-modal-create-list-fav',
   standalone: true,
@@ -35,7 +37,13 @@ export class ModalCreateListFavComponent {
           this.created.emit(data);
         }, 
         error => {
-          console.log("mensaje error" + error);
+          console.log("Error" + error);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            confirmButtonColor: '#4dce83',
+            text: error.error.mensaje,
+          });
         }
       )
       // Aquí puedes añadir la lógica para enviar los datos al backend.

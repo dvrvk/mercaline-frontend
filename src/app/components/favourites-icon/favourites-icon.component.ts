@@ -48,8 +48,6 @@ export class FavouritesIconComponent implements OnChanges{
     )
   }
 
-
-
   onHover(): void {
     // Cambia a "bi-heart-half" si la clase actual es "bi-heart-fill"
     if (this.initClass === 'bi-heart-fill') {
