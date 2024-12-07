@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FavoriteListsResponseDTO, FavoritesService, UpdateListFavProd } from '../../services/favorites-service/favorites.service';
 import { CommonModule } from '@angular/common';
-import { FormArray, FormBuilder, FormControl, FormGroup, NgModel, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { ModalCreateFavComponent } from "../modal-create-fav/modal-create-fav.component";
-import { UploadProductsComponent } from '../upload-products/upload-products.component';
+
+declare var Swal: any;
 
 @Component({
   selector: 'app-modal-fav',
@@ -33,7 +34,13 @@ export class ModalFavComponent implements OnInit {
         this.listFav = data.content ?? [];
       },
       error => {
-        console.log(error)
+        console.log("Error" + error);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            confirmButtonColor: '#4dce83',
+            text: error.error.mensaje,
+          });
       }
     )
   }
@@ -43,8 +50,6 @@ export class ModalFavComponent implements OnInit {
       this.favService.getProductFavList(this.idProduct).subscribe(
         data => {
           this.productInFavList = Array.isArray(data) && data.length > 0 ? data : [];
-          console.log(this.productInFavList)
-          console.log(this.listFav)
           this.checkFav();
         },
         error => {
