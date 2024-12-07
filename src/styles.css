@@ -3,6 +3,8 @@
     --darker-main-color: #48be79;
     --lighter-main-color: #48be7918;
     --darker-btn-main-color: #3fa469;
+    --shadow-color: #808080;
+    --title-nav-color: #344759;
 }
 
 .darker-main-color {
@@ -63,4 +65,30 @@
     color: white;
     border: 1px solid var(--main-color);
 }
+
+.btn-heart:hover {
+  transform: scale(1.2)
+}
+
+.shadow-drop-center:hover{
+  animation:shadow-drop-center 0.2s linear both
+} 
   
+@keyframes shadow-drop-center {
+  0%{box-shadow:0 0 0 0 transparent}
+  100% {
+      box-shadow:0 0 15px 0 var(--shadow-color);
+      scale: 1.02;
+  }
+}
+
+.tracking-in-expand{
+  animation:tracking-in-expand 0.3s linear both
+} 
+
+@keyframes tracking-in-expand{
+  0%{letter-spacing:-.2em;opacity:0}
+  40%{opacity:.6}100%{opacity:1}
+}
+
+

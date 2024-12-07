@@ -8,6 +8,8 @@ import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/rout
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser'
 import { SpinnerLoadNotblockComponent } from "../../utils/spinner-load-notblock/spinner-load-notblock.component";
 import { CarouselImagesComponent } from "../carousel-images/carousel-images.component";
+import { FavouritesIconComponent } from "../favourites-icon/favourites-icon.component";
+import { ModalFavComponent } from "../modal-fav/modal-fav.component";
 
 
 @Component({
@@ -20,7 +22,9 @@ import { CarouselImagesComponent } from "../carousel-images/carousel-images.comp
     CommonModule,
     RouterLink,
     SpinnerLoadNotblockComponent,
-    CarouselImagesComponent
+    CarouselImagesComponent,
+    FavouritesIconComponent,
+    ModalFavComponent
 ],
   templateUrl: './product-details.component.html',
   styleUrl: './product-details.component.css'
@@ -35,7 +39,9 @@ export class ProductDetailsComponent implements OnInit {
   isProductLoading : boolean = true;
   referrer: string = '/home';
 
+  selectedProductId: number | null = null;
 
+  changedFav : boolean = false;
 
   constructor(private productService: ProductService,
               private route : ActivatedRoute,
@@ -109,5 +115,15 @@ export class ProductDetailsComponent implements OnInit {
 
   getProductID() : number {
     return parseInt(this.route.snapshot.paramMap.get('id')|| '0', 10);
+  }
+
+  onProductSelected(productId: number): void {
+    this.selectedProductId = productId;
+  }
+
+  onChangedFav(changed : boolean) {
+    if(changed) {
+      this.changedFav = !this.changedFav;
+    }
   }
 }

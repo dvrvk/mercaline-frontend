@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { SafeUrl } from '@angular/platform-browser';
 
 @Injectable({
@@ -42,6 +42,28 @@ export class FavoritesService {
     return this.http.delete<Page<FavoriteProductsInAListResponseDTO>>(`http://localhost:8080/user/delete-product/${idProduct}/favorite-list/${idList}`, {headers});
     
   }
+
+  getProductFavList(idProduct : number) : Observable<boolean> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.get<boolean>(`http://localhost:8080/user/product-fav-list/${idProduct}`, {headers});
+  }
+
+  putFavorites(body : UpdateListFavProd[]) : Observable<boolean> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.put<boolean>(`http://localhost:8080/user/update-favs`, body, { headers });
+  }
+
+  createNewList(name : string) :Observable<number> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.put<number>(`http://localhost:8080/user/create-list-fav`, name, {headers});
+  }
+
 }
 
 export interface FavoriteListsResponseDTO {
@@ -77,4 +99,11 @@ export interface PageContent {
   totalPages: number;
   size: number;
   number: number;
+}
+
+export interface UpdateListFavProd {
+  idList : number,
+  idProduct: number,
+  isDeleteProductList: boolean,
+  isAddProductList: boolean
 }

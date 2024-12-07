@@ -1,8 +1,13 @@
 <app-navbar></app-navbar>
 <ng-content *ngIf="!isLoading; else loading">
   <!--Aqui va lo mio-->
-  <section class="container rounded bg-white mt-md-5 mb-5 p-3 p-md-5"
+  <section class="container rounded bg-white mt-md-2 mb-5 p-3 p-md-5"
     *ngIf="favoriteLists.length > 0; else noFavoriteLists">
+    <div class="d-flex gap-2">
+        <button class="btn btn-outline-custom" [routerLink]="['/home']">Volver</button>
+        <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#favCreateListModal">Crear lista</button>
+    </div>
+    <h2 class="mb-4 text-center">Mis listas de favoritos</h2>
     <div class="row gx-4 gx-lg-3 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
       <div class="col mb-5" *ngFor="let favoriteList of favoriteLists">
         <div class="card h-100 shadow-drop-center">
@@ -37,6 +42,7 @@
       <a class="btn custom-link" (click)="onPageChange(currentPage + 1)"
         *ngIf="currentPage + 2 <= totalPages">Siguiente</a>
     </div>
+    <app-modal-create-list-fav [listFav]="favoriteLists" (created)="onListCreated($event)"></app-modal-create-list-fav>
   </section>
   <ng-template #noFavoriteLists>
     <div class="container d-flex flex-column justify-content-center align-items-center">

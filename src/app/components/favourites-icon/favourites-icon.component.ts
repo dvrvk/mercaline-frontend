@@ -1,16 +1,17 @@
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FavoritesService } from '../../services/favorites-service/favorites.service';
+import { CommonModule } from '@angular/common';
 
 declare var Swal: any;
 
 @Component({
   selector: 'app-favourites-icon',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './favourites-icon.component.html',
   styleUrl: './favourites-icon.component.css'
 })
-export class FavouritesIconComponent {
+export class FavouritesIconComponent implements OnChanges{
   isError: boolean = false;
   errorMessage: string =
     'Ups, lo sentimos no hemos podido conectarnos al servidor. Por favor, intentalo más tarde.';
@@ -18,8 +19,36 @@ export class FavouritesIconComponent {
   @Input() productId : number = 0;
   @Input() listId : number = 0;
   @Input() initClass : string = 'bi-heart';
+  @Input() action : string = 'unlike';
+  @Input() favoriteAction : boolean = false;
+  @Input() favChanged : boolean = false;
+  
+
+  showModal: boolean = false;
+
+
 
   constructor(private favoritesService : FavoritesService) {}
+
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.loadFavorites()
+  }
+
+  loadFavorites() : void {
+    this.favoritesService.getProductFavList(this.productId).subscribe(
+      data => {
+        this.initClass = Array.isArray(data) && data.length > 0 ? 'bi-heart-fill': 'bi-heart';
+        this.action = data ? 'unlike' : 'like';
+      }, 
+      error => {
+        console.log(error)
+
+      }
+    )
+  }
+
+
 
   onHover(): void {
     // Cambia a "bi-heart-half" si la clase actual es "bi-heart-fill"
@@ -38,6 +67,20 @@ export class FavouritesIconComponent {
       this.initClass = 'bi-heart';
     }
   }
+
+  onClick() : void {
+    if(this.action == 'unlike') {
+      this.onDeleteProductFromAList();
+    } else {
+      this.showModal = true;
+      this.onAddProductFromAList();
+    }
+  }
+
+  onAddProductFromAList() : void {
+    console.log('agregando...')
+  }
+
 
   onDeleteProductFromAList(): void {
     Swal.fire({
@@ -77,4 +120,6 @@ export class FavouritesIconComponent {
       }
     })
   }
+
+
 }

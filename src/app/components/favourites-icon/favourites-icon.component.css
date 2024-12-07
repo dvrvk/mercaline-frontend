@@ -1,0 +1,28 @@
+/* Modal estilo */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1050;
+  }
+  
+  .modal.fade .modal-dialog {
+    transition: transform 0.3s ease-out;
+  }
+  
+  .modal.show .modal-dialog {
+    transform: translate(0);
+  }
+  
+  .modal-dialog {
+    transition: transform 0.3s ease-out;
+  }
+  
+  .show {
+    display: block !important;
+  }
+  
+  
