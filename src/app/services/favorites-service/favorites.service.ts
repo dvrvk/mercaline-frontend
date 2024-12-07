@@ -64,6 +64,13 @@ export class FavoritesService {
     return this.http.put<number>(`http://localhost:8080/user/create-list-fav`, name, {headers});
   }
 
+  editList(name: string, id : number) {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.put<number>(`http://localhost:8080/user/edit-list-fav`, {name, id}, {headers});
+  }
+
 }
 
 export interface FavoriteListsResponseDTO {

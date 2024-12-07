@@ -4,14 +4,14 @@
         <div class="modal-content">
             <form>
                 <div class="modal-header">
-                    <h5 class="modal-title" id="favCreateListModalLabel">Crear lista de favoritos</h5>
+                    <h5 class="modal-title" id="favCreateListModalLabel">{{this.option == 'create' ? 'Crear' : 'Modificar'}} lista de favoritos</h5>
                     <button id="close-modal-btn" type="button" class="btn-close" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body">
                     <div class="create-list-form p-3">
-                        <form [formGroup]="createListForm" (ngSubmit)="onCreate()" class="needs-validation" novalidate>
+                        <form [formGroup]="createListForm" (ngSubmit)="onAction()" class="needs-validation" novalidate>
                           <!-- Campo de nombre de la lista -->
                           <div class="mb-3">
                             <label for="listName" class="form-label">Nombre de la Lista</label>
@@ -19,7 +19,7 @@
                               id="listName"
                               type="text"
                               class="form-control"
-                              placeholder="Ingrese un nombre para la lista"
+                              [placeholder]="this.nameList ?? 'Ingrese un nombre para la lista'"
                               formControlName="listName"
                               (input)="checkDuplicate()"
                               [ngClass]="{ 'is-invalid': createListForm.get('listName')?.touched && createListForm.get('listName')?.invalid }"
@@ -38,7 +38,7 @@
                       </div>
                 </div>
                 <div class="modal-footer">
-                    <a class="btn btn-custom" (click)="onCreate()" data-bs-dismiss="modal" >Crear</a>
+                    <a class="btn btn-custom" (click)="onAction()" data-bs-dismiss="modal" >{{this.option == 'create' ? 'Crear' : 'Modificar'}}</a>
                     <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" (click)="onCancel()">Cancelar</button>
                 </div>
             </form>

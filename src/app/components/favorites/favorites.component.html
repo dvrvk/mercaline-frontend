@@ -5,7 +5,7 @@
     *ngIf="favoriteLists.length > 0; else noFavoriteLists">
     <div class="d-flex gap-2">
         <button class="btn btn-outline-custom" [routerLink]="['/home']">Volver</button>
-        <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#favCreateListModal">Crear lista</button>
+        <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#favCreateListModal" (click)="onOption('create')">Crear lista</button>
     </div>
     <h2 class="mb-4 text-center">Mis listas de favoritos</h2>
     <div class="row gx-4 gx-lg-3 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
@@ -27,10 +27,19 @@
             </div>
           </div>
           <!-- Product actions-->
-          <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-            <div class="text-center"><a [routerLink]="['/favorite-list', favoriteList.id]"
-                [ngClass]="{ 'disabled': favoriteList.productSize === 0 }" class="btn btn-outline-dark mt-auto">Ver
-                lista</a>
+          <div class="card-footer p-4 pt-0 border-top-0 bg-transparent d-flex justify-content-center gap-2">
+            <div class="text-center">
+              <a [routerLink]="['/favorite-list', favoriteList.id]"
+                [ngClass]="{ 'disabled': favoriteList.productSize === 0 }" class="btn btn-custom mt-auto">Ver lista</a>
+            </div>
+            <div class="dropdown">
+              <button class="btn btn-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-list"></i>
+              </button>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" (click)="onOption('update')" (click)="selectFavList(favoriteList.id, favoriteList.nameList)" data-bs-toggle="modal" data-bs-target="#favCreateListModal">Modificar</a></li>
+                <li><a class="dropdown-item text-danger" href="#">Eliminar</a></li>
+              </ul>
             </div>
           </div>
         </div>
@@ -42,7 +51,7 @@
       <a class="btn custom-link" (click)="onPageChange(currentPage + 1)"
         *ngIf="currentPage + 2 <= totalPages">Siguiente</a>
     </div>
-    <app-modal-create-list-fav [listFav]="favoriteLists" (created)="onListCreated($event)"></app-modal-create-list-fav>
+    <app-modal-create-list-fav [nameList]="this.nameList" [listFav]="favoriteLists" [option]="this.option" [idList]="this.idList" (created)="onListCreated($event)" (edit)="onSuccessEdit($event)"></app-modal-create-list-fav>
   </section>
   <ng-template #noFavoriteLists>
     <div class="container d-flex flex-column justify-content-center align-items-center">

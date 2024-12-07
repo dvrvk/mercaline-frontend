@@ -16,7 +16,11 @@ export class ModalCreateListFavComponent {
 
   createListForm!: FormGroup;
   @Output() created = new EventEmitter<Object>();
+  @Output() edit = new EventEmitter<Object>();
   @Input() listFav : any[] = [];
+  @Input() option: string = 'create';
+  @Input() idList : number | null = null;
+  @Input() nameList: string | null = null;
 
   duplicateName : boolean = false;
 
@@ -28,30 +32,56 @@ export class ModalCreateListFavComponent {
     });
   }
 
-  onCreate(): void {
+  onAction(): void {
     this.duplicateName = false;
     if (this.createListForm.valid && !this.listFav.some(fav => fav.nameList.toLowerCase() == this.createListForm.value.listName.toLowerCase())) {
       const listName = this.createListForm.value.listName;
-      this.favService.createNewList(listName).subscribe(
-        data => {
-          this.created.emit(data);
-        }, 
-        error => {
-          console.log("Error" + error);
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            confirmButtonColor: '#4dce83',
-            text: error.error.mensaje,
-          });
-        }
-      )
-      // Aquí puedes añadir la lógica para enviar los datos al backend.
+      if(this.option == 'create') {
+        this.onCreatetttt(listName);
+      } else if(this.option == 'update' && this.idList) {
+        this.onEdit(listName, this.idList)
+      }
+      
+      
     } else {
       this.duplicateName = true;
       this.createListForm.markAllAsTouched();
       
     }
+  }
+
+  onEdit(listName : string, idList: number) {
+    this.favService.editList(listName, idList).subscribe(
+      data => {
+        this.edit.emit(data);
+      }, 
+      error => {
+        console.log("Error" + error);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          confirmButtonColor: '#4dce83',
+          text: error.error.mensaje,
+        });
+      }
+    )
+  }
+
+  onCreatetttt(listName : string) : void {
+    this.favService.createNewList(listName).subscribe(
+      data => {
+        this.created.emit(data);
+      }, 
+      error => {
+        console.log("Error" + error);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          confirmButtonColor: '#4dce83',
+          text: error.error.mensaje,
+        });
+      }
+    )
   }
 
   onCancel(): void {
