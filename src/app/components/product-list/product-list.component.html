@@ -27,7 +27,7 @@
   </div>
       <div class="row gx-4 gx-lg-3 row-cols-1 row-cols-md-2 row-cols-xl-4 justify-content-center">
         <div class="col mb-5" *ngFor="let product of products">
-          <div class="card h-100 shadow-drop-center">
+          <div class="card h-100 shadow-drop-center" [ngClass]="{'sold': product.status === 'vendido'}">
             <!-- Product image-->
             <img class="card-img-top img-limited-height" [src]="product.imageUrl" alt="{{ product.name }}"
               *ngIf="product.imageUrl" />
