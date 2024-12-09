@@ -1,0 +1,47 @@
+<div class="modal fade" id="favCreateListModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true"
+    (shown.bs.modal)="onModalOpen()">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="favCreateListModalLabel">{{this.option == 'create' ? 'Crear' : 'Modificar'}} lista de favoritos</h5>
+                    <button id="close-modal-btn" type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="create-list-form p-3">
+                        <form [formGroup]="createListForm" (ngSubmit)="onAction()" class="needs-validation" novalidate>
+                          <!-- Campo de nombre de la lista -->
+                          <div class="mb-3">
+                            <label for="listName" class="form-label">Nombre de la Lista</label>
+                            <input
+                              id="listName"
+                              type="text"
+                              class="form-control"
+                              [placeholder]="this.nameList ?? 'Ingrese un nombre para la lista'"
+                              formControlName="listName"
+                              (input)="checkDuplicate()"
+                              [ngClass]="{ 'is-invalid': createListForm.get('listName')?.touched && createListForm.get('listName')?.invalid }"
+                            />
+                            <div class="invalid-feedback" *ngIf="createListForm.get('listName')?.touched && createListForm.get('listName')?.hasError('required')">
+                              El nombre de la lista es obligatorio.
+                            </div>
+                            <div class="invalid-feedback" *ngIf="createListForm.get('listName')?.touched && createListForm.get('listName')?.hasError('minlength')">
+                              El nombre debe tener al menos 3 caracteres.
+                            </div>
+                            <div *ngIf="duplicateName" class="text-danger">
+                                El nombre de la lista ya existe.
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-custom" (click)="onAction()" data-bs-dismiss="modal" >{{this.option == 'create' ? 'Crear' : 'Modificar'}}</a>
+                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" (click)="onCancel()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -6,10 +6,45 @@
     max-width: 50px;
 }
 
-a {
+.nav-item {
     transition: transform 0.1s;
 }
 
-a:hover {
+.nav-link {
+    color: var(--title-nav-color);
+    font-weight: 400;
+    font-size: 1.1rem;
+}
+
+.nav-item:hover {
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    cursor: pointer;
+}
+
+.title-custom {
+    letter-spacing: 0.2rem;
+    margin-left: 10px;
+    font-family: "Orbitron", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    color: var(--title-nav-color);
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.navbar-brand {
+    transition: transform 0.1s;
+}
+
+.navbar-brand:hover {
     transform: scale(1.1);
 }
+
+#dropdownMenuButton1 {
+    letter-spacing: 1.5px;
+}
+

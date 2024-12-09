@@ -1,0 +1,64 @@
+<app-navbar></app-navbar>
+@defer {
+<ng-content *ngIf="!isLoading; else loading">
+<section class="container py-2 px-2 mt-5" *ngIf="list.length > 0; else noProducts">
+  <button class="btn btn-outline-custom" [routerLink]="['/favorites']">Volver</button>
+  <div class="btn mb-4 d-flex justify-content-center align-items-center">
+    <h2>{{list[0].nameList}}</h2>
+  </div>
+  <div class="row gx-4 gx-lg-3 row-cols-1 row-cols-md-2 row-cols-xl-4 justify-content-center">
+    <div class="col mb-5" *ngFor="let product of list">
+      <div class="card h-100 shadow-drop-center">
+        <!-- Imagen del producto-->
+        <img class="card-img-top img-limited-height" [attr.src]="product.products.imageUrl" alt="{{ product.products.name }}" *ngIf="product.products.imageUrl" />
+        <!-- Detalles del producto-->
+        <div class="card-body p-2 tracking-in-expand">
+          <div class="text-center">
+            <!-- Nombre del producto-->
+            <h5 class="fw-bolder">{{ product.products.name | capitalizeFirst}}</h5>
+            <!-- Precio del producto-->
+            <p>{{ product.products.price | customCurrencyFormat }}</p>
+            <p class="d-flex flex-column justify-content-center align-items-center gap-2">
+              <span class="badge badge-cat">{{product.products.category | capitalizeFirst}}</span>
+              <span class="badge text-bg-light">{{product.products.status | capitalizeFirst}}</span>
+            </p>
+          </div>
+        </div>
+        <!-- Acciones del producto-->
+        <div class="card-footer d-flex justify-content-center pt-0 border-top-0 bg-transparent mb-3 align-items-center">
+            <a class="btn btn-outline-dark text-center" (click)="onViewProduct(product.products.id, product.id)">Ver producto</a>
+            <app-favourites-icon [productId]="product.products.id" [listId]="product.id" [initClass]="'bi-heart-fill'" [favoriteAction]="true"></app-favourites-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pagination d-flex justify-content-center align-items-center">
+    <a class="btn custom-link" (click)="onPageChange(currentPage - 1)" *ngIf="currentPage !== 0">Anterior</a>
+    <span class="mx-2 text-center align-middle">Página {{ currentPage + 1 }} de {{ totalPages }}</span>
+    <a class="btn custom-link" (click)="onPageChange(currentPage + 1)" *ngIf="currentPage + 2 <= totalPages">Siguiente</a>
+  </div>
+</section>
+<ng-template #noProducts>
+  <div class="container d-flex flex-column justify-content-center align-items-center">
+    <app-sgv-not-found></app-sgv-not-found>
+    <ng-content *ngIf="isError">
+
+        <h3 class="text-center my-3" >
+        {{errorMessage}}
+        </h3>
+    </ng-content>
+    
+    <ng-content *ngIf="!isError">
+        <h4 class="text-center my-3" >¡Aún no tienes productos en tu lista de favoritos!<br>¡Para guardar un producto, pulsa el icono de producto favorito (❤️)!</h4>
+        <button [routerLink]="['/home']" class="btn btn-custom">Añadir productos</button>
+    </ng-content>
+  </div>
+</ng-template>
+<app-error-alert *ngIf="isErrorAlert" [message]="errorMessageAlert" [title]="errorTitleAlert" (confirmation)="onConfirmationError()"></app-error-alert>
+</ng-content>
+<ng-template #loading>
+  <app-spinner-load-notblock></app-spinner-load-notblock>
+</ng-template>
+} @loading {
+  <app-spinner-load-notblock></app-spinner-load-notblock>
+} 

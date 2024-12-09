@@ -2,9 +2,10 @@
     <div class="container px-5">
       <a class="navbar-brand" href="#">
         <img class="logo-nav" src="assets\images\logo_sin_fondo.png" alt="Logo Mercaline">
-        MERCALINE</a>
+        <span class="d-none d-sm-inline title-custom">MERCALINE</span></a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
         aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="text-center align-middle p-2">{{ userData.username | uppercase }}</span>
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarText">
@@ -18,14 +19,24 @@
           <li class="nav-item">
             <a class="nav-link" aria-current="page" [routerLink]="['/favorites']">Favoritos</a>
           </li>
+          <li class="nav-item d-lg-none">
+            <a class="nav-link" aria-current="page" [routerLink]="['/mis-productos']">Mis productos</a>
+          </li>
+          <li class="nav-item d-lg-none">
+            <a class="nav-link" aria-current="page" [routerLink]="['/perfil']">Mi perfil</a>
+          </li>
+          <li class="nav-item d-lg-none">
+            <a class="nav-link text-danger" aria-current="page" (click)="logOut()">Cerrar sesión</a>
+          </li>
         </ul> 
         <!-- Botón Usuario -->
-        <div class="dropdown d-flex justify-content-center" id="botonUsuario">
+        <div class="dropdown d-none d-lg-flex justify-content-center" id="botonUsuario">
           <button *ngIf="userData?.username" class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton1"
             data-bs-toggle="dropdown" aria-expanded="false">
             {{ userData.username | uppercase }}
           </button>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li><a class="dropdown-item" [routerLink]="['/mis-productos']">Mis productos</a></li>
             <li><a class="dropdown-item" [routerLink]="['/perfil']">Mi perfil</a></li>
             <li><a class="dropdown-item text-danger" (click)="logOut()">Cerrar sesión</a></li>
           </ul>

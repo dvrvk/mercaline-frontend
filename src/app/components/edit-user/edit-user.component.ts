@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SuccessAlertComponent } from "../alerts/success-alert/success-alert.component";
 import { ErrorAlertComponent } from "../alerts/error-alert/error-alert.component";
+import { SpinnerLoadNotblockComponent } from "../../utils/spinner-load-notblock/spinner-load-notblock.component";
+import { SpinnerLoadComponent } from "../../utils/spinner-load/spinner-load.component";
 
 @Component({
   selector: 'app-edit-user',
@@ -15,7 +17,9 @@ import { ErrorAlertComponent } from "../alerts/error-alert/error-alert.component
     CommonModule,
     ReactiveFormsModule,
     SuccessAlertComponent,
-    ErrorAlertComponent
+    ErrorAlertComponent,
+    SpinnerLoadNotblockComponent,
+    SpinnerLoadComponent
 ],
   templateUrl: './edit-user.component.html',
   styleUrl: './edit-user.component.css'
@@ -29,6 +33,9 @@ export class EditUserComponent {
 
   isSuccess : boolean = false;
   successTitle : string = ''
+
+  isLoading : boolean = true;
+  isSubmiting : boolean = false;
 
   constructor(
     private userService: UserServiceService, 
@@ -61,6 +68,17 @@ export class EditUserComponent {
   ngOnInit(): void {
     this.userService.getUsuario().subscribe(datos => {
       this.user.patchValue(datos);
+      this.isLoading = false;
+    },
+    error => {
+      this.isLoading = false;
+      this.isError = true;
+      this.titleError = 'Ooops...'
+      this.errorMessage = typeof error.error.mensaje === 'string' ? 
+      error.error.mensaje : 
+      (Object.values(error.error.mensaje)).join(' ');
+
+      
     });
   }
 
@@ -68,11 +86,14 @@ export class EditUserComponent {
   guardarPerfil(): void {
     
     if (this.user.valid) {
+      this.isSubmiting = true;
       this.userService.updateUsuario(this.user.value).subscribe(
         response => {
+          this.isSubmiting = false;
           // Mensaje de exito
           this.isSuccess = true;
           this.successTitle = "Perfil actualizado con exito";
+          
           
           // Actualizo local storage
           localStorage.setItem('userdata', JSON.stringify({
@@ -87,7 +108,7 @@ export class EditUserComponent {
           }, 1000);
         },
         error => {
-
+          this.isSubmiting = false;
           this.isError = true;
           this.titleError = 'Error al actualizar'
           this.errorMessage = (Object.values(error.error.mensaje)).join(' ');

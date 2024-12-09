@@ -1,0 +1,69 @@
+<app-navbar></app-navbar>
+@defer {
+  <ng-content *ngIf="!isLoading; else loading">
+    <section class="container py-2 px-2 mt-5" *ngIf="products.length > 0; else noProducts">
+      <h2>Mis productos</h2>
+      <div class="row gx-4 gx-lg-3 row-cols-1 row-cols-md-2 row-cols-xl-4 justify-content-center">
+        <div class="col mb-5" *ngFor="let product of products">
+          <div class="card h-100 shadow-drop-center">
+            <!-- Imagen del producto-->
+            <img class="card-img-top img-limited-height" [src]="product.imageUrl" alt="{{ product.name }}"
+              *ngIf="product.imageUrl" />
+            <!-- Detalles del producto-->
+            <div class="card-body p-2 tracking-in-expand">
+              <div class="text-center">
+                <!-- Nombre del producto-->
+                <h5 class="fw-bolder">{{ product.name | capitalizeFirst}}</h5>
+                <!-- Precio del producto-->
+                <p>{{ product.price | customCurrencyFormat }}</p>
+                <p class="d-flex flex-column justify-content-center align-items-center gap-2">
+                  <span class="badge badge-cat">{{product.category | capitalizeFirst}}</span>
+                  <span class="badge text-bg-light">{{product.status | capitalizeFirst}}</span>
+                </p>
+                <p class="fw-lighter">Subido: <span>{{product.createDate | date:'dd-MM-YYYY'}}</span></p>
+              </div>
+            </div>
+            <!-- Acciones del producto-->
+            <div class="card-footer d-flex justify-content-center gap-2 pt-0 border-top-0 bg-transparent mb-3">
+              <div class="text-center"><a class="btn btn-outline-dark mt-auto"
+                  (click)="onViewProduct(product.id)">Modificar</a></div>
+              <div class="text-center"><a class="btn btn-outline-danger mt-auto"
+                  (click)="onDeleteProduct(product.id)">Eliminar</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pagination d-flex justify-content-center align-items-center">
+        <a class="btn custom-link" (click)="onPageChange(currentPage - 1)" *ngIf="currentPage !== 0">Anterior</a>
+        <span class="mx-2 text-center align-middle">Página {{ currentPage + 1 }} de {{ totalPages }}</span>
+        <a class="btn custom-link" (click)="onPageChange(currentPage + 1)"
+          *ngIf="currentPage + 2 <= totalPages">Siguiente</a>
+      </div>
+    </section>
+    <ng-template #noProducts>
+      <div class="container d-flex flex-column justify-content-center align-items-center">
+        <app-sgv-not-found></app-sgv-not-found>
+        <ng-content *ngIf="isError">
+    
+          <h3 class="text-center my-3">
+            {{errorMessage}}
+          </h3>
+        </ng-content>
+    
+        <ng-content *ngIf="!isError">
+          <h4 class="text-center my-3">¡Aún no tienes productos listados! Comparte tus increíbles productos con el mundo y
+            comienza a vender ahora. 🚀</h4>
+          <button [routerLink]="['/subir-producto']" class="btn btn-custom">Subir mi primer producto</button>
+        </ng-content>
+      </div>
+    </ng-template>
+    </ng-content>
+    <app-error-alert *ngIf="isErrorAlert" [message]="errorMessageAlert" [title]="errorTitleAlert"
+      (confirmation)="onConfirmationError()"></app-error-alert>
+    <ng-template #loading>
+      <app-spinner-load-notblock></app-spinner-load-notblock>
+    </ng-template>
+} @loading {
+  <app-spinner-load-notblock></app-spinner-load-notblock>
+}
+

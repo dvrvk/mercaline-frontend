@@ -3,7 +3,7 @@ import { ProductService, ProductResponseSummaryDTO, Page, FilterClass } from '..
 import { CommonModule } from '@angular/common';
 import { CustomCurrencyFormatPipe } from '../../utils/custom-currency/custom-currency-format.pipe';
 import { UserServiceService } from '../../services/user-service/user-service.service';
-import { Router, RouterLink, RouterModule, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink, RouterModule, RouterOutlet } from '@angular/router';
 import { CapitalizeFirstPipe } from '../../utils/capitalizeFirst/capitalize-first.pipe';
 import { CategoryService } from '../../services/category/category.service';
 import { SgvNotFoundComponent } from "../svg-icons/sgv-not-found/sgv-not-found.component";
@@ -12,6 +12,9 @@ import { OrderByProductsComponent } from '../order-by-products/order-by-products
 import { ErrorAlertComponent } from '../alerts/error-alert/error-alert.component';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Observable } from 'rxjs';
+import { SpinnerLoadNotblockComponent } from "../../utils/spinner-load-notblock/spinner-load-notblock.component";
+import { FavouritesIconComponent } from "../favourites-icon/favourites-icon.component";
+import { ModalFavComponent } from "../modal-fav/modal-fav.component";
 
 declare var Swal: any;
 
@@ -26,7 +29,11 @@ declare var Swal: any;
     FilterComponent,
     OrderByProductsComponent,
     ErrorAlertComponent,
-    RouterModule],
+    RouterModule,
+    SpinnerLoadNotblockComponent,
+    FavouritesIconComponent,
+    ModalFavComponent
+],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.css'
 })
@@ -42,6 +49,7 @@ export class ProductListComponent {
   // Categoria seleccionada
   selectedCategory: string = '';
   selectedCategoryId: number = 0;
+  categoryPage : number = 0;
 
   // Indiciador de filtros aplicados
   arefiltersApplied: boolean = false;
@@ -55,26 +63,50 @@ export class ProductListComponent {
   errorTitleAlert: string = ''
   isErrorAlert: boolean = false;
 
+  isLoading : boolean = true;
 
+  selectedProductId: number | null = null;
+
+  changedFav : boolean = false;
 
   constructor(
     private productService: ProductService,
     private UserService: UserServiceService,
     private router: Router,
     private categoryService: CategoryService,
-    private sanitizer: DomSanitizer) { }
+    private sanitizer: DomSanitizer,
+    private activatedRoute: ActivatedRoute) { }
 
   // Al inicio - cargar productos y suscribir los cambios de categoria
   ngOnInit(): void {
-    this.loadProducts(this.currentPage, this.pageSize);
+    // Para mantener la página al volver de detalles producto
+    this.activatedRoute.queryParams.subscribe((params) => {
+      this.categoryPage = params['page'] ? parseInt(params['page'], 10) : 0;
+      this.selectedCategoryId = params['category'] ? parseInt(params['category'], 10) : 0;
+      
+        if(this.selectedCategoryId == 0) {
+          this.loadProducts(this.categoryPage, this.pageSize);
+        } else {
+          
+          this.loadProductsByCategory(this.categoryPage, this.pageSize, this.selectedCategoryId);
+        }
+        
+      })
+
+
+    // this.loadProducts(this.currentPage, this.pageSize);
     this.categoryService.selectedCategory$.subscribe((category: any) => {
       if (Object.keys(category).length != 0) {
         this.selectedCategory = category[1];
         this.selectedCategoryId = category[0];
+
         this.loadProductsByCategory(0, this.pageSize, category[0]);
+        
       }
     });
+    
   }
+
 
   // Si cambian los productos
   ngOnChanges(): void {
@@ -165,12 +197,12 @@ export class ProductListComponent {
         this.totalPages = data.page.totalPages;
         this.currentPage = data.page.number;
         this.isError = false;
+        console.log(data)
 
         this.getImages(data.content);
       },
       (error) => {
-        console.error('Error al cargar los productos', error.error)
-
+        this.isLoading = false;
         const message = error.error && error.error.mensaje ? error.error.mensaje : "Ha ocurrido un error al cargar los productos. Por favor, inténtalo de nuevo"
         this.onError(message, "Error al cargar los productos");
 
@@ -224,13 +256,32 @@ export class ProductListComponent {
               product.imageUrl = product.imageUrl;
             }
           }
+          this.isLoading = false;
 
         },
         (error) => {
-          product.imageUrl = this.sanitizer.bypassSecurityTrustUrl('assets/images/not_found.png');
+          product.imageUrl = this.sanitizer.bypassSecurityTrustUrl('assets/images/image_not_available.png');
         }
       );
     });
+  }
+
+  onViewProduct(productId: number) : void {
+    this.router.navigate([`/detalles-producto/${productId}`], {
+      queryParams: { page: this.currentPage,
+                     category : this.selectedCategoryId
+                  }
+    });
+  }
+
+  onProductSelected(productId: number): void {
+    this.selectedProductId = productId;
+  }
+
+  onChangedFav(changed : boolean) {
+    if(changed) {
+      this.changedFav = !this.changedFav;
+    }
   }
 
 }

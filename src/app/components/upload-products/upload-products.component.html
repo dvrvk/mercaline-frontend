@@ -1,5 +1,6 @@
 <app-navbar></app-navbar>
 <section class="container rounded bg-white mt-md-5 mb-5 p-3 p-md-5">
+    <app-spinner-load [isLoading]="isLoading"></app-spinner-load>
     <div class="row">
         <div class="col-md-4 d-flex justify-content-center align-items-center w-md-100">
             <app-svg-upload-product></app-svg-upload-product>
@@ -56,10 +57,10 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="category" class="form-label">Estado</label>
+                    <label for="category" class="form-label">Categoría</label>
                     <select id="category" formControlName="category" class="form-select"
                         [ngClass]="{'is-invalid': productForm.get('category')?.invalid && productForm.get('category')?.touched}">
-                        <option value="">Seleccione el estado</option>
+                        <option value="">Seleccione el categoría</option>
                         <option *ngFor="let category of categoriesList" [value]="category.id">{{ category.name |
                             capitalizeFirst }}</option>
                     </select>
