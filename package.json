@@ -20,6 +20,7 @@
     "@angular/router": "^18.2.0",
     "angular-front": "file:",
     "cookieconsent": "^3.1.1",
+    "google-maps": "^4.3.3",
     "ngx-cookieconsent": "^6.0.0",
     "rxjs": "~7.8.0",
     "sweetalert2": "^11.14.4",
