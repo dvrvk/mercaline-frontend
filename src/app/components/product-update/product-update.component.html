@@ -72,6 +72,33 @@
                     </div>
                 </div>
                 <div class="mb-3">
+                    <app-maps [cp]="cpMap"></app-maps>
+                    <label for="cp" class="form-label">Código postal</label>
+                    <div class="d-flex gap-3 pb-2">
+                        <div class="form-check">
+                            <input class="form-check-input custom-radio" type="radio" name="cpOption"
+                                id="no-modificar-cp" formControlName="cpOption" value="0">
+                            <label class="form-check-label" for="no-modificar">
+                                No modificar
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input custom-radio" type="radio" name="cpOption"
+                                id="modificar-cp" formControlName="cpOption" value="1">
+                            <label class="form-check-label" for="modificar-cp">
+                                Modificar código postal
+                            </label>
+                            <input id="cp" type="text" formControlName="cp" class="form-control"
+                            placeholder="Código postal"
+                            [ngClass]="{'is-invalid': !validateCp()}"
+                            [hidden]="productForm.get('cpOption')?.value == '0'" />
+                            <div class="invalid-feedback">
+                                {{'Se requiere un código postal español valido (xxxxx).'}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
                     <label for="image" class="form-label">Imagen del Producto</label>
                     <div class="d-flex gap-3 pb-2">
                         <div class="form-check">

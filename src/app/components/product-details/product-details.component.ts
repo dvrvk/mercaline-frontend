@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { NavbarComponent } from "../navbar/navbar.component";
 import { CustomCurrencyFormatPipe } from '../../utils/custom-currency/custom-currency-format.pipe';
 import { CommonModule, NgClass } from '@angular/common';
@@ -10,7 +10,8 @@ import { SpinnerLoadNotblockComponent } from "../../utils/spinner-load-notblock/
 import { CarouselImagesComponent } from "../carousel-images/carousel-images.component";
 import { FavouritesIconComponent } from "../favourites-icon/favourites-icon.component";
 import { ModalFavComponent } from "../modal-fav/modal-fav.component";
-
+import { GoogleMapsService } from '../../services/google-maps.service';
+import { MapsComponent } from '../maps/maps.component';
 
 @Component({
   selector: 'app-product-details',
@@ -24,7 +25,8 @@ import { ModalFavComponent } from "../modal-fav/modal-fav.component";
     SpinnerLoadNotblockComponent,
     CarouselImagesComponent,
     FavouritesIconComponent,
-    ModalFavComponent
+    ModalFavComponent,
+    MapsComponent
 ],
   templateUrl: './product-details.component.html',
   styleUrl: './product-details.component.css'
@@ -45,8 +47,11 @@ export class ProductDetailsComponent implements OnInit {
 
   constructor(private productService: ProductService,
               private route : ActivatedRoute,
-              private sanitizer: DomSanitizer
+              private sanitizer: DomSanitizer,
+              private googleMapsService : GoogleMapsService,
   ) {}
+
+  
 
   ngOnInit(): void {
     
@@ -71,6 +76,7 @@ export class ProductDetailsComponent implements OnInit {
     this.productService.getProductDetails(id).subscribe(
       response => {
         this.isProductLoading = false;
+        console.log(response)
         this.product = response;
       },
       error => {

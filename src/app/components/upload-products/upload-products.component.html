@@ -69,6 +69,16 @@
                     </div>
                 </div>
                 <div class="mb-3">
+                    <label for="cp" class="form-label">Código postal</label>
+                    <input id="cp" formControlName="cp" type="text" class="form-control"
+                        [ngClass]="{'is-invalid': productForm.get('cp')?.invalid && productForm.get('cp')?.touched}" />
+                    <div class="invalid-feedback">
+                        <app-error-messages [control]="productForm.get('cp')" [errorMessage]="{
+                  pattern: 'El código postal tiene que estar formado por 5 dígitos.'
+                }"></app-error-messages>
+                    </div>
+                </div>
+                <div class="mb-3">
                     <label for="image" class="form-label">Imagen del Producto</label>
                     <input id="image" type="file" formControlName="urlImage" class="form-control"
                         [ngClass]="{'is-invalid': selectedFiles.length <= 0 && productForm.get('urlImage')?.touched}"
@@ -86,4 +96,5 @@
     </div>
 </section>
 <app-success-alert *ngIf="isSuccess" [title]="successTitle"></app-success-alert>
-<app-error-alert *ngIf="isError" [message]="errorMessage" [title]="titleError" (confirmation)="onConfirmationError()"></app-error-alert>
+<app-error-alert *ngIf="isError" [message]="errorMessage" [title]="titleError"
+    (confirmation)="onConfirmationError()"></app-error-alert>
