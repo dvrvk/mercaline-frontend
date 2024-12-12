@@ -8,9 +8,11 @@ import { CapitalizeFirstPipe } from '../../utils/capitalizeFirst/capitalize-firs
 import { CommonModule } from '@angular/common';
 import { UserServiceService } from '../../services/user-service/user-service.service';
 import { FavoritesService, FavoriteListsResponseDTO, Page } from '../../services/favorites-service/favorites.service';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { SpinnerLoadNotblockComponent } from "../../utils/spinner-load-notblock/spinner-load-notblock.component";
 import { ModalCreateListFavComponent } from "../modal-create-list-fav/modal-create-list-fav.component";
+
+declare var Swal: any;
 
 @Component({
   selector: 'app-favorites',
@@ -53,10 +55,15 @@ export class FavoritesComponent implements OnInit {
   constructor(
     private UserService: UserServiceService,
     private favoritesService: FavoritesService,
+    private route : ActivatedRoute,
     private router: Router) { }
 
   // Al inicio - cargar listas de favoritos
   ngOnInit(): void {
+    this.route.queryParams.subscribe((params) => {
+      // Si el parámetro 'page' existe, lo usamos; si no, usamos 0
+      this.currentPage = params['page'] ? parseInt(params['page'], 10) : 0;
+    });
     this.loadFavoriteLists(this.currentPage, this.pageSize);
   }
 
@@ -152,6 +159,45 @@ export class FavoritesComponent implements OnInit {
       // Si no se encuentra la lista, agregarla
       this.favoriteLists.push(list);
     }
+  }
+
+  onDeleteAList(id: number): void {
+    Swal.fire({
+      title: '¿Estás seguro de eliminar el producto de tu lista de favoritos?',
+      text: "¡No podrás revertir esto!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#48be79',
+      confirmButtonText: 'Sí, eliminarlo',
+      cancelButtonText: 'Cancelar'
+    }).then((result: { isConfirmed: any; }) => {
+      if (result.isConfirmed) {
+        this.favoritesService.deleteList(id).subscribe(
+          response => {
+            Swal.fire({
+              title: '¡Eliminado!',
+              text: 'Tu producto ha sido eliminado de tu lista de favoritos.',
+              icon: 'success',
+              confirmButtonText: 'Ok',
+              confirmButtonColor: '#48be79'
+          });
+            setTimeout(() => {
+              window.location.reload();
+            }, 1000);
+           
+          },
+          error => {
+            console.error('Error al eliminar el producto de tu lista de favoritos', error);
+            Swal.fire(
+              'Error',
+              error.error?.mensaje || 'Hubo un problema al eliminar tu producto de tu lista de favoritos. Inténtalo de nuevo más tarde.',
+              'error'
+            );
+          }
+        );
+      }
+    })
   }
   
 }
