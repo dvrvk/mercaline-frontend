@@ -2,7 +2,7 @@
 @defer {
 <ng-content *ngIf="!isLoading; else loading">
 <section class="container py-2 px-2 mt-5" *ngIf="list.length > 0; else noProducts">
-  <button class="btn btn-outline-custom" [routerLink]="['/favorites']">Volver</button>
+  <button class="btn btn-outline-custom" [routerLink]="['/favorites']" [queryParams]="{'page': currentPage}">Volver</button>
   <div class="btn mb-4 d-flex justify-content-center align-items-center">
     <h2>{{list[0].nameList}}</h2>
   </div>
@@ -31,11 +31,6 @@
         </div>
       </div>
     </div>
-  </div>
-  <div class="pagination d-flex justify-content-center align-items-center">
-    <a class="btn custom-link" (click)="onPageChange(currentPage - 1)" *ngIf="currentPage !== 0">Anterior</a>
-    <span class="mx-2 text-center align-middle">Página {{ currentPage + 1 }} de {{ totalPages }}</span>
-    <a class="btn custom-link" (click)="onPageChange(currentPage + 1)" *ngIf="currentPage + 2 <= totalPages">Siguiente</a>
   </div>
 </section>
 <ng-template #noProducts>

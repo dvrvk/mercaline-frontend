@@ -36,11 +36,11 @@ export class ProductsInAListComponent implements OnInit {
 
   list: FavoriteProductsInAListResponseDTO[] = [];
 
-  totalElements: number = 0;
-  totalPages: number = 0;
   currentPage: number = 0;
   pageSize: number = 12;
   selectedCategoryId: number = 0;
+
+
   isError: boolean = false;
   errorMessage: string =
     'Ups, lo sentimos no hemos podido conectarnos al servidor. Por favor, intentalo más tarde.';
@@ -59,17 +59,18 @@ export class ProductsInAListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.loadUserProducts(this.currentPage, this.pageSize);
+    this.route.queryParams.subscribe((params) => {
+      // Si el parámetro 'page' existe, lo usamos; si no, usamos 0
+      this.currentPage = params['page'] ? parseInt(params['page'], 10) : 0;
+    });
+    this.loadUserProducts();
   }
 
-  loadUserProducts(page: number, size: number): void {
+  loadUserProducts(): void {
     const id = parseInt(this.route.snapshot.paramMap.get('id') || '0', 10);
-      this.favoritesService.getFavoriteProductsInAList(page, size, id).subscribe(
+      this.favoritesService.getFavoriteProductsInAList(id).subscribe(
         (data) => {
-          this.list = data.content;
-          this.totalElements = data.page.totalElements;
-          this.totalPages = data.page.totalPages;
-          this.currentPage = data.page.number;
+          this.list = data;
           this.isError = false;
 
           this.getImages()
@@ -83,12 +84,6 @@ export class ProductsInAListComponent implements OnInit {
           this.isError = true;
         }
       );
-  }
-
-  onPageChange(page: number): void {
-    if (page >= 0 && page < this.totalPages) {
-      this.loadUserProducts(page, this.pageSize);
-    }
   }
 
   private onError(message: string, title: string): void {
@@ -129,7 +124,6 @@ export class ProductsInAListComponent implements OnInit {
   onViewProduct(productId: number, listId : number) : void {
     this.router.navigate([`/detalles-producto/${productId}`], {
       queryParams: { page: this.currentPage,
-                     category : this.selectedCategoryId,
                      referrer : `/favorite-list/${listId}`
                   }
     });

@@ -24,13 +24,12 @@ export class FavoritesService {
     
   }
 
-  getFavoriteProductsInAList(page: number, size: number, idList: number): Observable<Page<FavoriteProductsInAListResponseDTO>> {
+  getFavoriteProductsInAList(idList: number): Observable<Array<FavoriteProductsInAListResponseDTO>> {
     
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    const params = new HttpParams().set('page', page.toString()).set('size', size.toString());
 
-    return this.http.get<Page<FavoriteProductsInAListResponseDTO>>(this.apiUrlFavoriteProductsInAlist + idList, {headers, params});
+    return this.http.get<Array<FavoriteProductsInAListResponseDTO>>(this.apiUrlFavoriteProductsInAlist + idList, {headers});
     
   }
 
@@ -69,6 +68,13 @@ export class FavoritesService {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
     return this.http.put<number>(`http://localhost:8080/user/edit-list-fav`, {name, id}, {headers});
+  }
+
+  deleteList(idList : number) {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.delete<number>(`http://localhost:8080/user/delete-list-fav/${idList}`, {headers});
   }
 
 }
