@@ -14,6 +14,8 @@ import { SpinnerLoadComponent } from "../../utils/spinner-load/spinner-load.comp
 import { CustomCurrencyFormatPipe } from '../../utils/custom-currency/custom-currency-format.pipe';
 import { SpinnerLoadNotblockComponent } from "../../utils/spinner-load-notblock/spinner-load-notblock.component";
 import { timeout } from 'rxjs';
+import { MapsComponent } from "../maps/maps.component";
+import { NominatimService } from '../../services/coord/nominatim.service';
 
 @Component({
   selector: 'app-product-update',
@@ -30,7 +32,8 @@ import { timeout } from 'rxjs';
     CarouselImagesComponent,
     SpinnerLoadComponent,
     RouterLink,
-    SpinnerLoadNotblockComponent
+    SpinnerLoadNotblockComponent,
+    MapsComponent
 ],
   templateUrl: './product-update.component.html',
   styleUrl: './product-update.component.css'
@@ -40,6 +43,7 @@ export class ProductUpdateComponent {
   selectedFiles: File[] = [];
   selectedOption: string = 'no-modificar';
   imagesLength: number = 0;
+  cpMap : string = '';
 
   statusList: Status[] = [];
   categoriesList: Categories[] = [];
@@ -58,6 +62,7 @@ export class ProductUpdateComponent {
     private productService: ProductService,
     private router: Router,
     private route: ActivatedRoute,
+    private coordService : NominatimService
   ) {
     // Inicializar el formulario reactivo
     this.productForm = this.fb.group({
@@ -68,6 +73,8 @@ export class ProductUpdateComponent {
       status: ['', Validators.required],
       category: ['', Validators.required],
       urlImage: [''],
+      cp: [''],
+      cpOption : ['0', [Validators.required]],
       selectedOption: ['no-modificar']
     });
   }
@@ -93,8 +100,9 @@ export class ProductUpdateComponent {
                 description: product.description,
                 price: product.price,
                 status: product.statusId,
-                category: product.id_category,
+                category: product.id_category
               });
+              this.cpMap = product.cp;
               this.imagesLength = product.imageUrl.split(';').length;
               this.isLoading = false;
             },
@@ -176,8 +184,8 @@ export class ProductUpdateComponent {
   }
 
   // Enviar el formulario
-  onSubmit(): void {
-    if (this.productForm.valid && this.validateImages()) {
+  async onSubmit(): Promise<void> {
+    if (this.productForm.valid && this.validateImages() && this.validateCp()) {
       const formData = new FormData();
       formData.append('id', this.productForm.get('id')?.value)
       formData.append('name', (this.productForm.get('name')?.value).toUpperCase());
@@ -193,6 +201,12 @@ export class ProductUpdateComponent {
           formData.append('images', file, file.name);
         });
       }
+
+      if(this.productForm.get('cpOption')?.value == '1') {
+        const coords = await this.getCoord(this.productForm.get('cp')?.value);
+        formData.append('cp', coords);
+      }
+
       this.isLoading = true;
       this.productService.putProduct(formData).subscribe(
         next => {
@@ -218,6 +232,19 @@ export class ProductUpdateComponent {
       this.isError = true;
       this.titleError = 'Oops...'
       this.errorMessage = 'Algún campo del formulario no es válido.';
+    }
+  }
+
+  validateCp() : boolean {
+    const cp = this.productForm.get('cp')?.value
+    const cpRegex = /^\d{5}$/; 
+    switch (this.productForm.get('cpOption')?.value) {
+      case '0': 
+        return true;
+      case '1': 
+        return cpRegex.test(cp);
+      default: 
+        return false;
     }
   }
 
@@ -261,6 +288,20 @@ export class ProductUpdateComponent {
 
   getProductID(): number {
     return parseInt(this.productForm.get('id')?.value || '0', 10);
+  }
+
+  getCoord(cp: string) : Promise<string> {
+    return new Promise((resolve, reject) => {
+      this.coordService.getCoordinates(cp).subscribe(
+        (response) => {
+          resolve(response.lat + "," + response.lng);
+        }, error =>{
+          console.log(error)
+          reject('');
+        }
+      )
+    })
+
   }
 
 }

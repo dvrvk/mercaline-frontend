@@ -1,0 +1,8 @@
+<div #mapContainer id="mapContainer" class="rounded" style="height: 200px; width: 100%;" *ngIf="isMapLoaded; else noMapTemplate"></div>
+<ng-template #noMapTemplate>
+  <div class="no-map border">
+    <!-- Contenido que se mostrará si no se puede cargar el mapa -->
+    <p class="p-3 text-center"><i class="bi bi-exclamation-triangle text-warning"></i> No se pudo cargar el mapa. Por favor, intenta de nuevo más tarde.</p>
+  </div>
+</ng-template>
+

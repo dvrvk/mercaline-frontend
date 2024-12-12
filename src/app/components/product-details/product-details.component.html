@@ -1,7 +1,7 @@
 <app-navbar></app-navbar>
 <div class="container mt-5" *ngIf="!isProductLoading; else loading">
-    <div class="row ,mx-2 my-2 mx-md-4 my-md-4">
-      <div class="col-lg-6">
+    <div class="row mx-2 my-2 mx-md-4 my-md-4">
+      <div class="col-lg-6 my-auto">
         <app-carousel-images [productID]="getProductID()"></app-carousel-images>
       </div>
       <div class="col-lg-6 mt-lg-5">
@@ -12,6 +12,9 @@
           <p class="fs-3 fw-bold price">{{ product.price | customCurrencyFormat }}</p>
           <p><span class="badge badge-cat fs-6">{{ product.status | capitalizeFirst }}</span></p>
           <p>{{ product.description }}</p>
+        </div>
+        <div>
+          <app-maps [cp]="product.cp"></app-maps>
         </div>
         <p class="text-secondary mt-4 mb-3 mx-md-2  border-bottom">Detalles del vendedor:</p>
         <div class="mx-md-4 my-4">
@@ -34,7 +37,6 @@
           <button class="btn btn-custom mb-4">Comprar</button>
           <button class="btn btn-outline-custom mb-4" [routerLink]="[this.referrer]" [queryParams]="{ page: currentPage, category: currentCategory }">Volver</button>
         </div>
-       
       </div>
     </div>
   </div>
