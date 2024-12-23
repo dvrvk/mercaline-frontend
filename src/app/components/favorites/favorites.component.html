@@ -29,7 +29,7 @@
           <!-- Product actions-->
           <div class="card-footer p-4 pt-0 border-top-0 bg-transparent d-flex justify-content-center gap-2">
             <div class="text-center">
-              <a [routerLink]="['/favorite-list', favoriteList.id]"
+              <a [routerLink]="['/favorite-list', favoriteList.id]" [queryParams]="{'page': currentPage}"
                 [ngClass]="{ 'disabled': favoriteList.productSize === 0 }" class="btn btn-custom mt-auto">Ver lista</a>
             </div>
             <div class="dropdown">
@@ -38,7 +38,7 @@
               </button>
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" (click)="onOption('update')" (click)="selectFavList(favoriteList.id, favoriteList.nameList)" data-bs-toggle="modal" data-bs-target="#favCreateListModal">Modificar</a></li>
-                <li><a class="dropdown-item text-danger" href="#">Eliminar</a></li>
+                <li><a class="dropdown-item text-danger" (click)="onDeleteAList(favoriteList.id)">Eliminar</a></li>
               </ul>
             </div>
           </div>
