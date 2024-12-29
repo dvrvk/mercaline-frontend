@@ -62,6 +62,7 @@ export class MyProductsComponent implements OnInit {
   loadUserProducts(page: number, size: number): void {
       this.productService.getUserProducts(page, size).subscribe(
         (data) => {
+          console.log('Productos del usuario cargados', data);
           this.products = data.content;
           this.totalElements = data.page.totalElements;
           this.totalPages = data.page.totalPages;
@@ -121,7 +122,6 @@ export class MyProductsComponent implements OnInit {
             setTimeout(() => {
               window.location.reload();
             }, 1000);
-           
           },
           error => {
             console.error('Error al eliminar el producto', error);
@@ -169,4 +169,75 @@ export class MyProductsComponent implements OnInit {
       );
     });
   }
+  
+  markAsSold(productId: number): void { 
+    Swal.fire({ 
+      title: '¿Has vendido este producto?', 
+      text: "¡Este cambio no se puede deshacer!", 
+      icon: 'warning', 
+      showCancelButton: true, 
+      confirmButtonColor: '#d33', 
+      cancelButtonColor: '#48be79', 
+      confirmButtonText: 'Sí, marcar como vendido', 
+      cancelButtonText: 'Cancelar' 
+    }).then((result: { isConfirmed: any; }) => 
+      { if (result.isConfirmed) { 
+        this.productService.markProductAsSold(productId).subscribe( response => { 
+          Swal.fire({ 
+            title: '¡Marcado como vendido!', 
+            text: 'Tu producto ha sido marcado como vendido.', 
+            icon: 'success', 
+            confirmButtonText: 'Ok', 
+            confirmButtonColor: '#48be79' 
+          }); 
+          setTimeout(() => {
+            window.location.reload(); 
+          }, 1000); 
+        }, 
+        error => { 
+          console.error('Error al marcar el producto como vendido', error); 
+          Swal.fire( 
+            'Error', error.error?.mensaje || 'Hubo un problema al marcar tu producto como vendido. Inténtalo de nuevo más tarde.', 'error' ); 
+          } ); 
+        } }); 
+      }
+
+      markAsAvailable(productId: number): void {
+        Swal.fire({
+          title: '¿Quieres hacer disponible este producto nuevamente?',
+          text: "¡Podrás volver a venderlo!",
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonColor: '#48be79',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sí, hacerlo disponible',
+          cancelButtonText: 'Cancelar'
+        }).then((result: { isConfirmed: any; }) => {
+          if (result.isConfirmed) {
+            this.productService.markProductAsAvailable(productId).subscribe(
+              response => {
+                Swal.fire({
+                  title: '¡Disponible nuevamente!',
+                  text: 'Tu producto ahora está disponible para la venta.',
+                  icon: 'success',
+                  confirmButtonText: 'Ok',
+                  confirmButtonColor: '#48be79'
+                });
+                setTimeout(() => {
+                  window.location.reload();
+                }, 1000);
+              },
+              error => {
+                console.error('Error al hacer disponible el producto', error);
+                Swal.fire(
+                  'Error',
+                  error.error?.mensaje || 'Hubo un problema al hacer tu producto disponible. Inténtalo de nuevo más tarde.',
+                  'error'
+                );
+              }
+            );
+          }
+        });
+      }
+      
 }
