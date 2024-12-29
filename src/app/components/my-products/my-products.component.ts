@@ -62,6 +62,7 @@ export class MyProductsComponent implements OnInit {
   loadUserProducts(page: number, size: number): void {
       this.productService.getUserProducts(page, size).subscribe(
         (data) => {
+          console.log('Productos del usuario cargados', data);
           this.products = data.content;
           this.totalElements = data.page.totalElements;
           this.totalPages = data.page.totalPages;

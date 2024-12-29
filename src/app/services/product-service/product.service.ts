@@ -246,6 +246,7 @@ export interface ProductResponseSummaryDTO {
   category: string;
   createDate: Date;
   seller: ResponseUserProductDTO;
+  sold: boolean;
 }
 
 export interface ResponseUserProductDTO {

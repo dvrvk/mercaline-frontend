@@ -5,7 +5,7 @@
       <h2 class="text-center mb-4">Mis productos</h2>
       <div class="row gx-4 gx-lg-3 row-cols-1 row-cols-md-2 row-cols-xl-4 justify-content-center">
         <div class="col mb-5" *ngFor="let product of products">
-          <div class="card h-100 shadow-drop-center" [ngClass]="{'sold': product.status === 'vendido'}">
+          <div class="card h-100 shadow-drop-center" [ngClass]="{'sold': product.sold === true}">
             <!-- Imagen del producto-->
             <img class="card-img-top img-limited-height" [src]="product.imageUrl" alt="{{ product.name }}" *ngIf="product.imageUrl" />
             <!-- Detalles del producto-->
@@ -25,14 +25,14 @@
             <!-- Acciones del producto-->
             <div class="card-footer d-flex justify-content-center gap-2 pt-0 border-top-0 bg-transparent mb-2">
               <!-- modificar -->
-              <div class="text-center"><a class="btn btn-outline-dark mb-0" (click)="onViewProduct(product.id)">Modificar</a></div>
+              <div class="text-center"><button class="btn btn-outline-dark mb-0" (click)="onViewProduct(product.id)">Modificar</button></div>
               <!-- eliminar -->
-              <div class="text-center"><a class="btn btn-outline-danger mb-0" (click)="onDeleteProduct(product.id)">Eliminar</a></div>
+              <div class="text-center"><button class="btn btn-outline-danger mb-0" (click)="onDeleteProduct(product.id)">Eliminar</button></div>
             </div>
             <!-- vendido -->
             <div class="text-center">
-              <a class="btn btn-outline-success mb-3" *ngIf="product.status !== 'vendido'" (click)="markAsSold(product.id)">Marcar como Vendido</a>
-              <a class="btn btn-outline-primary mb-3" *ngIf="product.status === 'vendido'" (click)="markAsAvailable(product.id)">Poner a la venta</a>
+              <a class="btn btn-outline-success mb-3" *ngIf="product.sold == false" (click)="markAsSold(product.id)">Marcar como Vendido</a>
+              <a class="btn btn-outline-primary mb-3" *ngIf="product.sold" (click)="markAsAvailable(product.id)">Poner a la venta</a>
             </div>
           </div>
         </div>
