@@ -93,6 +93,7 @@ export interface ProductResponseDTO {
   imageUrl: SafeUrl | string,
   price: number,
   category: string
+  sold: boolean
 }
 
 export interface FavoriteProductsInAListResponseDTO {

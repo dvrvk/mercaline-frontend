@@ -48,3 +48,8 @@
     background-color: var(--darker-main-color); 
 
 }
+
+.sold {
+    background-color: #e0e0e0;
+    opacity: 0.6; 
+  }
