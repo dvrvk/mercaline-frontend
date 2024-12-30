@@ -2,26 +2,29 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
 import { SafeUrl } from '@angular/platform-browser';
+import { environment } from '../../../environments/environment';
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductService {
-  private apiUrlCategories = 'http://localhost:8080/products/categories';
-  private apiUrlStatus = 'http://localhost:8080/products/status';
-  private apiUrlUser = 'http://localhost:8080/user/products';
-  private apiUrlfindByCategory = `http://localhost:8080/products/category/`;
-  private apiUrlFilter = 'http://localhost:8080/products/filter2';
-  private apiUrlUpload = 'http://localhost:8080/products/create';
-  private apiUrlImageMain = 'http://localhost:8080/images/main/';
-  private apiUrlImages = 'http://localhost:8080/images';
-  private apiUrlProductDetails = 'http://localhost:8080/products/';
-  private apiUrlProductIsMine = 'http://localhost:8080/products/is-mine/';
-  private apiUrlUpdate = 'http://localhost:8080/products/update';
-  private apiUrlUserProducts = 'http://localhost:8080/products/myproducts';
-  private apiUrlDeleteProduct = 'http://localhost:8080/products/delete/';
-  private apiUrlMarkAsSold = 'http://localhost:8080/products/mark-as-sold/';
-  private apiUrlMarkAsAvailable = 'http://localhost:8080/products/mark-as-available/';
+  private apiUrl = environment.apiUrl;
+  private apiUrlCategories = this.apiUrl + '/products/categories';
+  private apiUrlStatus = this.apiUrl + '/products/status';
+  private apiUrlUser = this.apiUrl + '/user/products';
+  private apiUrlfindByCategory = this.apiUrl + `/products/category/`;
+  private apiUrlFilter = this.apiUrl + '/products/filter2';
+  private apiUrlUpload = this.apiUrl + '/products/create';
+  private apiUrlImageMain = this.apiUrl + '/images/main/';
+  private apiUrlImages = this.apiUrl + '/images';
+  private apiUrlProductDetails = this.apiUrl + '/products/';
+  private apiUrlProductIsMine = this.apiUrl + '/products/is-mine/';
+  private apiUrlUpdate = this.apiUrl + '/products/update';
+  private apiUrlUserProducts = this.apiUrl + '/products/myproducts';
+  private apiUrlDeleteProduct = this.apiUrl + '/products/delete/';
+  private apiUrlMarkAsSold = this.apiUrl + '/products/mark-as-sold/';
+  private apiUrlMarkAsAvailable = this.apiUrl + '/products/mark-as-available/';
 
   constructor(private http: HttpClient) {}
 

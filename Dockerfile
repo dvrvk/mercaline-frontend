@@ -8,10 +8,10 @@ WORKDIR /app
 COPY . .
 
 # Instalar las dependencias de la aplicación
-RUN npm install
+RUN npm install 
 
 # Compilar la aplicación Angular
-RUN npm run build
+RUN npm run build -- --configuration production
 
 # Usar una imagen de Nginx para servir la aplicación
 FROM nginx:1.19
