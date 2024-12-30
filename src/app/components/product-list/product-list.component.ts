@@ -166,7 +166,7 @@ export class ProductListComponent {
     this.productService.getProductsByCategory(page, size, categoryId).subscribe(
       (data: Page<ProductResponseSummaryDTO>) => {
 
-        this.products = data.content;
+        this.products = data.content.filter(product => product.status !== 'vendido' );
         this.totalElements = data.page.totalElements;
         this.totalPages = data.page.totalPages;
         this.currentPage = data.page.number;
@@ -192,7 +192,7 @@ export class ProductListComponent {
     this.productService.getProduct(page, size).subscribe(
       (data: Page<ProductResponseSummaryDTO>) => {
 
-        this.products = data.content;
+        this.products = data.content.filter(product => product.status !== 'vendido');
         this.totalElements = data.page.totalElements;
         this.totalPages = data.page.totalPages;
         this.currentPage = data.page.number;

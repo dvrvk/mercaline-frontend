@@ -7,3 +7,16 @@
     background-color: var(--darker-main-color);
     color: white;
 }
+
+.sold {
+    background-color: #e0e0e0; /* Color gris claro */
+    opacity: 0.6; /* Hacer la tarjeta más transparente */
+  }
+  
+  .sold * {
+    pointer-events: none; /* Deshabilitar interacciones con todos los elementos dentro de la tarjeta */
+  }
+  
+  .sold button, .sold a.btn {
+    pointer-events: auto; /* Permitir interacciones con los botones y enlaces */
+  }

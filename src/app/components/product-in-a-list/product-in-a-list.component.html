@@ -8,7 +8,7 @@
   </div>
   <div class="row gx-4 gx-lg-3 row-cols-1 row-cols-md-2 row-cols-xl-4 justify-content-center">
     <div class="col mb-5" *ngFor="let product of list">
-      <div class="card h-100 shadow-drop-center">
+      <div class="card h-100 shadow-drop-center" [ngClass]="{'sold': product.products.sold === true}">
         <!-- Imagen del producto-->
         <img class="card-img-top img-limited-height" [attr.src]="product.products.imageUrl" alt="{{ product.products.name }}" *ngIf="product.products.imageUrl" />
         <!-- Detalles del producto-->
@@ -21,6 +21,7 @@
             <p class="d-flex flex-column justify-content-center align-items-center gap-2">
               <span class="badge badge-cat">{{product.products.category | capitalizeFirst}}</span>
               <span class="badge text-bg-light">{{product.products.status | capitalizeFirst}}</span>
+              <span *ngIf="product.products.sold" class="badge text-bg-danger">{{"Vendido" | capitalizeFirst}}</span>
             </p>
           </div>
         </div>
