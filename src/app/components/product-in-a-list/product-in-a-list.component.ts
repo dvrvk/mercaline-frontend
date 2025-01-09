@@ -71,8 +71,8 @@ export class ProductsInAListComponent implements OnInit {
       this.favoritesService.getFavoriteProductsInAList(id).subscribe(
         (data) => {
           this.list = data;
+          console.log(data)
           this.isError = false;
-
           this.getImages()
         },
         (error) => {
