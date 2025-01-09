@@ -80,13 +80,6 @@ export class FavoritesService {
     return this.http.delete<number>(`${this.apiUrl}/user/delete-list-fav/${idList}`, {headers});
   }
 
-  deleteList(idList : number) {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-    return this.http.delete<number>(`http://localhost:8080/user/delete-list-fav/${idList}`, {headers});
-  }
-
 }
 
 export interface FavoriteListsResponseDTO {
