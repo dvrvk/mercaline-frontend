@@ -13,7 +13,7 @@ export class ProductService {
   private apiUrlStatus = 'http://localhost:8080/products/status';
   private apiUrlUser = 'http://localhost:8080/user/products'
   private apiUrlfindByCategory = `http://localhost:8080/products/category/`;
-  private apiUrlFilter = 'http://localhost:8080/products/filter2';
+  private apiUrlFilter = 'http://localhost:8080/products/filter';
   private apiUrlUpload = 'http://localhost:8080/products/create';
   private apiUrlImageMain = 'http://localhost:8080/images/main/'
   private apiUrlImages = 'http://localhost:8080/images'
