@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavbarComponent } from "../navbar/navbar.component";
 
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Categories, ProductService, Status } from '../../services/product-service/product.service';
 import { ErrorMessagesComponent } from "../validation/error-messages/error-messages.component";
 import { CommonModule } from '@angular/common';
@@ -12,6 +12,10 @@ import { ErrorAlertComponent } from "../alerts/error-alert/error-alert.component
 import { CarouselImagesComponent } from "../carousel-images/carousel-images.component";
 import { SpinnerLoadComponent } from "../../utils/spinner-load/spinner-load.component";
 import { CustomCurrencyFormatPipe } from '../../utils/custom-currency/custom-currency-format.pipe';
+import { SpinnerLoadNotblockComponent } from "../../utils/spinner-load-notblock/spinner-load-notblock.component";
+import { timeout } from 'rxjs';
+import { MapsComponent } from "../maps/maps.component";
+import { NominatimService } from '../../services/coord/nominatim.service';
 
 @Component({
   selector: 'app-product-update',
@@ -26,7 +30,10 @@ import { CustomCurrencyFormatPipe } from '../../utils/custom-currency/custom-cur
     SuccessAlertComponent,
     ErrorAlertComponent,
     CarouselImagesComponent,
-    SpinnerLoadComponent
+    SpinnerLoadComponent,
+    RouterLink,
+    SpinnerLoadNotblockComponent,
+    MapsComponent
 ],
   templateUrl: './product-update.component.html',
   styleUrl: './product-update.component.css'
@@ -36,6 +43,7 @@ export class ProductUpdateComponent {
   selectedFiles: File[] = [];
   selectedOption: string = 'no-modificar';
   imagesLength: number = 0;
+  cpMap : string = '';
 
   statusList: Status[] = [];
   categoriesList: Categories[] = [];
@@ -54,6 +62,7 @@ export class ProductUpdateComponent {
     private productService: ProductService,
     private router: Router,
     private route: ActivatedRoute,
+    private coordService : NominatimService
   ) {
     // Inicializar el formulario reactivo
     this.productForm = this.fb.group({
@@ -64,6 +73,8 @@ export class ProductUpdateComponent {
       status: ['', Validators.required],
       category: ['', Validators.required],
       urlImage: [''],
+      cp: [''],
+      cpOption : ['0', [Validators.required]],
       selectedOption: ['no-modificar']
     });
   }
@@ -89,15 +100,17 @@ export class ProductUpdateComponent {
                 description: product.description,
                 price: product.price,
                 status: product.statusId,
-                category: product.id_category,
+                category: product.id_category
               });
-              this.imagesLength = product.imageURL.split(';').length;
+              this.cpMap = product.cp;
+              this.imagesLength = product.imageUrl.split(';').length;
               this.isLoading = false;
             },
             error => {
               this.isError = true;
               this.titleError = "Ooops...";
               this.errorMessage = "No se han podido cargar los productos."
+              this.isLoading = false;
             }
           )
         },
@@ -171,8 +184,8 @@ export class ProductUpdateComponent {
   }
 
   // Enviar el formulario
-  onSubmit(): void {
-    if (this.productForm.valid && this.validateImages()) {
+  async onSubmit(): Promise<void> {
+    if (this.productForm.valid && this.validateImages() && this.validateCp()) {
       const formData = new FormData();
       formData.append('id', this.productForm.get('id')?.value)
       formData.append('name', (this.productForm.get('name')?.value).toUpperCase());
@@ -188,6 +201,12 @@ export class ProductUpdateComponent {
           formData.append('images', file, file.name);
         });
       }
+
+      if(this.productForm.get('cpOption')?.value == '1') {
+        const coords = await this.getCoord(this.productForm.get('cp')?.value);
+        formData.append('cp', coords);
+      }
+
       this.isLoading = true;
       this.productService.putProduct(formData).subscribe(
         next => {
@@ -213,6 +232,19 @@ export class ProductUpdateComponent {
       this.isError = true;
       this.titleError = 'Oops...'
       this.errorMessage = 'Algún campo del formulario no es válido.';
+    }
+  }
+
+  validateCp() : boolean {
+    const cp = this.productForm.get('cp')?.value
+    const cpRegex = /^\d{5}$/; 
+    switch (this.productForm.get('cpOption')?.value) {
+      case '0': 
+        return true;
+      case '1': 
+        return cpRegex.test(cp);
+      default: 
+        return false;
     }
   }
 
@@ -256,6 +288,20 @@ export class ProductUpdateComponent {
 
   getProductID(): number {
     return parseInt(this.productForm.get('id')?.value || '0', 10);
+  }
+
+  getCoord(cp: string) : Promise<string> {
+    return new Promise((resolve, reject) => {
+      this.coordService.getCoordinates(cp).subscribe(
+        (response) => {
+          resolve(response.lat + "," + response.lng);
+        }, error =>{
+          console.log(error)
+          reject('');
+        }
+      )
+    })
+
   }
 
 }

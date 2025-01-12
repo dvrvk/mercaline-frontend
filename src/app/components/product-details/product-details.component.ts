@@ -1,12 +1,17 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { NavbarComponent } from "../navbar/navbar.component";
 import { CustomCurrencyFormatPipe } from '../../utils/custom-currency/custom-currency-format.pipe';
 import { CommonModule, NgClass } from '@angular/common';
 import { CapitalizeFirstPipe } from '../../utils/capitalizeFirst/capitalize-first.pipe';
 import { ProductService } from '../../services/product-service/product.service';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/router';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser'
-
+import { SpinnerLoadNotblockComponent } from "../../utils/spinner-load-notblock/spinner-load-notblock.component";
+import { CarouselImagesComponent } from "../carousel-images/carousel-images.component";
+import { FavouritesIconComponent } from "../favourites-icon/favourites-icon.component";
+import { ModalFavComponent } from "../modal-fav/modal-fav.component";
+import { GoogleMapsService } from '../../services/google-maps.service';
+import { MapsComponent } from '../maps/maps.component';
 
 @Component({
   selector: 'app-product-details',
@@ -14,11 +19,15 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser'
   imports: [
     NavbarComponent,
     CustomCurrencyFormatPipe,
-    NgClass,
     CapitalizeFirstPipe,
     CommonModule,
-    RouterLink
-  ],
+    RouterLink,
+    SpinnerLoadNotblockComponent,
+    CarouselImagesComponent,
+    FavouritesIconComponent,
+    ModalFavComponent,
+    MapsComponent
+],
   templateUrl: './product-details.component.html',
   styleUrl: './product-details.component.css'
 })
@@ -27,21 +36,31 @@ export class ProductDetailsComponent implements OnInit {
   images: SafeUrl[] = [];
 
   currentPage: number = 0;
-
   currentCategory : number = 0;
+
+  isProductLoading : boolean = true;
+  referrer: string = '/home';
+
+  selectedProductId: number | null = null;
+
+  changedFav : boolean = false;
 
   constructor(private productService: ProductService,
               private route : ActivatedRoute,
-              private sanitizer: DomSanitizer
+              private sanitizer: DomSanitizer,
+              private googleMapsService : GoogleMapsService,
   ) {}
 
+  
+
   ngOnInit(): void {
+    
     this.route.queryParams.subscribe((params) => {
       // Si el parámetro 'page' existe, lo usamos; si no, usamos 0
       this.currentPage = params['page'] ? parseInt(params['page'], 10) : 0;
       this.currentCategory = params['category'] ? parseInt(params['category'], 10) : 0;
+      this.referrer = params['referrer'] ? params['referrer'] : '/home';
     });
-
 
     // Capturar el ID de la URL
     const id = this.route.snapshot.paramMap.get('id');
@@ -56,10 +75,13 @@ export class ProductDetailsComponent implements OnInit {
   loadProductDetails(id: number): void {
     this.productService.getProductDetails(id).subscribe(
       response => {
+        this.isProductLoading = false;
+        console.log(response)
         this.product = response;
       },
       error => {
         console.error(error)
+        this.isProductLoading = false;
       })
 
   }
@@ -95,5 +117,19 @@ export class ProductDetailsComponent implements OnInit {
   isUrl(str: string): boolean {
     // Comprueba si la cadena tiene un formato típico de URL 
     const urlPattern = /^(https?:\/\/|www\.)[^\s$.?#].[^\s]*$/; return urlPattern.test(str);
+  }
+
+  getProductID() : number {
+    return parseInt(this.route.snapshot.paramMap.get('id')|| '0', 10);
+  }
+
+  onProductSelected(productId: number): void {
+    this.selectedProductId = productId;
+  }
+
+  onChangedFav(changed : boolean) {
+    if(changed) {
+      this.changedFav = !this.changedFav;
+    }
   }
 }

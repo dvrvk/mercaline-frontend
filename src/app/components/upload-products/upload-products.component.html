@@ -1,5 +1,6 @@
 <app-navbar></app-navbar>
 <section class="container rounded bg-white mt-md-5 mb-5 p-3 p-md-5">
+    <app-spinner-load [isLoading]="isLoading"></app-spinner-load>
     <div class="row">
         <div class="col-md-4 d-flex justify-content-center align-items-center w-md-100">
             <app-svg-upload-product></app-svg-upload-product>
@@ -56,15 +57,25 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="category" class="form-label">Estado</label>
+                    <label for="category" class="form-label">Categoría</label>
                     <select id="category" formControlName="category" class="form-select"
                         [ngClass]="{'is-invalid': productForm.get('category')?.invalid && productForm.get('category')?.touched}">
-                        <option value="">Seleccione el estado</option>
+                        <option value="">Seleccione el categoría</option>
                         <option *ngFor="let category of categoriesList" [value]="category.id">{{ category.name |
                             capitalizeFirst }}</option>
                     </select>
                     <div class="invalid-feedback">
                         <app-error-messages [control]="productForm.get('category')"></app-error-messages>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="cp" class="form-label">Código postal</label>
+                    <input id="cp" formControlName="cp" type="text" class="form-control"
+                        [ngClass]="{'is-invalid': productForm.get('cp')?.invalid && productForm.get('cp')?.touched}" />
+                    <div class="invalid-feedback">
+                        <app-error-messages [control]="productForm.get('cp')" [errorMessage]="{
+                  pattern: 'El código postal tiene que estar formado por 5 dígitos.'
+                }"></app-error-messages>
                     </div>
                 </div>
                 <div class="mb-3">
@@ -85,4 +96,5 @@
     </div>
 </section>
 <app-success-alert *ngIf="isSuccess" [title]="successTitle"></app-success-alert>
-<app-error-alert *ngIf="isError" [message]="errorMessage" [title]="titleError" (confirmation)="onConfirmationError()"></app-error-alert>
+<app-error-alert *ngIf="isError" [message]="errorMessage" [title]="titleError"
+    (confirmation)="onConfirmationError()"></app-error-alert>

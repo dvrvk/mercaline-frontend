@@ -12,6 +12,9 @@ import { OrderByProductsComponent } from '../order-by-products/order-by-products
 import { ErrorAlertComponent } from '../alerts/error-alert/error-alert.component';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Observable } from 'rxjs';
+import { SpinnerLoadNotblockComponent } from "../../utils/spinner-load-notblock/spinner-load-notblock.component";
+import { FavouritesIconComponent } from "../favourites-icon/favourites-icon.component";
+import { ModalFavComponent } from "../modal-fav/modal-fav.component";
 
 declare var Swal: any;
 
@@ -26,7 +29,11 @@ declare var Swal: any;
     FilterComponent,
     OrderByProductsComponent,
     ErrorAlertComponent,
-    RouterModule],
+    RouterModule,
+    SpinnerLoadNotblockComponent,
+    FavouritesIconComponent,
+    ModalFavComponent
+],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.css'
 })
@@ -56,7 +63,11 @@ export class ProductListComponent {
   errorTitleAlert: string = ''
   isErrorAlert: boolean = false;
 
-  
+  isLoading : boolean = true;
+
+  selectedProductId: number | null = null;
+
+  changedFav : boolean = false;
 
   constructor(
     private productService: ProductService,
@@ -155,7 +166,7 @@ export class ProductListComponent {
     this.productService.getProductsByCategory(page, size, categoryId).subscribe(
       (data: Page<ProductResponseSummaryDTO>) => {
 
-        this.products = data.content;
+        this.products = data.content.filter(product => product.status !== 'vendido' );
         this.totalElements = data.page.totalElements;
         this.totalPages = data.page.totalPages;
         this.currentPage = data.page.number;
@@ -181,17 +192,17 @@ export class ProductListComponent {
     this.productService.getProduct(page, size).subscribe(
       (data: Page<ProductResponseSummaryDTO>) => {
 
-        this.products = data.content;
+        this.products = data.content.filter(product => product.status !== 'vendido');
         this.totalElements = data.page.totalElements;
         this.totalPages = data.page.totalPages;
         this.currentPage = data.page.number;
         this.isError = false;
+        console.log(data)
 
         this.getImages(data.content);
       },
       (error) => {
-        console.error('Error al cargar los productos', error.error)
-
+        this.isLoading = false;
         const message = error.error && error.error.mensaje ? error.error.mensaje : "Ha ocurrido un error al cargar los productos. Por favor, inténtalo de nuevo"
         this.onError(message, "Error al cargar los productos");
 
@@ -245,6 +256,7 @@ export class ProductListComponent {
               product.imageUrl = product.imageUrl;
             }
           }
+          this.isLoading = false;
 
         },
         (error) => {
@@ -257,9 +269,19 @@ export class ProductListComponent {
   onViewProduct(productId: number) : void {
     this.router.navigate([`/detalles-producto/${productId}`], {
       queryParams: { page: this.currentPage,
-                    category : this.selectedCategoryId
+                     category : this.selectedCategoryId
                   }
     });
+  }
+
+  onProductSelected(productId: number): void {
+    this.selectedProductId = productId;
+  }
+
+  onChangedFav(changed : boolean) {
+    if(changed) {
+      this.changedFav = !this.changedFav;
+    }
   }
 
 }

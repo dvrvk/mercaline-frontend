@@ -1,0 +1,11 @@
+<ng-content *ngIf="favoriteAction">
+        <a class="btn mt-auto btn-heart" (click)="onDeleteProductFromAList()">
+            <i [class]="initClass" class="bi text-danger fs-3" (mouseover)="onHover()" (mouseout)="onLeave()"></i>
+        </a>
+</ng-content>
+<ng-content *ngIf="!favoriteAction">
+    <a class="btn mt-auto btn-heart position-relative" data-bs-toggle="modal" data-bs-target="#favModal">
+        <i [class]="initClass" class="bi text-danger fs-3" (mouseover)="onHover()" (mouseout)="onLeave()"></i>
+    </a>
+</ng-content>
+    

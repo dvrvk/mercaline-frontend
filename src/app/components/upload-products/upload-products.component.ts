@@ -9,6 +9,9 @@ import { Router } from '@angular/router';
 import { SuccessAlertComponent } from '../alerts/success-alert/success-alert.component';
 import { ErrorAlertComponent } from '../alerts/error-alert/error-alert.component';
 import { SvgUploadProductComponent } from "../svg-icons/svg-upload-product/svg-upload-product.component";
+import { SpinnerLoadComponent } from "../../utils/spinner-load/spinner-load.component";
+import { NominatimService } from '../../services/coord/nominatim.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-upload-products',
@@ -20,8 +23,10 @@ import { SvgUploadProductComponent } from "../svg-icons/svg-upload-product/svg-u
     CapitalizeFirstPipe,
     ErrorMessagesComponent,
     SuccessAlertComponent,
-    ErrorAlertComponent, 
-    SvgUploadProductComponent],
+    ErrorAlertComponent,
+    SvgUploadProductComponent,
+    SpinnerLoadComponent
+],
   templateUrl: './upload-products.component.html',
   styleUrl: './upload-products.component.css'
 })
@@ -40,9 +45,14 @@ export class UploadProductsComponent implements OnInit{
   isSuccess : boolean = false;
   successTitle : string = '';
 
+  isLoading : boolean = false;
+
+  coords : string = '';
+
   constructor(private fb: FormBuilder, 
               private productService : ProductService,
-              private router : Router
+              private router : Router,
+              private coordService : NominatimService
   ) {
     // Inicializar el formulario reactivo
     this.productForm = this.fb.group({
@@ -51,7 +61,8 @@ export class UploadProductsComponent implements OnInit{
       price: ['', [Validators.required, Validators.min(0.01), Validators.pattern("^[0-9]+([,.][0-9]{1,2})?$")]],
       status: ['', Validators.required],
       category: ['', Validators.required],
-      urlImage: ['', Validators.required]
+      urlImage: ['', Validators.required],
+      cp: ['', [Validators.required, Validators.pattern("^[0-9]{5}$")]]
     });
   }
 
@@ -110,14 +121,17 @@ export class UploadProductsComponent implements OnInit{
   }
 
   // Enviar el formulario
-  onSubmit() : void {
+  async onSubmit() : Promise<void> {
     if (this.productForm.valid && this.selectedFiles?.length > 0) {
+      this.isLoading = true;
       const formData = new FormData();
       formData.append('name', this.productForm.get('name')?.value);
       formData.append('description', this.productForm.get('description')?.value);
       formData.append('price', this.productForm.get('price')?.value);
       formData.append('status', this.productForm.get('status')?.value);
       formData.append('category', this.productForm.get('category')?.value);
+      const coords = await this.getCoord(this.productForm.get('cp')?.value);
+      formData.append('cp', coords)
       this.selectedFiles.forEach((file) => {
         // Puedes usar un índice para cada archivo o tratarlos como un array
         formData.append('images', file, file.name);
@@ -125,7 +139,7 @@ export class UploadProductsComponent implements OnInit{
 
       this.productService.uploadProduct(formData).subscribe({
         next: (response : any) => {
-          
+          this.isLoading = false;
           // Mensaje exito
           this.isSuccess = true;
           this.successTitle = `Producto ${response.name}creado correctamente`;
@@ -136,7 +150,8 @@ export class UploadProductsComponent implements OnInit{
           
         },
         error: (error) => {
-          console.log(error); // TODO 
+          console.log(error)
+          this.isLoading = false;
           // Mensaje de error
           this.isError = true;
           this.titleError = "Ooops...";
@@ -148,8 +163,24 @@ export class UploadProductsComponent implements OnInit{
       })
 
     } else {
-      console.log('Formulario no válido o imagen no seleccionada');
+      this.isError = true;
+      this.titleError = "Error...";
+      this.errorMessage = "No se ha seleccionado ninguna imagen"
     }
+  }
+
+  getCoord(cp: string) : Promise<string> {
+    return new Promise((resolve, reject) => {
+      this.coordService.getCoordinates(cp).subscribe(
+        (response) => {
+          resolve(response.lat + "," + response.lng);
+        }, error =>{
+          console.log(error)
+          reject('');
+        }
+      )
+    })
+
   }
 
   onConfirmationError() : void {

@@ -1,5 +1,6 @@
 <app-navbar></app-navbar>
-<section class="container rounded bg-white mt-md-5 mb-5 p-3 p-md-5">
+@defer {
+<section class="container rounded bg-white mt-md-5 mb-5 p-3 p-md-5" *ngIf="!isLoading; else loading">
     <app-spinner-load [isLoading]="isLoading"></app-spinner-load>
     <div class="row">
         <div class="col-md-5 d-flex justify-content-center align-items-center w-md-100">
@@ -10,13 +11,9 @@
             <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
                 <div class="mb-3">
                     <label for="name" class="form-label">Nombre del Producto</label>
-                    <input 
-                        id="name" 
-                        formControlName="name" 
-                        type="text" 
-                        class="form-control"
-                        [ngClass]="{'is-invalid': productForm.get('name')?.invalid && productForm.get('name')?.touched}" 
-                        [value]="productForm.get('name')?.value | capitalizeFirst"/>
+                    <input id="name" formControlName="name" type="text" class="form-control"
+                        [ngClass]="{'is-invalid': productForm.get('name')?.invalid && productForm.get('name')?.touched}"
+                        [value]="productForm.get('name')?.value | capitalizeFirst" />
                     <div class="invalid-feedback">
                         <app-error-messages [control]="productForm.get('name')" [errorMessage]="{
                       pattern: 'El nombre del producto solo puede contener letras y numeros.'
@@ -35,13 +32,9 @@
 
                 <div class="mb-3">
                     <label for="price" class="form-label">Precio</label>
-                    <input 
-                        id="price" 
-                        formControlName="price" 
-                        type="number" step="0.01" 
-                        class="form-control"
-                        [ngClass]="{'is-invalid': productForm.get('price')?.invalid && productForm.get('price')?.touched}" 
-                        [value]="productForm.get('price')?.value"/>
+                    <input id="price" formControlName="price" type="number" step="0.01" class="form-control"
+                        [ngClass]="{'is-invalid': productForm.get('price')?.invalid && productForm.get('price')?.touched}"
+                        [value]="productForm.get('price')?.value" />
                     <div class="invalid-feedback">
                         <app-error-messages [control]="productForm.get('price')" [errorMessage]="{
                         min: 'Tiene que ser mayor que 0.',
@@ -76,6 +69,33 @@
                     </select>
                     <div class="invalid-feedback">
                         <app-error-messages [control]="productForm.get('category')"></app-error-messages>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <app-maps [cp]="cpMap"></app-maps>
+                    <label for="cp" class="form-label">Código postal</label>
+                    <div class="d-flex gap-3 pb-2">
+                        <div class="form-check">
+                            <input class="form-check-input custom-radio" type="radio" name="cpOption"
+                                id="no-modificar-cp" formControlName="cpOption" value="0">
+                            <label class="form-check-label" for="no-modificar">
+                                No modificar
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input custom-radio" type="radio" name="cpOption"
+                                id="modificar-cp" formControlName="cpOption" value="1">
+                            <label class="form-check-label" for="modificar-cp">
+                                Modificar código postal
+                            </label>
+                            <input id="cp" type="text" formControlName="cp" class="form-control"
+                            placeholder="Código postal"
+                            [ngClass]="{'is-invalid': !validateCp()}"
+                            [hidden]="productForm.get('cpOption')?.value == '0'" />
+                            <div class="invalid-feedback">
+                                {{'Se requiere un código postal español valido (xxxxx).'}}
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="mb-3">
@@ -119,11 +139,11 @@
                     <button type="submit" class="btn btn-custom" [disabled]="!productForm.valid">
                         Actualizar
                     </button>
-                    <button type="button" class="btn btn-outline-custom">
+                    <button type="button" class="btn btn-outline-custom" [routerLink]="['/mis-productos']">
                         Volver
                     </button>
                 </div>
-                
+
             </form>
         </div>
     </div>
@@ -131,3 +151,9 @@
 <app-success-alert *ngIf="isSuccess" [title]="successTitle"></app-success-alert>
 <app-error-alert *ngIf="isError" [message]="errorMessage" [title]="titleError"
     (confirmation)="onConfirmationError()"></app-error-alert>
+<ng-template #loading>
+    <app-spinner-load-notblock></app-spinner-load-notblock>
+</ng-template>
+} @loading {
+<app-spinner-load-notblock></app-spinner-load-notblock>
+}

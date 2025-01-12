@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -8,13 +9,13 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 
 export class UserServiceService {
 
-  private url = 'http://localhost:8080';
+  private url = environment.apiUrl;
   private pathRegister = "/user/registrar";
   private pathGetUser = '/user/profile'; 
   private pathUpdateUser = '/user/update'; 
   private pathDeleteUser = '/user/delete'; 
-  private pathCheckUsername = '/user/check-username'; // verificar Ya registrado
-  private pathCheckEmail = '/user/check-email'; // verificar email ya registrado
+  private pathCheckUsername = '/user/check-username'; 
+  private pathCheckEmail = '/user/check-email'; 
   private pathChangePassword = '/user/change-password'
 
   // Inicializa con el valor actual en localStorage (si existe)

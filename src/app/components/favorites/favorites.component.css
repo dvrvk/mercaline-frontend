@@ -1,0 +1,13 @@
+.badge-cat {
+    background-color: var(--darker-main-color);
+    color: white;
+}
+
+.badge-cat-red {
+    background-color: red;
+    color: white;
+}
+
+.dropdown-item {
+    cursor: pointer;
+}

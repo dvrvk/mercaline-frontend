@@ -1,44 +1,21 @@
 <app-navbar></app-navbar>
-<div class="container mt-5">
-    <div class="row ,mx-2 my-2 mx-md-4 my-md-4">
-      <div class="col-lg-6">
-        <!--Carrousel de fotos-->
-        <div id="productCarousel" class="carousel slide m-2 m-md-5 carousel-shadow">
-          <!-- Indicadores para saltar entre imagenes -->
-          <ng-container *ngIf="images.length > 1">
-            <div class="carousel-indicators">
-              <ng-container *ngFor="let image of images; let i = index">
-                <button type="button" [ngClass]="{'active': i === 0}" data-bs-target="#productCarousel" [attr.data-bs-slide-to]="i" [attr.aria-label]="i + 1" ></button>
-              </ng-container>
-            </div>
-          </ng-container>
-          <!-- Imagenes-->
-          <div class="carousel-inner rounded">
-            <div *ngFor="let image of images; let i = index" [ngClass]="{'carousel-item': true, 'active': i === 0}">
-              <img [src]="image" class="d-block w-100 img-limited-height" alt="Product Image">
-            </div>
-          </div>
-          <!-- Flechas para moverse -->
-          <ng-container *ngIf="images.length > 1">
-          <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-          </button>
-          <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-          </button>
-          </ng-container>
-        </div>
+<div class="container mt-5" *ngIf="!isProductLoading; else loading">
+    <div class="row mx-2 my-2 mx-md-4 my-md-4" [ngClass]="{'sold': product.sold === true}">
+      <div class="col-lg-6 my-auto">
+        <app-carousel-images [productID]="getProductID()"></app-carousel-images>
       </div>
       <div class="col-lg-6 mt-lg-5">
         <p class="mt-2 mx-2 category">{{ product.category | capitalizeFirst }}</p>
         <p class="text-secondary mt-4 mb-3 mx-md-2  border-bottom">Detalles del producto:</p>
         <div class="mx-md-4">
-          <h2 class="fs-1 ">{{ product.name | titlecase}}</h2>
+          <h2 class="fs-1 ">{{ product.name | titlecase}}<span><app-favourites-icon [productId]="product.id" data-bs-toggle="modal" data-bs-target="#favModal" (click)="onProductSelected(product.id)" [favChanged]="changedFav"></app-favourites-icon></span></h2>
           <p class="fs-3 fw-bold price">{{ product.price | customCurrencyFormat }}</p>
           <p><span class="badge badge-cat fs-6">{{ product.status | capitalizeFirst }}</span></p>
+          <p *ngIf="product.sold"><span class="badge text-bg-danger fs-6">{{ "Vendido" | capitalizeFirst }}</span></p>
           <p>{{ product.description }}</p>
+        </div>
+        <div>
+          <app-maps [cp]="product.cp"></app-maps>
         </div>
         <p class="text-secondary mt-4 mb-3 mx-md-2  border-bottom">Detalles del vendedor:</p>
         <div class="mx-md-4 my-4">
@@ -58,11 +35,15 @@
           </p>
         </div>
         <div class="d-flex justify-content-center gap-2">
-          <button class="btn btn-custom mb-4">Comprar ahora</button>
-          <button class="btn btn-outline-custom mb-4" [routerLink]="['/home']" [queryParams]="{ page: currentPage, category: currentCategory }">Volver</button>
+          <button class="btn btn-custom mb-4">Comprar</button>
+          <button class="btn btn-outline-custom mb-4" [routerLink]="[this.referrer]" [queryParams]="{ page: currentPage, category: currentCategory }">Volver</button>
         </div>
-       
       </div>
     </div>
   </div>
+  <app-modal-fav [idProduct]="selectedProductId" (changed)="onChangedFav($event)"></app-modal-fav>
+  <ng-template #loading>
+    <app-spinner-load-notblock></app-spinner-load-notblock>
+  </ng-template>
+  
   
