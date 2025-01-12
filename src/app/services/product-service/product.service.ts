@@ -14,7 +14,7 @@ export class ProductService {
   private apiUrlStatus = this.apiUrl + '/products/status';
   private apiUrlUser = this.apiUrl + '/user/products';
   private apiUrlfindByCategory = this.apiUrl + `/products/category/`;
-  private apiUrlFilter = this.apiUrl + '/products/filter2';
+  private apiUrlFilter = this.apiUrl + '/products/filter';
   private apiUrlUpload = this.apiUrl + '/products/create';
   private apiUrlImageMain = this.apiUrl + '/images/main/';
   private apiUrlImages = this.apiUrl + '/images';
